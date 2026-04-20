@@ -1,0 +1,49 @@
+import 'package:get/get.dart';
+
+class GstBillingController extends GetxController {}
+class GstBillingBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<GstBillingController>(() => GstBillingController());
+  }
+}
+
+class PaymentHistoryController extends GetxController {}
+class PaymentHistoryBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<PaymentHistoryController>(() => PaymentHistoryController());
+  }
+}
+
+class ExpenseController extends GetxController {}
+class ExpenseBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<ExpenseController>(() => ExpenseController());
+  }
+}
+
+class CreateIngredientController extends GetxController {}
+class CreateIngredientBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<CreateIngredientController>(() => CreateIngredientController());
+  }
+}
+
+class EventSummaryController extends GetxController {}
+class EventSummaryBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<EventSummaryController>(() => EventSummaryController());
+  }
+}
+
+class GroundChecklistController extends GetxController {}
+class GroundChecklistBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<GroundChecklistController>(() => GroundChecklistController());
+  }
+}

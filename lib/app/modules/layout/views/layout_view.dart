@@ -10,10 +10,16 @@ import '../../all_order/views/all_order_view.dart';
 import '../../all_order/bindings/all_order_binding.dart';
 import '../../stock/views/stock_view.dart';
 import '../../stock/bindings/stock_binding.dart';
-import '../../item/views/item_view.dart';
-import '../../item/bindings/item_binding.dart';
+import '../../category/views/category_view.dart';
+import '../../category/bindings/category_binding.dart';
 import '../../people/views/people_view.dart';
-// import '../../people/bindings/people_binding.dart';
+import '../../people/bindings/people_binding.dart';
+import '../../quotation/views/quotation_view.dart';
+import '../../quotation/controllers/quotation_controller.dart';
+import '../../invoice/views/invoice_view.dart';
+import '../../invoice/controllers/invoice_controller.dart';
+import '../controllers/navigation_placeholders.dart';
+import './navigation_placeholders_views.dart';
 
 class LayoutView extends GetView<LayoutController> {
   final Widget child;
@@ -60,7 +66,7 @@ class LayoutView extends GetView<LayoutController> {
         bottom: false,
         child: Column(
           children: [
-            // Logo Section (Matches React UI Style)
+            // Logo Section
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 20),
               child: Image.asset('assets/images/logo.png',
@@ -69,7 +75,7 @@ class LayoutView extends GetView<LayoutController> {
                   errorBuilder: (_, __, ___) => const FlutterLogo(size: 60)),
             ),
 
-            // Scrollable Menu Items (Exact List from Image)
+            // Scrollable Menu Items
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -78,43 +84,52 @@ class LayoutView extends GetView<LayoutController> {
                       () => Get.offAll(() => const BookingView(), binding: BookingBinding())),
                   const SizedBox(height: 10),
                   
-                  _buildSidebarItem(1, 'Category', Icons.category_outlined, () {}),
+                  _buildSidebarItem(1, 'Category', Icons.category_outlined, 
+                      () => Get.offAll(() => const CategoryView(), binding: CategoryBinding())),
                   const SizedBox(height: 10),
                   
-                  _buildSidebarItem(2, 'Quotation', Icons.edit_note_rounded, () {}),
+                  _buildSidebarItem(2, 'Quotation', Icons.edit_note_rounded, 
+                      () => Get.offAll(() => const QuotationView(), binding: QuotationBinding())),
                   const SizedBox(height: 10),
                   
                   _buildSidebarItem(3, 'All Order', Icons.checklist_rtl_rounded, 
                       () => Get.offAll(() => const AllOrderView(), binding: AllOrderBinding())),
                   const SizedBox(height: 10),
                   
-                  _buildSidebarItem(4, 'Invoice', Icons.receipt_outlined, () {}),
+                  _buildSidebarItem(4, 'Invoice', Icons.receipt_outlined, 
+                      () => Get.offAll(() => const InvoiceView(), binding: InvoiceBinding())),
                   const SizedBox(height: 10),
                   
-                  _buildSidebarItem(5, 'GST Billing', Icons.receipt_long_outlined, () {}),
+                  _buildSidebarItem(5, 'GST Billing', Icons.receipt_long_outlined, 
+                      () => Get.offAll(() => const GstBillingView(), binding: GstBillingBinding())),
                   const SizedBox(height: 10),
                   
                   _buildSidebarItem(6, 'Stock', Icons.shopping_bag_outlined, 
                       () => Get.offAll(() => const StockView(), binding: StockBinding())),
                   const SizedBox(height: 10),
                   
-                  _buildSidebarItem(7, 'Payment History', Icons.history_rounded, () {}),
+                  _buildSidebarItem(7, 'Payment History', Icons.history_rounded, 
+                      () => Get.offAll(() => const PaymentHistoryView(), binding: PaymentHistoryBinding())),
                   const SizedBox(height: 10),
                   
-                  _buildSidebarItem(8, 'Expense', Icons.payments_outlined, () {}),
+                  _buildSidebarItem(8, 'Expense', Icons.payments_outlined, 
+                      () => Get.offAll(() => const ExpenseView(), binding: ExpenseBinding())),
                   const SizedBox(height: 10),
                   
-                  _buildSidebarItem(9, 'Create Ingredient', Icons.note_add_outlined, () {}),
+                  _buildSidebarItem(9, 'Create Ingredient', Icons.note_add_outlined, 
+                      () => Get.offAll(() => const CreateIngredientView(), binding: CreateIngredientBinding())),
                   const SizedBox(height: 10),
                   
-                  // _buildSidebarItem(10, 'People', Icons.people_outline_rounded, 
-                  //     () => Get.offAll(() => const PeopleView(), binding: PeopleBinding())),
+                  _buildSidebarItem(10, 'People', Icons.people_outline_rounded, 
+                      () => Get.offAll(() => const PeopleView(), binding: PeopleBinding())),
                   const SizedBox(height: 10),
                   
-                  _buildSidebarItem(11, 'Event Summary', Icons.description_outlined, () {}),
+                  _buildSidebarItem(11, 'Event Summary', Icons.description_outlined, 
+                      () => Get.offAll(() => const EventSummaryView(), binding: EventSummaryBinding())),
                   const SizedBox(height: 10),
                   
-                  _buildSidebarItem(12, 'Ground Checklist', Icons.rule_folder_outlined, () {}),
+                  _buildSidebarItem(12, 'Ground Checklist', Icons.rule_folder_outlined, 
+                      () => Get.offAll(() => const GroundChecklistView(), binding: GroundChecklistBinding())),
                   const SizedBox(height: 24),
                 ],
               ),
@@ -136,7 +151,7 @@ class LayoutView extends GetView<LayoutController> {
           duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15), // Replicating the rounded corners in image
+            borderRadius: BorderRadius.circular(15),
             color: isActive ? AppColors.primary : Colors.transparent,
             boxShadow: isActive
                 ? [
@@ -149,7 +164,6 @@ class LayoutView extends GetView<LayoutController> {
           ),
           child: Row(
             children: [
-              // Icon Container with White Box logic from Image
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
