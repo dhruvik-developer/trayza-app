@@ -170,7 +170,7 @@ class LayoutView extends GetView<LayoutController> {
             children: [
               _buildBadge("12 Low Stock", Icons.warning_amber_rounded, Colors.red.withOpacity(0.2)),
               const SizedBox(width: 12),
-              _buildBadge("5 Upcoming", Icons.calendar_month_rounded, Colors.emerald.withOpacity(0.2)),
+              _buildBadge("5 Upcoming", Icons.calendar_month_rounded, AppColors.success.withOpacity(0.2)),
               const SizedBox(width: 24),
               const CircleAvatar(
                 radius: 18,

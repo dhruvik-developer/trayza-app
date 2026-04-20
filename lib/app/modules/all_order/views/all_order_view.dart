@@ -13,13 +13,13 @@ class AllOrderView extends GetView<AllOrderController> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: EdgeInsets.all(24.0),
           child: Container(
-            padding: const EdgeInsets.all(24.0),
+            padding: EdgeInsets.all(24.0),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
-              shadows: [
+              boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.05),
                   blurRadius: 10,
@@ -41,7 +41,8 @@ class AllOrderView extends GetView<AllOrderController> {
                       return _buildEmptyState();
                     }
                     return GridView.builder(
-                      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      gridDelegate:
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
                         maxCrossAxisExtent: 600,
                         mainAxisExtent: 260,
                         crossAxisSpacing: 16,
@@ -49,7 +50,8 @@ class AllOrderView extends GetView<AllOrderController> {
                       ),
                       itemCount: controller.orders.length,
                       itemBuilder: (context, index) {
-                        return _buildOrderCard(context, controller.orders[index]);
+                        return _buildOrderCard(
+                            context, controller.orders[index]);
                       },
                     );
                   }),
@@ -74,14 +76,21 @@ class AllOrderView extends GetView<AllOrderController> {
                 color: AppColors.primaryLight,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(Icons.assignment_rounded, color: AppColors.primary, size: 22),
+              child: const Icon(Icons.assignment_rounded,
+                  color: AppColors.primary, size: 22),
             ),
             const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("All Orders", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
-                Obx(() => Text("${controller.orders.length} orders", style: const TextStyle(fontSize: 14, color: AppColors.textSecondary))),
+                const Text("All Orders",
+                    style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary)),
+                Obx(() => Text("${controller.orders.length} orders",
+                    style: const TextStyle(
+                        fontSize: 14, color: AppColors.textSecondary))),
               ],
             ),
           ],
@@ -117,23 +126,32 @@ class AllOrderView extends GetView<AllOrderController> {
                       radius: 20,
                       backgroundColor: AppColors.primary,
                       child: Text(
-                        (order['name'] as String? ?? "?").substring(0, 1).toUpperCase(),
-                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                        (order['name'] as String? ?? "?")
+                            .substring(0, 1)
+                            .toUpperCase(),
+                        style: const TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                     ),
                     const SizedBox(width: 12),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(order['name'] ?? "Unknown", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                        Text(order['name'] ?? "Unknown",
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16)),
                         if (order['reference'] != null)
-                          Text("Ref: ${order['reference']}", style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+                          Text("Ref: ${order['reference']}",
+                              style: const TextStyle(
+                                  fontSize: 12,
+                                  color: AppColors.textSecondary)),
                       ],
                     ),
                   ],
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
@@ -141,16 +159,21 @@ class AllOrderView extends GetView<AllOrderController> {
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.calendar_today, size: 12, color: AppColors.primary),
+                      const Icon(Icons.calendar_today,
+                          size: 12, color: AppColors.primary),
                       const SizedBox(width: 6),
-                      Text(order['event_date'] ?? "No Date", style: const TextStyle(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.bold)),
+                      Text(order['event_date'] ?? "No Date",
+                          style: const TextStyle(
+                              fontSize: 12,
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ),
               ],
             ),
           ),
-          
+
           // Card Body
           Expanded(
             child: Padding(
@@ -159,7 +182,8 @@ class AllOrderView extends GetView<AllOrderController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
@@ -168,9 +192,12 @@ class AllOrderView extends GetView<AllOrderController> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.phone, size: 14, color: AppColors.primary),
+                        const Icon(Icons.phone,
+                            size: 14, color: AppColors.primary),
                         const SizedBox(width: 8),
-                        Text(order['mobile_no'] ?? "--", style: const TextStyle(fontWeight: FontWeight.w500)),
+                        Text(order['mobile_no'] ?? "--",
+                            style:
+                                const TextStyle(fontWeight: FontWeight.w500)),
                       ],
                     ),
                   ),
@@ -187,12 +214,17 @@ class AllOrderView extends GetView<AllOrderController> {
                       children: [
                         Row(
                           children: [
-                            const Icon(Icons.assignment_outlined, size: 14, color: AppColors.primary),
+                            const Icon(Icons.assignment_outlined,
+                                size: 14, color: AppColors.primary),
                             const SizedBox(width: 8),
-                            Text("Total Sessions: ${order['sessions']?.length ?? 1}", style: const TextStyle(fontWeight: FontWeight.bold)),
+                            Text(
+                                "Total Sessions: ${order['sessions']?.length ?? 1}",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold)),
                           ],
                         ),
-                        const Icon(Icons.chevron_right, color: AppColors.primary),
+                        const Icon(Icons.chevron_right,
+                            color: AppColors.primary),
                       ],
                     ),
                   ),
@@ -200,19 +232,23 @@ class AllOrderView extends GetView<AllOrderController> {
               ),
             ),
           ),
-          
+
           // Card Footer
           Padding(
             padding: const EdgeInsets.all(12),
             child: Row(
               children: [
-                _buildActionButton("Complete", Icons.check_circle_outline, const Color(0xFFECFDF5), const Color(0xFF059669)),
+                _buildActionButton("Complete", Icons.check_circle_outline,
+                    const Color(0xFFECFDF5), const Color(0xFF059669)),
                 const SizedBox(width: 8),
-                _buildActionButton("Share", Icons.share_outlined, const Color(0xFFEFF6FF), const Color(0xFF2563EB)),
+                _buildActionButton("Share", Icons.share_outlined,
+                    const Color(0xFFEFF6FF), const Color(0xFF2563EB)),
                 const SizedBox(width: 8),
-                _buildActionButton("PDF", Icons.picture_as_pdf_outlined, const Color(0xFFF5F3FF), AppColors.primary),
+                _buildActionButton("PDF", Icons.picture_as_pdf_outlined,
+                    const Color(0xFFF5F3FF), AppColors.primary),
                 const SizedBox(width: 8),
-                _buildActionButton("Cancel", Icons.cancel_outlined, const Color(0xFFFEF2F2), const Color(0xFFDC2626)),
+                _buildActionButton("Cancel", Icons.cancel_outlined,
+                    const Color(0xFFFEF2F2), const Color(0xFFDC2626)),
               ],
             ),
           ),
@@ -234,7 +270,9 @@ class AllOrderView extends GetView<AllOrderController> {
           children: [
             Icon(icon, size: 14, color: text),
             const SizedBox(width: 4),
-            Text(label, style: TextStyle(color: text, fontSize: 13, fontWeight: FontWeight.bold)),
+            Text(label,
+                style: TextStyle(
+                    color: text, fontSize: 13, fontWeight: FontWeight.bold)),
           ],
         ),
       ),
@@ -248,8 +286,13 @@ class AllOrderView extends GetView<AllOrderController> {
         children: [
           Icon(Icons.warning_amber_rounded, size: 48, color: Colors.amber),
           SizedBox(height: 12),
-          Text("No Orders Available", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textSecondary)),
-          Text("Orders will appear here once created", style: TextStyle(color: Colors.grey)),
+          Text("No Orders Available",
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textSecondary)),
+          Text("Orders will appear here once created",
+              style: TextStyle(color: Colors.grey)),
         ],
       ),
     );
