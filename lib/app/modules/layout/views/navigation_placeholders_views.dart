@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:trayza_app/app/modules/create_ingredient/controllers/create_ingredient_controller.dart';
 import '../../layout/views/layout_view.dart';
 import '../controllers/navigation_placeholders.dart';
 
