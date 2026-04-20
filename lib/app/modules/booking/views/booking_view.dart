@@ -15,26 +15,22 @@ class BookingView extends GetView<BookingController> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: EdgeInsets.all(context.width > 600 ? 24.0 : 12.0),
           child: Column(
             children: [
               // Pixel-Perfect Stepper Header
               _buildStepperHeader(context),
-
+              
               // Scrollable Content
               Expanded(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(vertical: 24),
                   child: Obx(() {
                     switch (controller.currentStep.value) {
-                      case 0:
-                        return _buildStep1(context);
-                      case 1:
-                        return _buildStep2();
-                      case 2:
-                        return _buildStep3();
-                      default:
-                        return const SizedBox();
+                      case 0: return _buildStep1(context);
+                      case 1: return _buildStep2();
+                      case 2: return _buildStep3();
+                      default: return const SizedBox();
                     }
                   }),
                 ),
@@ -47,6 +43,7 @@ class BookingView extends GetView<BookingController> {
   }
 
   Widget _buildStepperHeader(BuildContext context) {
+    bool isMobile = context.width < 600;
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.primary,
@@ -55,15 +52,15 @@ class BookingView extends GetView<BookingController> {
           topRight: Radius.circular(12),
         ),
       ),
-      padding: const EdgeInsets.symmetric(vertical: 20),
+      padding: EdgeInsets.symmetric(vertical: isMobile ? 12 : 20, horizontal: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _buildStepIcon(0, Icons.person_outline, "Client & Event"),
-          _buildStepConnector(0),
-          _buildStepIcon(1, Icons.grid_view_rounded, "Menu Selection"),
-          _buildStepConnector(1),
-          _buildStepIcon(2, Icons.assignment_outlined, "Summary & Services"),
+          _buildStepIcon(0, Icons.person_outline, isMobile ? "Client" : "Client & Event"),
+          _buildStepConnector(0, isMobile),
+          _buildStepIcon(1, Icons.grid_view_rounded, isMobile ? "Menu" : "Menu Selection"),
+          _buildStepConnector(1, isMobile),
+          _buildStepIcon(2, Icons.assignment_outlined, isMobile ? "Summary" : "Summary & Services"),
         ],
       ),
     );
@@ -73,31 +70,28 @@ class BookingView extends GetView<BookingController> {
     return Obx(() {
       bool isActive = controller.currentStep.value == step;
       bool isCompleted = controller.currentStep.value > step;
-
+      bool isMobile = Get.width < 600;
+      
       return Column(
         children: [
           Container(
-            width: 44,
-            height: 44,
+            width: isMobile ? 36 : 44,
+            height: isMobile ? 36 : 44,
             decoration: BoxDecoration(
-              color: isCompleted
-                  ? Colors.green
-                  : (isActive ? Colors.white : Colors.white24),
+              color: isCompleted ? Colors.green : (isActive ? Colors.white : Colors.white24),
               shape: BoxShape.circle,
             ),
             child: Icon(
               isCompleted ? Icons.check : icon,
-              size: 20,
-              color: isActive
-                  ? AppColors.primary
-                  : (isCompleted ? Colors.white : Colors.white60),
+              size: isMobile ? 16 : 20,
+              color: isActive ? AppColors.primary : (isCompleted ? Colors.white : Colors.white60),
             ),
           ),
           const SizedBox(height: 8),
           Text(
             label,
             style: TextStyle(
-              fontSize: 10,
+              fontSize: isMobile ? 8 : 10,
               fontWeight: FontWeight.bold,
               color: isActive ? Colors.white : Colors.white54,
             ),
@@ -107,13 +101,13 @@ class BookingView extends GetView<BookingController> {
     });
   }
 
-  Widget _buildStepConnector(int step) {
+  Widget _buildStepConnector(int step, bool isMobile) {
     return Obx(() {
       bool isCompleted = controller.currentStep.value > step;
       return Container(
-        width: 80,
+        width: isMobile ? 30 : 80,
         height: 2,
-        margin: const EdgeInsets.only(left: 8, right: 8, bottom: 20),
+        margin: EdgeInsets.only(left: 4, right: 4, bottom: isMobile ? 16 : 20),
         color: isCompleted ? Colors.green : Colors.white24,
       );
     });
@@ -121,8 +115,9 @@ class BookingView extends GetView<BookingController> {
 
   // --- STEP 1: CLIENT & EVENT ---
   Widget _buildStep1(BuildContext context) {
+    bool isMobile = context.width < 600;
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(isMobile ? 16 : 24),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -132,57 +127,51 @@ class BookingView extends GetView<BookingController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Section: Client Info
-          _buildSectionHeader(Icons.person_rounded, "Client Information",
-              "Enter basic details of the client"),
+          _buildSectionHeader(Icons.person_rounded, "Client Information", "Enter basic details of the client"),
           const SizedBox(height: 24),
-          Row(
-            children: [
-              Expanded(
-                  child: _buildInputField("Client Name *",
-                      controller.nameController, "Enter client name")),
-              const SizedBox(width: 24),
-              Expanded(
-                  child: _buildInputField("Mobile Number *",
-                      controller.mobileController, "Mobile Number")),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              Expanded(
-                child: _buildInputField(
-                  "Order Date",
-                  TextEditingController(
-                      text: DateFormat('dd/MM/yyyy')
-                          .format(controller.orderDate.value)),
-                  "",
-                  enabled: false,
-                ),
-              ),
-              const SizedBox(width: 24),
-              Expanded(
-                  child: _buildInputField("Reference Name (Optional)",
-                      controller.referenceController, "Reference Name")),
-            ],
-          ),
-
+          
+          // Responsive Rows
+          if (isMobile) ...[
+            _buildInputField("Client Name *", controller.nameController, "Enter client name"),
+            const SizedBox(height: 20),
+            _buildInputField("Mobile Number *", controller.mobileController, "Mobile Number"),
+            const SizedBox(height: 20),
+            _buildInputField("Order Date", TextEditingController(text: DateFormat('dd/MM/yyyy').format(controller.orderDate.value)), "", enabled: false),
+            const SizedBox(height: 20),
+            _buildInputField("Reference Name (Optional)", controller.referenceController, "Reference Name"),
+          ] else ...[
+            Row(
+              children: [
+                Expanded(child: _buildInputField("Client Name *", controller.nameController, "Enter client name")),
+                const SizedBox(width: 24),
+                Expanded(child: _buildInputField("Mobile Number *", controller.mobileController, "Mobile Number")),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Expanded(child: _buildInputField("Order Date", TextEditingController(text: DateFormat('dd/MM/yyyy').format(controller.orderDate.value)), "", enabled: false)),
+                const SizedBox(width: 24),
+                Expanded(child: _buildInputField("Reference Name (Optional)", controller.referenceController, "Reference Name")),
+              ],
+            ),
+          ],
+          
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 32),
             child: Divider(color: AppColors.border),
           ),
-
+          
           // Section: Event Schedule
-          _buildSectionHeader(Icons.calendar_month_rounded, "Event Schedule",
-              "Add event dates and time slots for each day"),
+          _buildSectionHeader(Icons.calendar_month_rounded, "Event Schedule", "Add event dates and time slots for each day"),
           const SizedBox(height: 24),
-
+          
           Obx(() => Column(
-                children: List.generate(controller.schedule.length,
-                    (index) => _buildDayCard(context, index)),
-              )),
-
+            children: List.generate(controller.schedule.length, (index) => _buildDayCard(context, index)),
+          )),
+          
           const SizedBox(height: 32),
-
+          
           // Footer Buttons
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -197,6 +186,7 @@ class BookingView extends GetView<BookingController> {
   }
 
   Widget _buildSectionHeader(IconData icon, String title, String subtitle) {
+    bool isMobile = Get.width < 600;
     return Row(
       children: [
         Container(
@@ -208,34 +198,24 @@ class BookingView extends GetView<BookingController> {
           child: Icon(icon, color: AppColors.primary, size: 20),
         ),
         const SizedBox(width: 12),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title,
-                style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary)),
-            Text(subtitle,
-                style: const TextStyle(
-                    fontSize: 13, color: AppColors.textSecondary)),
-          ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: TextStyle(fontSize: isMobile ? 16 : 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+              Text(subtitle, style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+            ],
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildInputField(
-      String label, TextEditingController controller, String hint,
-      {bool enabled = true}) {
+  Widget _buildInputField(String label, TextEditingController controller, String hint, {bool enabled = true}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label,
-            style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary)),
+        Text(label, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
         const SizedBox(height: 8),
         TextField(
           controller: controller,
@@ -245,12 +225,8 @@ class BookingView extends GetView<BookingController> {
             filled: true,
             fillColor: enabled ? Colors.white : const Color(0xFFF9FAFB),
             contentPadding: const EdgeInsets.all(12),
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: Color(0xFFD1D5DB))),
-            enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: Color(0xFFD1D5DB))),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xFFD1D5DB))),
+            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xFFD1D5DB))),
           ),
         ),
       ],
@@ -259,9 +235,10 @@ class BookingView extends GetView<BookingController> {
 
   Widget _buildDayCard(BuildContext context, int dayIndex) {
     final day = controller.schedule[dayIndex];
+    bool isMobile = context.width < 600;
     return Container(
       margin: const EdgeInsets.only(bottom: 24),
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(isMobile ? 12 : 20),
       decoration: BoxDecoration(
         color: const Color(0xFFFAF8FD),
         borderRadius: BorderRadius.circular(12),
@@ -272,56 +249,50 @@ class BookingView extends GetView<BookingController> {
           Row(
             children: [
               Container(
-                width: 40,
-                height: 40,
+                width: 36,
+                height: 36,
                 decoration: BoxDecoration(
                   color: AppColors.primary,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Center(
-                    child: Text("${dayIndex + 1}",
-                        style: const TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold))),
+                child: Center(child: Text("${dayIndex + 1}", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
               ),
               const SizedBox(width: 12),
-              const Text("Event Date:",
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              const SizedBox(width: 12),
-              InkWell(
-                onTap: () async {
-                  final picked = await showDatePicker(
-                    context: context,
-                    initialDate: day.eventDate,
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime.now().add(const Duration(days: 365)),
-                  );
-                  if (picked != null)
-                    controller.updateScheduleDate(dayIndex, picked);
-                },
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: const Color(0xFFE9D5FF)),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("Event Date:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                  InkWell(
+                    onTap: () async {
+                      final picked = await showDatePicker(
+                        context: context,
+                        initialDate: day.eventDate,
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime.now().add(const Duration(days: 365)),
+                      );
+                      if (picked != null) controller.updateScheduleDate(dayIndex, picked);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(color: const Color(0xFFE9D5FF)),
+                      ),
+                      child: Text(DateFormat('dd/MM/yyyy').format(day.eventDate), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                    ),
                   ),
-                  child: Text(DateFormat('dd/MM/yyyy').format(day.eventDate),
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                ),
+                ],
               ),
               const Spacer(),
               if (controller.schedule.length > 1)
-                IconButton(
-                    icon: const Icon(Icons.delete_outline, color: Colors.red),
-                    onPressed: () => controller.removeSchedule(dayIndex)),
+                IconButton(icon: const Icon(Icons.delete_outline, color: Colors.red, size: 20), onPressed: () => controller.removeSchedule(dayIndex)),
             ],
           ),
           const SizedBox(height: 20),
           Obx(() => Column(
-                children: List.generate(day.timeSlots.length,
-                    (slotIndex) => _buildSlotCard(dayIndex, slotIndex)),
-              )),
+            children: List.generate(day.timeSlots.length, (slotIndex) => _buildSlotCard(dayIndex, slotIndex)),
+          )),
           const SizedBox(height: 12),
           _buildAddSlotButton(dayIndex),
         ],
@@ -330,60 +301,53 @@ class BookingView extends GetView<BookingController> {
   }
 
   Widget _buildSlotCard(int dayIndex, int slotIndex) {
+    bool isMobile = Get.width < 600;
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      height: 90,
+      padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: AppColors.primary.withOpacity(0.2)),
-        boxShadow: const [
-          BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2))
-        ],
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2))],
       ),
       child: Stack(
         children: [
-          // Left Accent Bar
           Container(
             width: 6,
+            height: 60, // Fixed height for accent bar
             decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [AppColors.primary, Color(0xFF6A3FAF)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter),
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  bottomLeft: Radius.circular(12)),
+              gradient: LinearGradient(colors: [AppColors.primary, Color(0xFF6A3FAF)], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), bottomLeft: Radius.circular(12)),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 20, right: 12),
+            padding: const EdgeInsets.only(left: 16, right: 8),
             child: Row(
               children: [
-                const Icon(Icons.access_time_rounded,
-                    color: AppColors.primary, size: 16),
-                const SizedBox(width: 8),
-                Text("SLOT ${slotIndex + 1}",
-                    style: const TextStyle(
-                        color: AppColors.primary,
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold)),
-                const SizedBox(width: 24),
                 Expanded(
-                  flex: 3,
-                  child:
-                      _buildMiniLabelInput("EVENT TIMING", "Select Timing..."),
-                ),
-                const SizedBox(width: 24),
-                Expanded(
-                  flex: 2,
-                  child: _buildMiniLabelInput("NUMBER OF PERSONS", "e.g. 250"),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.access_time_rounded, color: AppColors.primary, size: 14),
+                          const SizedBox(width: 4),
+                          Text("SLOT ${slotIndex + 1}", style: const TextStyle(color: AppColors.primary, fontSize: 10, fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Expanded(child: _buildMiniLabelInput("TIMING", "Select...")),
+                          const SizedBox(width: 8),
+                          Expanded(child: _buildMiniLabelInput("PERSONS", "e.g. 250")),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
                 if (controller.schedule[dayIndex].timeSlots.length > 1)
-                  IconButton(
-                      icon: const Icon(Icons.close, size: 16),
-                      onPressed: () =>
-                          controller.removeTimeSlot(dayIndex, slotIndex)),
+                  IconButton(icon: const Icon(Icons.close, size: 16), onPressed: () => controller.removeTimeSlot(dayIndex, slotIndex)),
               ],
             ),
           ),
@@ -394,26 +358,21 @@ class BookingView extends GetView<BookingController> {
 
   Widget _buildMiniLabelInput(String label, String hint) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label,
-            style: const TextStyle(
-                fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey)),
+        Text(label, style: const TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: Colors.grey)),
         const SizedBox(height: 4),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(color: AppColors.primary.withOpacity(0.1)),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(hint,
-                  style: const TextStyle(fontSize: 13, color: Colors.grey)),
-              const Icon(Icons.keyboard_arrow_down,
-                  size: 16, color: Colors.grey),
+              Expanded(child: Text(hint, style: const TextStyle(fontSize: 11, color: Colors.grey), overflow: TextOverflow.ellipsis)),
+              const Icon(Icons.keyboard_arrow_down, size: 12, color: Colors.grey),
             ],
           ),
         ),
@@ -425,22 +384,18 @@ class BookingView extends GetView<BookingController> {
     return InkWell(
       onTap: () => controller.addTimeSlot(dayIndex),
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        padding: const EdgeInsets.symmetric(vertical: 10),
         width: double.infinity,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-              color: Colors.grey.withOpacity(0.3),
-              style: BorderStyle.none), // Custom dash border logic can be added
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.grey.withOpacity(0.2)),
         ),
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.add, size: 16, color: Colors.grey),
-            SizedBox(width: 8),
-            Text("Add Time Slot",
-                style:
-                    TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+            Icon(Icons.add, size: 14, color: Colors.grey),
+            SizedBox(width: 6),
+            Text("Add Time Slot", style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 12)),
           ],
         ),
       ),
@@ -448,45 +403,43 @@ class BookingView extends GetView<BookingController> {
   }
 
   Widget _buildAddDateButton() {
+    bool isMobile = Get.width < 600;
     return ElevatedButton.icon(
       onPressed: controller.addSchedule,
-      icon: const Icon(Icons.add, size: 16),
-      label: const Text("Add Event Date"),
+      icon: const Icon(Icons.add, size: 14),
+      label: Text(isMobile ? "Add Date" : "Add Event Date", style: const TextStyle(fontSize: 12)),
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFFF5F3FF),
         foregroundColor: AppColors.primary,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-            side: const BorderSide(color: Color(0xFFE9D5FF))),
+        padding: EdgeInsets.symmetric(horizontal: isMobile ? 12 : 20, vertical: 10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: const BorderSide(color: Color(0xFFE9D5FF))),
       ),
     );
   }
 
   Widget _buildContinueButton() {
+    bool isMobile = Get.width < 600;
     return ElevatedButton(
       onPressed: controller.nextStep,
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        elevation: 10,
-        shadowColor: AppColors.primary.withOpacity(0.3),
+        padding: EdgeInsets.symmetric(horizontal: isMobile ? 16 : 32, vertical: 12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        elevation: 5,
+        shadowColor: AppColors.primary.withOpacity(0.2),
       ),
-      child: const Row(
+      child: Row(
         children: [
-          Text("Continue to Menu Selection",
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          SizedBox(width: 12),
-          Icon(Icons.arrow_forward_rounded, size: 18),
+          Text(isMobile ? "Continue" : "Continue to Menu", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+          const SizedBox(width: 8),
+          const Icon(Icons.arrow_forward_rounded, size: 16),
         ],
       ),
     );
   }
 
-  // --- STEP 2 Placeholder ---
+  // Placeholder steps
   Widget _buildStep2() => const Center(child: Text("Menu Selection"));
-  // --- STEP 3 Placeholder ---
   Widget _buildStep3() => const Center(child: Text("Summary & Services"));
 }

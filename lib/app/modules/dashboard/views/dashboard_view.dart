@@ -27,7 +27,7 @@ class DashboardView extends GetView<DashboardController> {
                 ),
                 const SizedBox(height: 24),
                 Obx(() => GridView.count(
-                  crossAxisCount: MediaQuery.of(context).size.width > 1200 ? 4 : 2,
+                  crossAxisCount: context.width > 1200 ? 4 : (context.width > 600 ? 2 : 1),
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   crossAxisSpacing: 16,

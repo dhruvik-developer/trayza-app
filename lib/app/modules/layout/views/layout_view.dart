@@ -27,20 +27,20 @@ class LayoutView extends GetView<LayoutController> {
 
   @override
   Widget build(BuildContext context) {
-    bool isDesktop = MediaQuery.of(context).size.width > 900;
+    bool isDesktop = context.width > 900;
 
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Row(
         children: [
-          // Desktop Sidebar - Lowered threshold from 1024 to 900
+          // Desktop Sidebar
           if (isDesktop) _buildSidebar(context),
           
           // Main Content
           Expanded(
             child: Column(
               children: [
-                _buildHeader(context, !isDesktop),
+                _buildHeader(context, isDesktop),
                 Expanded(child: child),
               ],
             ),
@@ -55,7 +55,7 @@ class LayoutView extends GetView<LayoutController> {
 
   Widget _buildSidebar(BuildContext context) {
     return Container(
-      width: 260, // Slightly narrower for better fit
+      width: 260,
       height: double.infinity,
       decoration: const BoxDecoration(
         color: AppColors.sidebarBackground,
@@ -114,11 +114,7 @@ class LayoutView extends GetView<LayoutController> {
             borderRadius: BorderRadius.circular(12),
             color: isActive ? AppColors.primary : Colors.transparent,
             boxShadow: isActive ? [
-              BoxShadow(
-                color: AppColors.primary.withOpacity(0.2),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              )
+              BoxShadow(color: AppColors.primary.withOpacity(0.2), blurRadius: 10, offset: const Offset(0, 4))
             ] : null,
           ),
           child: Row(
@@ -128,19 +124,9 @@ class LayoutView extends GetView<LayoutController> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
-                  boxShadow: isActive ? null : [
-                    const BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 2,
-                      offset: Offset(0, 1),
-                    )
-                  ],
+                  boxShadow: isActive ? null : [const BoxShadow(color: Colors.black12, blurRadius: 2, offset: Offset(0, 1))],
                 ),
-                child: Icon(
-                  icon,
-                  size: 20,
-                  color: AppColors.primary,
-                ),
+                child: Icon(icon, size: 20, color: AppColors.primary),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -160,46 +146,39 @@ class LayoutView extends GetView<LayoutController> {
     );
   }
 
-  Widget _buildHeader(BuildContext context, bool showMenuIcon) {
+  Widget _buildHeader(BuildContext context, bool isDesktop) {
+    bool isSmallMobile = context.width < 400;
     return Container(
       height: 64,
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: EdgeInsets.symmetric(horizontal: isSmallMobile ? 12 : 24),
       decoration: const BoxDecoration(
         color: AppColors.primary,
-        boxShadow: [
-          BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2))
-        ],
+        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2))],
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              if (showMenuIcon)
-                IconButton(
-                  icon: const Icon(Icons.menu, color: Colors.white),
-                  onPressed: () => Scaffold.of(context).openDrawer(),
-                ),
-              const Icon(Icons.home_outlined, color: Colors.white70, size: 20),
-              const SizedBox(width: 8),
-              const Icon(Icons.chevron_right_rounded, color: Colors.white30, size: 16),
-              const SizedBox(width: 8),
-              const Text(
-                "Trayza Admin",
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              _buildBadge("12 Low Stock", Icons.warning_amber_rounded, Colors.red.withOpacity(0.2)),
-              const SizedBox(width: 12),
-              const CircleAvatar(
-                radius: 18,
-                backgroundColor: Colors.white24,
-                child: Text("A", style: TextStyle(color: Colors.white)),
-              ),
-            ],
+          if (!isDesktop)
+            IconButton(
+              icon: const Icon(Icons.menu, color: Colors.white),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+            ),
+          
+          if (!isSmallMobile) ...[
+            const Icon(Icons.home_outlined, color: Colors.white70, size: 20),
+            const SizedBox(width: 8),
+            const Icon(Icons.chevron_right_rounded, color: Colors.white30, size: 16),
+            const SizedBox(width: 8),
+            const Text("Trayza Admin", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
+          ],
+          
+          const Spacer(),
+          
+          _buildBadge(isSmallMobile ? "" : "12 Low Stock", Icons.warning_amber_rounded, Colors.red.withOpacity(0.2)),
+          const SizedBox(width: 12),
+          const CircleAvatar(
+            radius: 16,
+            backgroundColor: Colors.white24,
+            child: Text("A", style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
           ),
         ],
       ),
@@ -208,16 +187,16 @@ class LayoutView extends GetView<LayoutController> {
 
   Widget _buildBadge(String text, IconData icon, Color bg) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(20),
-      ),
+      padding: EdgeInsets.symmetric(horizontal: text.isEmpty ? 10 : 12, vertical: 8),
+      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(20)),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, color: Colors.white, size: 14),
-          const SizedBox(width: 6),
-          Text(text, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500)),
+          if (text.isNotEmpty) ...[
+            const SizedBox(width: 6),
+            Text(text, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500)),
+          ],
         ],
       ),
     );
