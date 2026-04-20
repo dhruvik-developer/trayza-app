@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart' as get_x;
+import '../../routes/app_routes.dart';
 import '../values/app_values.dart';
 import '../../data/services/auth_service.dart';
 
@@ -29,7 +30,7 @@ class ApiClient {
       onError: (DioException e, handler) {
         if (e.response?.statusCode == 401) {
           AuthService.to.logout();
-          get_x.Get.offAllNamed('/login');
+          get_x.Get.offAllNamed(Routes.LOGIN);
         }
         return handler.next(e);
       },

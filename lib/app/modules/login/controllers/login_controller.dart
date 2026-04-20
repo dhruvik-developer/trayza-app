@@ -1,17 +1,20 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../routes/app_routes.dart';
 import '../../../data/providers/auth_provider.dart';
 import '../../../data/services/auth_service.dart';
 
 class LoginController extends GetxController {
   final AuthProvider _authProvider = AuthProvider();
-  
+
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
-  
+
   final isLoading = false.obs;
   final showPassword = false.obs;
-  
+
   void toggleShowPassword() => showPassword.toggle();
 
   Future<void> login() async {
@@ -39,10 +42,10 @@ class LoginController extends GetxController {
         final access = tokens['access'];
         final username = data['username'];
         final userType = data['user_type'];
-
-        if (userType == "ADMIN") {
+        log(userType);
+        if (userType == "admin") {
           AuthService.to.login(access, username, userType);
-          Get.offAllNamed('/dish');
+          Get.offAllNamed(Routes.DISH);
           Get.snackbar("Success", "Login successful",
               backgroundColor: Colors.green, colorText: Colors.white);
         } else {
