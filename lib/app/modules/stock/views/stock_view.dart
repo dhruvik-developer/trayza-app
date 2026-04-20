@@ -56,7 +56,8 @@ class StockView extends GetView<StockController> {
                 color: const Color(0xFFF4EFFC),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(Icons.sticky_note_2_outlined, color: AppColors.primary, size: 24),
+              child: const Icon(Icons.sticky_note_2_outlined,
+                  color: AppColors.primary, size: 24),
             ),
             const SizedBox(width: 12),
             const Column(
@@ -64,11 +65,15 @@ class StockView extends GetView<StockController> {
               children: [
                 Text(
                   "Stock Management",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary),
                 ),
                 Text(
                   "Monitor and adjust inventory levels",
-                  style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
+                  style:
+                      TextStyle(fontSize: 14, color: AppColors.textSecondary),
                 ),
               ],
             ),
@@ -94,10 +99,13 @@ class StockView extends GetView<StockController> {
               decoration: InputDecoration(
                 hintText: "Search items...",
                 prefixIcon: const Icon(Icons.search, size: 20),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide.none),
                 filled: true,
                 fillColor: const Color(0xFFF9FAFB),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
             ),
           ),
@@ -112,24 +120,25 @@ class StockView extends GetView<StockController> {
 
   Widget _buildCategoryDropdown() {
     return Obx(() => Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFFD1D5DB)),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: DropdownButton<String>(
-        value: controller.selectedCategoryId.value,
-        underline: Container(),
-        onChanged: (v) => controller.onCategoryChanged(v),
-        items: [
-          const DropdownMenuItem(value: "all_items", child: Text("All Categories")),
-          ...controller.categories.map((cat) => DropdownMenuItem(
-            value: cat.id.toString(),
-            child: Text(cat.name ?? ""),
-          )),
-        ],
-      ),
-    ));
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+            border: Border.all(color: const Color(0xFFD1D5DB)),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: DropdownButton<String>(
+            value: controller.selectedCategoryId.value,
+            underline: Container(),
+            onChanged: (v) => controller.onCategoryChanged(v),
+            items: [
+              const DropdownMenuItem(
+                  value: "all_items", child: Text("All Categories")),
+              ...controller.categories.map((cat) => DropdownMenuItem(
+                    value: cat.id.toString(),
+                    child: Text(cat.name ?? ""),
+                  )),
+            ],
+          ),
+        ));
   }
 
   Widget _buildDesktopTable() {
@@ -145,24 +154,49 @@ class StockView extends GetView<StockController> {
           headingRowColor: MaterialStateProperty.all(const Color(0xFFF9FAFB)),
           columnSpacing: 24,
           columns: const [
-            DataColumn(label: Text("ITEM NAME", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
-            DataColumn(label: Text("CATEGORY", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
-            DataColumn(label: Text("IN STOCK", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
-            DataColumn(label: Text("UNIT", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
-            DataColumn(label: Text("STATUS", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
-            DataColumn(label: Text("ACTIONS", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
+            DataColumn(
+                label: Text("ITEM NAME",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
+            DataColumn(
+                label: Text("CATEGORY",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
+            DataColumn(
+                label: Text("IN STOCK",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
+            DataColumn(
+                label: Text("UNIT",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
+            DataColumn(
+                label: Text("STATUS",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
+            DataColumn(
+                label: Text("ACTIONS",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 12))),
           ],
           rows: controller.filteredStocks.map((stock) {
             return DataRow(cells: [
-              DataCell(Text(stock.name ?? "—", style: const TextStyle(fontWeight: FontWeight.w600))),
+              DataCell(Text(stock.name ?? "—",
+                  style: const TextStyle(fontWeight: FontWeight.w600))),
               DataCell(Text(stock.categoryName ?? "—")),
               DataCell(Text(stock.quantity ?? "0")),
               DataCell(Text(stock.type ?? "—")), // Mapping 'type' to Unit
-              DataCell(_buildStatusBadge(double.tryParse(stock.quantity ?? "0") ?? 0)),
+              DataCell(_buildStatusBadge(
+                  double.tryParse(stock.quantity ?? "0") ?? 0)),
               DataCell(Row(
                 children: [
-                  IconButton(icon: const Icon(Icons.edit_outlined, size: 18), onPressed: () {}),
-                  IconButton(icon: const Icon(Icons.delete_outline, size: 18, color: Colors.red), onPressed: () => controller.deleteItem(stock.id!)),
+                  IconButton(
+                      icon: const Icon(Icons.edit_outlined, size: 18),
+                      onPressed: () {}),
+                  IconButton(
+                      icon: const Icon(Icons.delete_outline,
+                          size: 18, color: Colors.red),
+                      onPressed: () => controller.deleteItem(stock.id!)),
                 ],
               )),
             ]);
@@ -194,12 +228,17 @@ class StockView extends GetView<StockController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(stock.name ?? "—", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                        Text(stock.categoryName ?? "—", style: TextStyle(color: Colors.grey[500], fontSize: 13)),
+                        Text(stock.name ?? "—",
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16)),
+                        Text(stock.categoryName ?? "—",
+                            style: TextStyle(
+                                color: Colors.grey[500], fontSize: 13)),
                       ],
                     ),
                   ),
-                  _buildStatusBadge(double.tryParse(stock.quantity ?? "0") ?? 0),
+                  _buildStatusBadge(
+                      double.tryParse(stock.quantity ?? "0") ?? 0),
                 ],
               ),
               const Divider(height: 24),
@@ -209,14 +248,21 @@ class StockView extends GetView<StockController> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Quantity", style: TextStyle(fontSize: 12, color: Colors.grey)),
-                      Text("${stock.quantity ?? "0"} ${stock.type ?? "—"}", style: const TextStyle(fontWeight: FontWeight.bold)),
+                      const Text("Quantity",
+                          style: TextStyle(fontSize: 12, color: Colors.grey)),
+                      Text("${stock.quantity ?? "0"} ${stock.type ?? "—"}",
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
                     ],
                   ),
                   Row(
                     children: [
-                      IconButton(icon: const Icon(Icons.edit_outlined, size: 20), onPressed: () {}),
-                      IconButton(icon: const Icon(Icons.delete_outline, size: 20, color: Colors.red), onPressed: () => controller.deleteItem(stock.id!)),
+                      IconButton(
+                          icon: const Icon(Icons.edit_outlined, size: 20),
+                          onPressed: () {}),
+                      IconButton(
+                          icon: const Icon(Icons.delete_outline,
+                              size: 20, color: Colors.red),
+                          onPressed: () => controller.deleteItem(stock.id!)),
                     ],
                   ),
                 ],
@@ -244,8 +290,13 @@ class StockView extends GetView<StockController> {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(20), border: Border.all(color: color.withOpacity(0.3))),
-      child: Text(label, style: TextStyle(color: color, fontSize: 11, fontWeight: FontWeight.bold)),
+      decoration: BoxDecoration(
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: color.withOpacity(0.3))),
+      child: Text(label,
+          style: TextStyle(
+              color: color, fontSize: 11, fontWeight: FontWeight.bold)),
     );
   }
 
@@ -256,8 +307,13 @@ class StockView extends GetView<StockController> {
         children: [
           Icon(Icons.inventory_2_outlined, size: 64, color: Colors.grey[300]),
           const SizedBox(height: 16),
-          const Text("No Items in Stock", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey)),
-          const Text("Items will appear here once added", style: TextStyle(color: Colors.grey)),
+          const Text("No Items in Stock",
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey)),
+          const Text("Items will appear here once added",
+              style: TextStyle(color: Colors.grey)),
         ],
       ),
     );
