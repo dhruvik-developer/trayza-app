@@ -10,6 +10,7 @@ class StockView extends GetView<StockController> {
   @override
   Widget build(BuildContext context) {
     return LayoutView(
+      activeIndex: 3,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Padding(

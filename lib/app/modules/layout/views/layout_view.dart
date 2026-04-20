@@ -6,39 +6,48 @@ import '../controllers/layout_controller.dart';
 // Import all views and bindings for direct navigation
 import '../../booking/views/booking_view.dart';
 import '../../booking/bindings/booking_binding.dart';
-import '../../category/views/category_view.dart';
-import '../../category/bindings/category_binding.dart';
 import '../../all_order/views/all_order_view.dart';
 import '../../all_order/bindings/all_order_binding.dart';
 import '../../dashboard/views/dashboard_view.dart';
 import '../../dashboard/bindings/dashboard_binding.dart';
+import '../../stock/views/stock_view.dart';
+import '../../stock/bindings/stock_binding.dart';
+import '../../item/views/item_view.dart';
+import '../../item/bindings/item_binding.dart';
 
 class LayoutView extends GetView<LayoutController> {
   final Widget child;
+  final int activeIndex; // To highlight the active menu item
 
-  const LayoutView({Key? key, required this.child}) : super(key: key);
+  const LayoutView({
+    Key? key, 
+    required this.child, 
+    this.activeIndex = -1,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    bool isDesktop = MediaQuery.of(context).size.width > 900;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Row(
         children: [
-          // Desktop Sidebar
-          if (MediaQuery.of(context).size.width > 1024) _buildSidebar(context),
+          // Desktop Sidebar - Lowered threshold from 1024 to 900
+          if (isDesktop) _buildSidebar(context),
           
           // Main Content
           Expanded(
             child: Column(
               children: [
-                _buildHeader(context),
+                _buildHeader(context, !isDesktop),
                 Expanded(child: child),
               ],
             ),
           ),
         ],
       ),
-      drawer: MediaQuery.of(context).size.width <= 1024 
+      drawer: !isDesktop 
           ? Drawer(child: _buildSidebar(context)) 
           : null,
     );
@@ -46,19 +55,19 @@ class LayoutView extends GetView<LayoutController> {
 
   Widget _buildSidebar(BuildContext context) {
     return Container(
-      width: 288,
+      width: 260, // Slightly narrower for better fit
       height: double.infinity,
       decoration: const BoxDecoration(
         color: AppColors.sidebarBackground,
-        border: Border(right: BorderSide(color: AppColors.border, width: 2)),
+        border: Border(right: BorderSide(color: AppColors.border, width: 1)),
       ),
       child: Column(
         children: [
           // Logo Section
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-            child: Image.asset('assets/images/logo.png', height: 80, errorBuilder: (_, __, ___) => 
-              const FlutterLogo(size: 80)),
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 20),
+            child: Image.asset('assets/images/logo.png', height: 60, errorBuilder: (_, __, ___) => 
+              const FlutterLogo(size: 60)),
           ),
           
           // Menu Items
@@ -66,13 +75,24 @@ class LayoutView extends GetView<LayoutController> {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               children: [
-                _buildSidebarItem(context, 'Create Dish', Icons.restaurant_menu_rounded, () => Get.offAll(() => const BookingView(), binding: BookingBinding())),
-                const SizedBox(height: 16),
-                _buildSidebarItem(context, 'Category', Icons.category_rounded, () => Get.offAll(() => const CategoryView(), binding: CategoryBinding())),
-                const SizedBox(height: 16),
-                _buildSidebarItem(context, 'All Orders', Icons.assignment_rounded, () => Get.offAll(() => const AllOrderView(), binding: AllOrderBinding())),
-                const SizedBox(height: 16),
-                _buildSidebarItem(context, 'Dashboard', Icons.dashboard_rounded, () => Get.offAll(() => const DashboardView(), binding: DashboardBinding())),
+                _buildSidebarItem(0, 'Dashboard', Icons.dashboard_rounded, () => Get.offAll(() => const DashboardView(), binding: DashboardBinding())),
+                const SizedBox(height: 8),
+                _buildSidebarItem(1, 'All Orders', Icons.assignment_rounded, () => Get.offAll(() => const AllOrderView(), binding: AllOrderBinding())),
+                const SizedBox(height: 8),
+                _buildSidebarItem(2, 'Create Dish', Icons.restaurant_menu_rounded, () => Get.offAll(() => const BookingView(), binding: BookingBinding())),
+                const SizedBox(height: 8),
+                _buildSidebarItem(3, 'Stocks', Icons.inventory_2_rounded, () => Get.offAll(() => const StockView(), binding: StockBinding())),
+                const SizedBox(height: 8),
+                _buildSidebarItem(4, 'Items', Icons.list_alt_rounded, () => Get.offAll(() => const ItemView(), binding: ItemBinding())),
+                
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                  child: Divider(color: AppColors.border),
+                ),
+                
+                _buildSidebarItem(5, 'Expense', Icons.payments_rounded, () {}),
+                const SizedBox(height: 8),
+                _buildSidebarItem(6, 'Settings', Icons.settings_rounded, () {}),
               ],
             ),
           ),
@@ -81,9 +101,8 @@ class LayoutView extends GetView<LayoutController> {
     );
   }
 
-  Widget _buildSidebarItem(BuildContext context, String title, IconData icon, VoidCallback onTap) {
-    // Note: Active state check in direct navigation is usually done via a controller variable or checking runtime type
-    bool isActive = false; // Simplified for direct navigation
+  Widget _buildSidebarItem(int index, String title, IconData icon, VoidCallback onTap) {
+    bool isActive = activeIndex == index;
     
     return MouseRegion(
       cursor: SystemMouseCursors.click,
@@ -119,7 +138,7 @@ class LayoutView extends GetView<LayoutController> {
                 ),
                 child: Icon(
                   icon,
-                  size: 24,
+                  size: 20,
                   color: AppColors.primary,
                 ),
               ),
@@ -128,7 +147,7 @@ class LayoutView extends GetView<LayoutController> {
                 child: Text(
                   title,
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: isActive ? Colors.white : AppColors.textSecondary,
                   ),
@@ -141,7 +160,7 @@ class LayoutView extends GetView<LayoutController> {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context, bool showMenuIcon) {
     return Container(
       height: 64,
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -154,13 +173,18 @@ class LayoutView extends GetView<LayoutController> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(Icons.home_outlined, color: Colors.white70, size: 20),
-              SizedBox(width: 8),
-              Icon(Icons.chevron_right_rounded, color: Colors.white30, size: 16),
-              SizedBox(width: 8),
-              Text(
+              if (showMenuIcon)
+                IconButton(
+                  icon: const Icon(Icons.menu, color: Colors.white),
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                ),
+              const Icon(Icons.home_outlined, color: Colors.white70, size: 20),
+              const SizedBox(width: 8),
+              const Icon(Icons.chevron_right_rounded, color: Colors.white30, size: 16),
+              const SizedBox(width: 8),
+              const Text(
                 "Trayza Admin",
                 style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
               ),
@@ -170,8 +194,6 @@ class LayoutView extends GetView<LayoutController> {
             children: [
               _buildBadge("12 Low Stock", Icons.warning_amber_rounded, Colors.red.withOpacity(0.2)),
               const SizedBox(width: 12),
-              _buildBadge("5 Upcoming", Icons.calendar_month_rounded, AppColors.success.withOpacity(0.2)),
-              const SizedBox(width: 24),
               const CircleAvatar(
                 radius: 18,
                 backgroundColor: Colors.white24,

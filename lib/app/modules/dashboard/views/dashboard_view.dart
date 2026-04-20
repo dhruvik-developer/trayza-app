@@ -11,6 +11,7 @@ class DashboardView extends GetView<DashboardController> {
   @override
   Widget build(BuildContext context) {
     return LayoutView(
+      activeIndex: 0,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: RefreshIndicator(

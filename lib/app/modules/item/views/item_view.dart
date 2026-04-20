@@ -10,6 +10,7 @@ class ItemView extends GetView<ItemController> {
   @override
   Widget build(BuildContext context) {
     return LayoutView(
+      activeIndex: 4,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Padding(
