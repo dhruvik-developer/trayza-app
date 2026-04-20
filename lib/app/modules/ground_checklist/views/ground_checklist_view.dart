@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:trayza_app/app/modules/layout/controllers/navigation_placeholders.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../layout/views/layout_view.dart';
-import '../controllers/navigation_placeholders.dart';
 
 class GroundChecklistView extends GetView<GroundChecklistController> {
   const GroundChecklistView({Key? key}) : super(key: key);

@@ -248,7 +248,7 @@ class AllOrderView extends GetView<AllOrderController> {
             decoration: const BoxDecoration(border: Border(top: BorderSide(color: Color(0xFFEDE7F6)))),
             child: Row(
               children: [
-                _buildActionBtn(Icons.check_circle_outline, "Complete", Colors.emerald),
+                _buildActionBtn(Icons.check_circle_outline, "Complete", Colors.green),
                 const SizedBox(width: 8),
                 _buildActionBtn(Icons.share_outlined, "Share", Colors.blue),
                 const SizedBox(width: 8),
