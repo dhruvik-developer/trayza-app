@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import '../../routes/app_routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService extends GetxService {
@@ -48,6 +49,6 @@ class AuthService extends GetxService {
     _prefs.remove('username');
     _prefs.remove('userType');
     
-    Get.offAllNamed('/login');
+    Get.offAllNamed(Routes.LOGIN);
   }
 }

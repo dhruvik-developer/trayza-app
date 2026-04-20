@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:trayza_app/app/data/services/auth_service.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../data/services/auth_service.dart';
 import '../controllers/layout_controller.dart';
 
 class LayoutView extends GetView<LayoutController> {
@@ -84,16 +84,22 @@ class LayoutView extends GetView<LayoutController> {
                     ),
                     leading: Icon(
                       _getIcon(item['icon'] as String),
-                      color: isSelected ? Colors.white : AppColors.textSecondaryLight,
+                      color: isSelected
+                          ? Colors.white
+                          : AppColors.textSecondaryLight,
                     ),
                     title: Text(
                       item['title'] as String,
                       style: TextStyle(
-                        color: isSelected ? Colors.white : AppColors.textPrimaryLight,
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        color: isSelected
+                            ? Colors.white
+                            : AppColors.textPrimaryLight,
+                        fontWeight:
+                            isSelected ? FontWeight.bold : FontWeight.normal,
                       ),
                     ),
-                    tileColor: isSelected ? AppColors.primary : Colors.transparent,
+                    tileColor:
+                        isSelected ? AppColors.primary : Colors.transparent,
                   );
                 });
               },
@@ -150,14 +156,22 @@ class LayoutView extends GetView<LayoutController> {
 
   IconData _getIcon(String iconName) {
     switch (iconName) {
-      case 'dashboard': return Icons.grid_view_rounded;
-      case 'shopping_cart': return Icons.shopping_basket_rounded;
-      case 'restaurant': return Icons.restaurant_menu_rounded;
-      case 'category': return Icons.category_rounded;
-      case 'inventory': return Icons.inventory_2_rounded;
-      case 'people': return Icons.people_alt_rounded;
-      case 'settings': return Icons.settings_rounded;
-      default: return Icons.circle;
+      case 'dashboard':
+        return Icons.grid_view_rounded;
+      case 'shopping_cart':
+        return Icons.shopping_basket_rounded;
+      case 'restaurant':
+        return Icons.restaurant_menu_rounded;
+      case 'category':
+        return Icons.category_rounded;
+      case 'inventory':
+        return Icons.inventory_2_rounded;
+      case 'people':
+        return Icons.people_alt_rounded;
+      case 'settings':
+        return Icons.settings_rounded;
+      default:
+        return Icons.circle;
     }
   }
 }

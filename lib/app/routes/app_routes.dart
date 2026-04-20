@@ -3,6 +3,7 @@ abstract class Routes {
   static const LOGIN = _Paths.LOGIN;
   static const LAYOUT = _Paths.LAYOUT;
   static const DASHBOARD = _Paths.DASHBOARD;
+  static const CATEGORY = _Paths.CATEGORY; // Added
   static const DISH = _Paths.DISH;
   static const ALL_ORDER = _Paths.ALL_ORDER;
 }
@@ -12,6 +13,7 @@ abstract class _Paths {
   static const LOGIN = '/login';
   static const LAYOUT = '/layout';
   static const DASHBOARD = '/dashboard';
+  static const CATEGORY = '/category'; // Added
   static const DISH = '/dish';
   static const ALL_ORDER = '/all-order';
 }

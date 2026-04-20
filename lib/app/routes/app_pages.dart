@@ -19,12 +19,12 @@ class AppPages {
 
   static final routes = [
     GetPage(
-      name: _Paths.LOGIN,
+      name: Routes.LOGIN,
       page: () => const LoginView(),
       binding: LoginBinding(),
     ),
     GetPage(
-      name: _Paths.DASHBOARD,
+      name: Routes.DASHBOARD,
       page: () => const DashboardView(),
       bindings: [
         DashboardBinding(),
@@ -32,7 +32,7 @@ class AppPages {
       ],
     ),
     GetPage(
-      name: _Paths.ALL_ORDER,
+      name: Routes.ALL_ORDER,
       page: () => const AllOrderView(),
       bindings: [
         AllOrderBinding(),
@@ -40,7 +40,7 @@ class AppPages {
       ],
     ),
     GetPage(
-      name: _Paths.CATEGORY,
+      name: Routes.CATEGORY,
       page: () => const CategoryView(),
       bindings: [
         CategoryBinding(),
@@ -48,7 +48,7 @@ class AppPages {
       ],
     ),
     GetPage(
-      name: _Paths.DISH, // Mapping /dish (wizard)
+      name: Routes.DISH,
       page: () => const BookingView(),
       bindings: [
         BookingBinding(),
