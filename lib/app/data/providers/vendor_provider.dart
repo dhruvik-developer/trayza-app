@@ -22,7 +22,7 @@ class VendorProvider {
 
   Future<Response> updateVendor(int id, Map<String, dynamic> data) async {
     try {
-      final response = await ApiInstance.dio.put('/vendors/$id/', data: data);
+      final response = await ApiClient.dio.put('/vendors/$id/', data: data);
       return response;
     } catch (e) {
       rethrow;

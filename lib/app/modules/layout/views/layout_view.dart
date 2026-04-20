@@ -13,7 +13,7 @@ import '../../stock/bindings/stock_binding.dart';
 import '../../item/views/item_view.dart';
 import '../../item/bindings/item_binding.dart';
 import '../../people/views/people_view.dart';
-import '../../people/bindings/people_binding.dart';
+// import '../../people/bindings/people_binding.dart';
 
 class LayoutView extends GetView<LayoutController> {
   final Widget child;
@@ -107,8 +107,8 @@ class LayoutView extends GetView<LayoutController> {
                   _buildSidebarItem(9, 'Create Ingredient', Icons.note_add_outlined, () {}),
                   const SizedBox(height: 10),
                   
-                  _buildSidebarItem(10, 'People', Icons.people_outline_rounded, 
-                      () => Get.offAll(() => const PeopleView(), binding: PeopleBinding())),
+                  // _buildSidebarItem(10, 'People', Icons.people_outline_rounded, 
+                  //     () => Get.offAll(() => const PeopleView(), binding: PeopleBinding())),
                   const SizedBox(height: 10),
                   
                   _buildSidebarItem(11, 'Event Summary', Icons.description_outlined, () {}),
