@@ -5,16 +5,20 @@ class LayoutController extends GetxController {
   
   void setIndex(int index) => selectedIndex.value = index;
   
-  // Menu items based on React Project structure
+  // Exact Menu list from React Web Sidebar images
   final menuItems = [
-    {'title': 'Dashboard', 'icon': 'dashboard'},
-    {'title': 'All Orders', 'icon': 'assignment'},
-    {'title': 'Create Dish', 'icon': 'restaurant_menu'}, // This is the Booking Wizard
-    {'title': 'Stocks', 'icon': 'inventory_2'},
-    {'title': 'Items', 'icon': 'list_alt'},
-    {'title': 'People', 'icon': 'people'},
-    {'title': 'Expense', 'icon': 'payments'},
+    {'title': 'Create Dish', 'icon': 'room_service'},
+    {'title': 'Category', 'icon': 'category'},
+    {'title': 'Quotation', 'icon': 'assignment'},
+    {'title': 'All Order', 'icon': 'checklist'},
+    {'title': 'Invoice', 'icon': 'receipt'},
     {'title': 'GST Billing', 'icon': 'receipt_long'},
-    {'title': 'Settings', 'icon': 'settings'},
+    {'title': 'Stock', 'icon': 'shopping_bag'},
+    {'title': 'Payment History', 'icon': 'history'},
+    {'title': 'Expense', 'icon': 'payments'},
+    {'title': 'Create Ingredient', 'icon': 'note_add'},
+    {'title': 'People', 'icon': 'people'},
+    {'title': 'Event Summary', 'icon': 'description'},
+    {'title': 'Ground Checklist', 'icon': 'rule_folder'},
   ];
 }

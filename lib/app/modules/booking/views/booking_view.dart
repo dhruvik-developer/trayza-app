@@ -11,7 +11,7 @@ class BookingView extends GetView<BookingController> {
   @override
   Widget build(BuildContext context) {
     return LayoutView(
-      activeIndex: 2,
+      activeIndex: 0,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Padding(

@@ -10,7 +10,7 @@ class AllOrderView extends GetView<AllOrderController> {
   @override
   Widget build(BuildContext context) {
     return LayoutView(
-      activeIndex: 1,
+      activeIndex: 3,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Padding(

@@ -11,7 +11,7 @@ class StockView extends GetView<StockController> {
   Widget build(BuildContext context) {
     bool isMobile = context.width < 600;
     return LayoutView(
-      activeIndex: 3,
+      activeIndex: 6,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Padding(

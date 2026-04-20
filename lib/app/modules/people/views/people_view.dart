@@ -11,7 +11,7 @@ class PeopleView extends StatelessWidget {
     bool isMobile = context.width < 600;
 
     return LayoutView(
-      activeIndex: 5,
+      activeIndex: 10,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Padding(
