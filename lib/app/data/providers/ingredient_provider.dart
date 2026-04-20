@@ -4,7 +4,7 @@ import '../../core/utils/api_client.dart';
 class IngredientProvider {
   Future<Response> getIngredientCategories() async {
     try {
-      final response = await ApiClient.dio.get('/ingredients-categories/');
+      final response = await ApiClient.dio.get('ingredients-categories/');
       return response;
     } catch (e) {
       rethrow;
@@ -13,7 +13,7 @@ class IngredientProvider {
 
   Future<Response> addIngredientCategory(String name, bool isCommon) async {
     try {
-      final response = await ApiClient.dio.post('/ingredients-categories/', data: {
+      final response = await ApiClient.dio.post('ingredients-categories/', data: {
         'name': name,
         'is_common': isCommon,
       });
@@ -25,7 +25,7 @@ class IngredientProvider {
 
   Future<Response> addIngredientItem(String name, int categoryId) async {
     try {
-      final response = await ApiClient.dio.post('/ingredients-items/', data: {
+      final response = await ApiClient.dio.post('ingredients-items/', data: {
         'name': name,
         'category': categoryId,
       });

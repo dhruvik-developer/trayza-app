@@ -38,7 +38,19 @@ class CreateIngredientController extends GetxController {
     isLoading.value = true;
     try {
       final response = await _provider.getIngredientCategories();
-      final List data = response.data['data'] ?? [];
+      List data = [];
+      
+      // Robust response parsing
+      if (response.data is List) {
+        data = response.data;
+      } else if (response.data is Map) {
+        if (response.data.containsKey('data')) {
+          data = response.data['data'];
+        } else if (response.data.containsKey('results')) {
+          data = response.data['results'];
+        }
+      }
+
       final fetched = data.map((e) => IngredientCategoryModel.fromJson(e)).toList();
       categories.assignAll(fetched);
       
@@ -46,35 +58,43 @@ class CreateIngredientController extends GetxController {
         selectedCategoryId.value = categories.first.id;
       }
     } catch (e) {
-      Get.snackbar("Error", "Failed to fetch ingredient categories");
+      Get.snackbar("Error", "Failed to fetch ingredient categories: ${e.toString()}");
     } finally {
       isLoading.value = false;
     }
   }
 
   Future<void> saveIngredientCategory(String name, bool isCommon) async {
+    if (name.trim().isEmpty) {
+      Get.snackbar("Required", "Category name is required");
+      return;
+    }
     try {
-      final response = await _provider.addIngredientCategory(name, isCommon);
-      if (response.statusCode == 201 || response.statusCode == 200) {
+      final response = await _provider.addIngredientCategory(name.trim(), isCommon);
+      if (response.statusCode == 201 || response.statusCode == 200 || response.data['status'] == true) {
         await fetchCategories();
         Get.back();
         Get.snackbar("Success", "Ingredient Category added successfully!");
       }
     } catch (e) {
-      Get.snackbar("Error", "Failed to add ingredient category");
+      Get.snackbar("Error", "Failed to add ingredient category: ${e.toString()}");
     }
   }
 
   Future<void> saveIngredientItem(String name, int categoryId) async {
+    if (name.trim().isEmpty) {
+      Get.snackbar("Required", "Item name is required");
+      return;
+    }
     try {
-      final response = await _provider.addIngredientItem(name, categoryId);
-      if (response.statusCode == 201 || response.statusCode == 200) {
+      final response = await _provider.addIngredientItem(name.trim(), categoryId);
+      if (response.statusCode == 201 || response.statusCode == 200 || response.data['status'] == true) {
         await fetchCategories();
         Get.back();
         Get.snackbar("Success", "Ingredient item created successfully!");
       }
     } catch (e) {
-      Get.snackbar("Error", "Failed to create ingredient item");
+      Get.snackbar("Error", "Failed to create ingredient item: ${e.toString()}");
     }
   }
 

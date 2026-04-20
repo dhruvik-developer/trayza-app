@@ -4,7 +4,7 @@ import '../../core/utils/api_client.dart';
 class CategoryProvider {
   Future<Response> getCategories() async {
     try {
-      final response = await ApiClient.dio.get('/categories/');
+      final response = await ApiClient.dio.get('categories/');
       return response;
     } catch (e) {
       rethrow;
@@ -13,7 +13,7 @@ class CategoryProvider {
 
   Future<Response> createCategory(String name) async {
     try {
-      final response = await ApiClient.dio.post('/categories/', data: {
+      final response = await ApiClient.dio.post('categories/', data: {
         'name': name,
       });
       return response;
@@ -24,7 +24,7 @@ class CategoryProvider {
 
   Future<Response> createItem(String name, int categoryId, double baseCost, double selectionRate) async {
     try {
-      final response = await ApiClient.dio.post('/items/', data: {
+      final response = await ApiClient.dio.post('items/', data: {
         'name': name,
         'category': categoryId,
         'base_cost': baseCost,
@@ -38,7 +38,7 @@ class CategoryProvider {
 
   Future<Response> createRecipe(Map<String, dynamic> data) async {
     try {
-      final response = await ApiClient.dio.post('/recipes/', data: data);
+      final response = await ApiClient.dio.post('recipes/', data: data);
       return response;
     } catch (e) {
       rethrow;
@@ -47,7 +47,7 @@ class CategoryProvider {
 
   Future<Response> getIngredientItems() async {
     try {
-      final response = await ApiClient.dio.get('/ingredients-items/');
+      final response = await ApiClient.dio.get('ingredients-items/');
       return response;
     } catch (e) {
       rethrow;
@@ -56,7 +56,7 @@ class CategoryProvider {
 
   Future<Response> getAllItems() async {
     try {
-      final response = await ApiClient.dio.get('/items/');
+      final response = await ApiClient.dio.get('items/');
       return response;
     } catch (e) {
       rethrow;

@@ -39,18 +39,28 @@ class CategoryController extends GetxController {
     isLoading.value = true;
     try {
       final response = await _categoryProvider.getCategories();
-      if (response.data['status'] == true) {
-        final List data = response.data['data'];
-        final fetched = data.map((e) => CategoryModel.fromJson(e)).toList();
-        categories.assignAll(fetched);
-        
-        // Default selection to first category if none selected
-        if (selectedCategoryId.value == null && categories.isNotEmpty) {
-          selectedCategoryId.value = categories.first.id;
+      List data = [];
+      
+      // Handle various response formats
+      if (response.data is List) {
+        data = response.data;
+      } else if (response.data is Map) {
+        if (response.data.containsKey('data')) {
+          data = response.data['data'];
+        } else if (response.data.containsKey('results')) {
+          data = response.data['results'];
         }
       }
+
+      final fetched = data.map((e) => CategoryModel.fromJson(e)).toList();
+      categories.assignAll(fetched);
+      
+      // Default selection to first category if none selected
+      if (selectedCategoryId.value == null && categories.isNotEmpty) {
+        selectedCategoryId.value = categories.first.id;
+      }
     } catch (e) {
-      Get.snackbar("Error", "Failed to fetch categories");
+      Get.snackbar("Error", "Failed to fetch categories: ${e.toString()}");
     } finally {
       isLoading.value = false;
     }
@@ -68,41 +78,49 @@ class CategoryController extends GetxController {
   // --- CRUD Actions for Modals ---
 
   Future<void> createCategory(String name) async {
+    if (name.isEmpty) {
+      Get.snackbar("Required", "Category name is required");
+      return;
+    }
     try {
       final response = await _categoryProvider.createCategory(name);
-      if (response.statusCode == 201 || response.statusCode == 200) {
+      if (response.statusCode == 201 || response.statusCode == 200 || response.data['status'] == true) {
         await fetchCategories();
         Get.back(); // Close modal
         Get.snackbar("Success", "Category created successfully!");
       }
     } catch (e) {
-      Get.snackbar("Error", "Failed to create category");
+      Get.snackbar("Error", "Failed to create category: ${e.toString()}");
     }
   }
 
   Future<void> createItem(String name, int categoryId, double baseCost, double selectionRate) async {
+    if (name.isEmpty) {
+      Get.snackbar("Required", "Item name is required");
+      return;
+    }
     try {
       final response = await _categoryProvider.createItem(name, categoryId, baseCost, selectionRate);
-      if (response.statusCode == 201 || response.statusCode == 200) {
+      if (response.statusCode == 201 || response.statusCode == 200 || response.data['status'] == true) {
         await fetchCategories();
         Get.back(); // Close modal
         Get.snackbar("Success", "Item created successfully!");
       }
     } catch (e) {
-      Get.snackbar("Error", "Failed to create item");
+      Get.snackbar("Error", "Failed to create item: ${e.toString()}");
     }
   }
 
   Future<void> createRecipe(Map<String, dynamic> data) async {
     try {
       final response = await _categoryProvider.createRecipe(data);
-      if (response.statusCode == 201 || response.statusCode == 200) {
+      if (response.statusCode == 201 || response.statusCode == 200 || response.data['status'] == true) {
         await fetchCategories();
         Get.back(); // Close modal
         Get.snackbar("Success", "Recipe ingredient saved successfully!");
       }
     } catch (e) {
-      Get.snackbar("Error", "Failed to create recipe");
+      Get.snackbar("Error", "Failed to create recipe: ${e.toString()}");
     }
   }
 }
