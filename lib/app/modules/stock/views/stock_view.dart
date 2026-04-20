@@ -90,6 +90,7 @@ class StockView extends GetView<StockController> {
         children: [
           Expanded(
             child: TextField(
+              onChanged: (v) => controller.onSearchChanged(v),
               decoration: InputDecoration(
                 hintText: "Search items...",
                 prefixIcon: const Icon(Icons.search, size: 20),
@@ -98,40 +99,48 @@ class StockView extends GetView<StockController> {
                 fillColor: const Color(0xFFF9FAFB),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
-              onChanged: (v) {}, // Add search logic here
             ),
           ),
           if (!isMobile) ...[
             const SizedBox(width: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              decoration: BoxDecoration(
-                border: Border.all(color: const Color(0xFFD1D5DB)),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Row(
-                children: [
-                  Text("All Categories", style: TextStyle(fontSize: 14)),
-                  SizedBox(width: 8),
-                  Icon(Icons.keyboard_arrow_down, size: 18),
-                ],
-              ),
-            ),
+            _buildCategoryDropdown(),
           ],
         ],
       ),
     );
   }
 
+  Widget _buildCategoryDropdown() {
+    return Obx(() => Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        border: Border.all(color: const Color(0xFFD1D5DB)),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: DropdownButton<String>(
+        value: controller.selectedCategoryId.value,
+        underline: Container(),
+        onChanged: (v) => controller.onCategoryChanged(v),
+        items: [
+          const DropdownMenuItem(value: "all_items", child: Text("All Categories")),
+          ...controller.categories.map((cat) => DropdownMenuItem(
+            value: cat.id.toString(),
+            child: Text(cat.name ?? ""),
+          )),
+        ],
+      ),
+    ));
+  }
+
   Widget _buildDesktopTable() {
     return Container(
+      width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: const Color(0xFFE8E0F3)),
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
+      child: SingleChildScrollView(
         child: DataTable(
           headingRowColor: MaterialStateProperty.all(const Color(0xFFF9FAFB)),
           columnSpacing: 24,
@@ -146,14 +155,14 @@ class StockView extends GetView<StockController> {
           rows: controller.filteredStocks.map((stock) {
             return DataRow(cells: [
               DataCell(Text(stock.name ?? "—", style: const TextStyle(fontWeight: FontWeight.w600))),
-              DataCell(Text(stock.category ?? "—")),
-              DataCell(Text(stock.quantity.toString())),
-              DataCell(Text(stock.unit ?? "—")),
-              DataCell(_buildStatusBadge(stock.quantity)),
+              DataCell(Text(stock.categoryName ?? "—")),
+              DataCell(Text(stock.quantity ?? "0")),
+              DataCell(Text(stock.type ?? "—")), // Mapping 'type' to Unit
+              DataCell(_buildStatusBadge(double.tryParse(stock.quantity ?? "0") ?? 0)),
               DataCell(Row(
                 children: [
                   IconButton(icon: const Icon(Icons.edit_outlined, size: 18), onPressed: () {}),
-                  IconButton(icon: const Icon(Icons.delete_outline, size: 18, color: Colors.red), onPressed: () {}),
+                  IconButton(icon: const Icon(Icons.delete_outline, size: 18, color: Colors.red), onPressed: () => controller.deleteItem(stock.id!)),
                 ],
               )),
             ]);
@@ -186,11 +195,11 @@ class StockView extends GetView<StockController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(stock.name ?? "—", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                        Text(stock.category ?? "—", style: TextStyle(color: Colors.grey[500], fontSize: 13)),
+                        Text(stock.categoryName ?? "—", style: TextStyle(color: Colors.grey[500], fontSize: 13)),
                       ],
                     ),
                   ),
-                  _buildStatusBadge(stock.quantity),
+                  _buildStatusBadge(double.tryParse(stock.quantity ?? "0") ?? 0),
                 ],
               ),
               const Divider(height: 24),
@@ -201,13 +210,13 @@ class StockView extends GetView<StockController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text("Quantity", style: TextStyle(fontSize: 12, color: Colors.grey)),
-                      Text("${stock.quantity} ${stock.unit}", style: const TextStyle(fontWeight: FontWeight.bold)),
+                      Text("${stock.quantity ?? "0"} ${stock.type ?? "—"}", style: const TextStyle(fontWeight: FontWeight.bold)),
                     ],
                   ),
                   Row(
                     children: [
                       IconButton(icon: const Icon(Icons.edit_outlined, size: 20), onPressed: () {}),
-                      IconButton(icon: const Icon(Icons.delete_outline, size: 20, color: Colors.red), onPressed: () {}),
+                      IconButton(icon: const Icon(Icons.delete_outline, size: 20, color: Colors.red), onPressed: () => controller.deleteItem(stock.id!)),
                     ],
                   ),
                 ],

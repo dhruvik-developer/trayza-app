@@ -10,6 +10,7 @@ class StockController extends GetxController {
   final categories = <StockCategoryModel>[].obs;
   final items = <StockItemModel>[].obs;
   final selectedCategoryId = "all_items".obs;
+  final searchQuery = "".obs;
 
   // Stats
   final totalItems = 0.obs;
@@ -20,6 +21,19 @@ class StockController extends GetxController {
   void onInit() {
     super.onInit();
     fetchData();
+  }
+
+  // Reactive getter for filtered stocks
+  List<StockItemModel> get filteredStocks {
+    if (searchQuery.value.isEmpty) {
+      return items;
+    }
+    return items.where((item) {
+      final name = item.name?.toLowerCase() ?? "";
+      final cat = item.categoryName?.toLowerCase() ?? "";
+      final query = searchQuery.value.toLowerCase();
+      return name.contains(query) || cat.contains(query);
+    }).toList();
   }
 
   Future<void> fetchData() async {
@@ -81,6 +95,10 @@ class StockController extends GetxController {
     }
   }
 
+  void onSearchChanged(String query) {
+    searchQuery.value = query;
+  }
+
   Future<void> deleteItem(int id) async {
     try {
       await _provider.deleteStockItem(id);
@@ -91,6 +109,4 @@ class StockController extends GetxController {
       Get.snackbar("Error", "Failed to delete item");
     }
   }
-
-  // To be implemented: Increase/Decrease methods
 }
