@@ -2,7 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
 import '../controllers/layout_controller.dart';
-import '../../../app/routes/app_pages.dart';
+
+// Import all views and bindings for direct navigation
+import '../../booking/views/booking_view.dart';
+import '../../booking/bindings/booking_binding.dart';
+import '../../category/views/category_view.dart';
+import '../../category/bindings/category_binding.dart';
+import '../../all_order/views/all_order_view.dart';
+import '../../all_order/bindings/all_order_binding.dart';
+import '../../dashboard/views/dashboard_view.dart';
+import '../../dashboard/bindings/dashboard_binding.dart';
 
 class LayoutView extends GetView<LayoutController> {
   final Widget child;
@@ -37,7 +46,7 @@ class LayoutView extends GetView<LayoutController> {
 
   Widget _buildSidebar(BuildContext context) {
     return Container(
-      width: 288, // w-72 from React
+      width: 288,
       height: double.infinity,
       decoration: const BoxDecoration(
         color: AppColors.sidebarBackground,
@@ -57,15 +66,13 @@ class LayoutView extends GetView<LayoutController> {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               children: [
-                _buildSidebarItem(context, 'Create Dish', Icons.restaurant_menu_rounded, Routes.DISH),
-                const SizedBox(height: 16), // space-y-4
-                _buildSidebarItem(context, 'Category', Icons.category_rounded, Routes.CATEGORY),
+                _buildSidebarItem(context, 'Create Dish', Icons.restaurant_menu_rounded, () => Get.offAll(() => const BookingView(), binding: BookingBinding())),
                 const SizedBox(height: 16),
-                _buildSidebarItem(context, 'All Orders', Icons.assignment_rounded, Routes.ALL_ORDER),
+                _buildSidebarItem(context, 'Category', Icons.category_rounded, () => Get.offAll(() => const CategoryView(), binding: CategoryBinding())),
                 const SizedBox(height: 16),
-                _buildSidebarItem(context, 'Stock', Icons.inventory_2_rounded, Routes.STOCK),
+                _buildSidebarItem(context, 'All Orders', Icons.assignment_rounded, () => Get.offAll(() => const AllOrderView(), binding: AllOrderBinding())),
                 const SizedBox(height: 16),
-                _buildSidebarItem(context, 'People', Icons.people_alt_rounded, Routes.PEOPLE),
+                _buildSidebarItem(context, 'Dashboard', Icons.dashboard_rounded, () => Get.offAll(() => const DashboardView(), binding: DashboardBinding())),
               ],
             ),
           ),
@@ -74,17 +81,18 @@ class LayoutView extends GetView<LayoutController> {
     );
   }
 
-  Widget _buildSidebarItem(BuildContext context, String title, IconData icon, String route) {
-    bool isActive = Get.currentRoute == route;
+  Widget _buildSidebarItem(BuildContext context, String title, IconData icon, VoidCallback onTap) {
+    // Note: Active state check in direct navigation is usually done via a controller variable or checking runtime type
+    bool isActive = false; // Simplified for direct navigation
     
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: () => Get.toNamed(route),
+        onTap: onTap,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12), // rounded-xl
+            borderRadius: BorderRadius.circular(12),
             color: isActive ? AppColors.primary : Colors.transparent,
             boxShadow: isActive ? [
               BoxShadow(
@@ -96,7 +104,6 @@ class LayoutView extends GetView<LayoutController> {
           ),
           child: Row(
             children: [
-              // Icon Container
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
@@ -113,7 +120,7 @@ class LayoutView extends GetView<LayoutController> {
                 child: Icon(
                   icon,
                   size: 24,
-                  color: isActive ? AppColors.primary : AppColors.primary,
+                  color: AppColors.primary,
                 ),
               ),
               const SizedBox(width: 16),
@@ -147,7 +154,6 @@ class LayoutView extends GetView<LayoutController> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Breadcrumbs (Mock for now)
           const Row(
             children: [
               Icon(Icons.home_outlined, color: Colors.white70, size: 20),
@@ -155,13 +161,11 @@ class LayoutView extends GetView<LayoutController> {
               Icon(Icons.chevron_right_rounded, color: Colors.white30, size: 16),
               SizedBox(width: 8),
               Text(
-                "Dashboard",
+                "Trayza Admin",
                 style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
               ),
             ],
           ),
-          
-          // Badges & Profile
           Row(
             children: [
               _buildBadge("12 Low Stock", Icons.warning_amber_rounded, Colors.red.withOpacity(0.2)),
@@ -191,10 +195,7 @@ class LayoutView extends GetView<LayoutController> {
         children: [
           Icon(icon, color: Colors.white, size: 14),
           const SizedBox(width: 6),
-          Text(
-            text,
-            style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
-          ),
+          Text(text, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500)),
         ],
       ),
     );

@@ -2,7 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../routes/app_routes.dart';
+import '../../booking/views/booking_view.dart';
+import '../../booking/bindings/booking_binding.dart';
 import '../../../data/providers/auth_provider.dart';
 import '../../../data/services/auth_service.dart';
 
@@ -45,7 +46,7 @@ class LoginController extends GetxController {
         log(userType);
         if (userType == "admin") {
           AuthService.to.login(access, username, userType);
-          Get.offAllNamed(Routes.DISH);
+          Get.offAll(() => const BookingView(), binding: BookingBinding());
           Get.snackbar("Success", "Login successful",
               backgroundColor: Colors.green, colorText: Colors.white);
         } else {
