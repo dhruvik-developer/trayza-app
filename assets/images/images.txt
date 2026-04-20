@@ -1,0 +1,2 @@
+# Asset Placeholder
+This folder is for app images.

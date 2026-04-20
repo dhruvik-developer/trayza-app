@@ -14,31 +14,22 @@ class BookingView extends GetView<BookingController> {
         backgroundColor: Colors.transparent,
         body: Padding(
           padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Create Event Booking",
-                style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 24),
-              ),
-              const SizedBox(height: 24),
-              
-              // Step Progress
-              Obx(() => Row(
-                children: [
-                  _buildStepIndicator(context, 0, "Client Info", controller.currentStep.value >= 0),
-                  _buildLine(controller.currentStep.value >= 1),
-                  _buildStepIndicator(context, 1, "Schedule", controller.currentStep.value >= 1),
-                  _buildLine(controller.currentStep.value >= 2),
-                  _buildStepIndicator(context, 2, "Dishes", controller.currentStep.value >= 2),
-                ],
-              )),
-              
-              const SizedBox(height: 32),
-              
-              // Content Area
-              Expanded(
-                child: Card(
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                )
+              ],
+            ),
+            child: Column(
+              children: [
+                _buildStepperHeader(context),
+                Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(24.0),
                     child: Obx(() {
@@ -51,78 +42,95 @@ class BookingView extends GetView<BookingController> {
                     }),
                   ),
                 ),
-              ),
-              
-              const SizedBox(height: 24),
-              
-              // Navigation Buttons
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Obx(() => controller.currentStep.value > 0
-                      ? OutlinedButton(
-                          onPressed: controller.previousStep,
-                          child: const Text("Back"),
-                        )
-                      : const SizedBox()),
-                  Obx(() => ElevatedButton(
-                    onPressed: controller.currentStep.value == 2
-                        ? controller.submitBooking
-                        : controller.nextStep,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
-                    ),
-                    child: Text(controller.currentStep.value == 2 ? "Finish" : "Next"),
-                  )),
-                ],
-              ),
-            ],
+                _buildFooter(),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildStepIndicator(BuildContext context, int step, String label, bool isActive) {
-    return Column(
-      children: [
-        Container(
-          width: 32,
-          height: 32,
-          decoration: BoxDecoration(
-            color: isActive ? AppColors.primary : Colors.grey.withOpacity(0.2),
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: Text(
-              (step + 1).toString(),
-              style: TextStyle(
-                color: isActive ? Colors.white : Colors.grey,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
+  Widget _buildStepperHeader(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFF845CBD), Color(0xFF6A3FAF)],
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
         ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            color: isActive ? AppColors.primary : Colors.grey,
-            fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
-          ),
-        ),
-      ],
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 40),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _buildStepItem(0, "Client & Event", Icons.person_outline),
+          _buildConnector(0),
+          _buildStepItem(1, "Menu Selection", Icons.grid_view_rounded),
+          _buildConnector(1),
+          _buildStepItem(2, "Summary & Services", Icons.assignment_outlined),
+        ],
+      ),
     );
   }
 
-  Widget _buildLine(bool isActive) {
+  Widget _buildStepItem(int step, String label, IconData icon) {
+    return Obx(() {
+      bool isActive = controller.currentStep.value == step;
+      bool isCompleted = controller.currentStep.value > step;
+      
+      return Column(
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: isCompleted ? Colors.green : (isActive ? Colors.white : Colors.white24),
+              shape: BoxShape.circle,
+              boxShadow: (isActive || isCompleted) ? [
+                BoxShadow(
+                  color: isCompleted ? Colors.green.withOpacity(0.3) : Colors.white.withOpacity(0.3),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                )
+              ] : null,
+            ),
+            child: Icon(
+              isCompleted ? Icons.check : icon,
+              size: 20,
+              color: isCompleted ? Colors.white : (isActive ? AppColors.primary : Colors.white60),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.5,
+              color: isActive ? Colors.white : (isCompleted ? Colors.green[200] : Colors.white54),
+            ),
+          ),
+        ],
+      );
+    });
+  }
+
+  Widget _buildConnector(int step) {
     return Expanded(
-      child: Container(
-        height: 2,
-        color: isActive ? AppColors.primary : Colors.grey.withOpacity(0.2),
-        margin: const EdgeInsets.only(bottom: 20),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 20, left: 12, right: 12),
+        child: Obx(() {
+          bool isCompleted = controller.currentStep.value > step;
+          return Container(
+            height: 3,
+            decoration: BoxDecoration(
+              color: isCompleted ? Colors.green : Colors.white24,
+              borderRadius: BorderRadius.circular(10),
+            ),
+          );
+        }),
       ),
     );
   }
@@ -133,11 +141,11 @@ class BookingView extends GetView<BookingController> {
       children: [
         const Text("Client Information", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         const SizedBox(height: 24),
-        _buildTextField("Client Name", controller.clientName, Icons.person),
+        _buildTextField("Client Name", controller.clientName, Icons.person_outline),
         const SizedBox(height: 16),
-        _buildTextField("Mobile Number", controller.mobileNo, Icons.phone),
+        _buildTextField("Mobile Number", controller.mobileNo, Icons.phone_outlined),
         const SizedBox(height: 16),
-        _buildTextField("Reference", controller.reference, Icons.link),
+        _buildTextField("Reference", controller.reference, Icons.link_rounded),
       ],
     );
   }
@@ -148,19 +156,25 @@ class BookingView extends GetView<BookingController> {
       children: [
         const Text("Event Schedule", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         const SizedBox(height: 24),
-        ListTile(
-          title: const Text("Event Date"),
-          subtitle: Obx(() => Text(controller.eventDate.value.toString().split(' ')[0])),
-          trailing: const Icon(Icons.calendar_today),
-          onTap: () async {
-            final picked = await showDatePicker(
-              context: context,
-              initialDate: controller.eventDate.value,
-              firstDate: DateTime.now(),
-              lastDate: DateTime.now().add(const Duration(days: 365)),
-            );
-            if (picked != null) controller.eventDate.value = picked;
-          },
+        Card(
+          elevation: 0,
+          color: AppColors.background,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          child: ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            title: const Text("Select Event Date", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+            subtitle: Obx(() => Text(controller.eventDate.value.toString().split(' ')[0], style: const TextStyle(fontSize: 16, color: AppColors.primary, fontWeight: FontWeight.bold))),
+            trailing: const Icon(Icons.calendar_month_rounded, color: AppColors.primary),
+            onTap: () async {
+              final picked = await showDatePicker(
+                context: context,
+                initialDate: controller.eventDate.value,
+                firstDate: DateTime.now(),
+                lastDate: DateTime.now().add(const Duration(days: 365)),
+              );
+              if (picked != null) controller.eventDate.value = picked;
+            },
+          ),
         ),
       ],
     );
@@ -173,8 +187,51 @@ class BookingView extends GetView<BookingController> {
         children: [
           Icon(Icons.restaurant_menu_rounded, size: 64, color: AppColors.primary),
           SizedBox(height: 16),
-          Text("Dish Selection Logic", style: TextStyle(fontWeight: FontWeight.bold)),
-          Text("Select items from categories to add to the menu"),
+          Text("Dish Selection Logic", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+          SizedBox(height: 8),
+          Text("Select items from categories to add to the menu", style: TextStyle(color: Colors.grey)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFooter() {
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Obx(() => controller.currentStep.value > 0
+              ? OutlinedButton.icon(
+                  onPressed: controller.previousStep,
+                  icon: const Icon(Icons.chevron_left),
+                  label: const Text("Back"),
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                )
+              : const SizedBox()),
+          Obx(() => ElevatedButton(
+            onPressed: controller.currentStep.value == 2
+                ? controller.submitBooking
+                : controller.nextStep,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              elevation: 4,
+              shadowColor: AppColors.primary.withOpacity(0.4),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            child: Row(
+              children: [
+                Text(controller.currentStep.value == 2 ? "Confirm Booking" : "Continue"),
+                const SizedBox(width: 8),
+                Icon(controller.currentStep.value == 2 ? Icons.check_circle_outline : Icons.chevron_right),
+              ],
+            ),
+          )),
         ],
       ),
     );
@@ -185,8 +242,22 @@ class BookingView extends GetView<BookingController> {
       controller: ctrl,
       decoration: InputDecoration(
         labelText: label,
-        prefixIcon: Icon(icon, size: 20),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+        prefixIcon: Icon(icon, size: 20, color: AppColors.primary),
+        filled: true,
+        fillColor: AppColors.background,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+        ),
       ),
     );
   }
