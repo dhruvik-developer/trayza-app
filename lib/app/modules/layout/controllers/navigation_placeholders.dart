@@ -24,13 +24,6 @@ class ExpenseBinding extends Bindings {
   }
 }
 
-class CreateIngredientController extends GetxController {}
-class CreateIngredientBinding extends Bindings {
-  @override
-  void dependencies() {
-    Get.lazyPut<CreateIngredientController>(() => CreateIngredientController());
-  }
-}
 
 class EventSummaryController extends GetxController {}
 class EventSummaryBinding extends Bindings {
