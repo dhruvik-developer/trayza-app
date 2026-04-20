@@ -75,7 +75,7 @@ class LayoutView extends GetView<LayoutController> {
                   errorBuilder: (_, __, ___) => const FlutterLogo(size: 60)),
             ),
 
-            // Scrollable Menu Items
+            // Scrollable Menu Items (GST Billing Removed)
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -100,35 +100,31 @@ class LayoutView extends GetView<LayoutController> {
                       () => Get.offAll(() => const InvoiceView(), binding: InvoiceBinding())),
                   const SizedBox(height: 10),
                   
-                  _buildSidebarItem(5, 'GST Billing', Icons.receipt_long_outlined, 
-                      () => Get.offAll(() => const GstBillingView(), binding: GstBillingBinding())),
-                  const SizedBox(height: 10),
-                  
-                  _buildSidebarItem(6, 'Stock', Icons.shopping_bag_outlined, 
+                  _buildSidebarItem(5, 'Stock', Icons.shopping_bag_outlined, 
                       () => Get.offAll(() => const StockView(), binding: StockBinding())),
                   const SizedBox(height: 10),
                   
-                  _buildSidebarItem(7, 'Payment History', Icons.history_rounded, 
+                  _buildSidebarItem(6, 'Payment History', Icons.history_rounded, 
                       () => Get.offAll(() => const PaymentHistoryView(), binding: PaymentHistoryBinding())),
                   const SizedBox(height: 10),
                   
-                  _buildSidebarItem(8, 'Expense', Icons.payments_outlined, 
+                  _buildSidebarItem(7, 'Expense', Icons.payments_outlined, 
                       () => Get.offAll(() => const ExpenseView(), binding: ExpenseBinding())),
                   const SizedBox(height: 10),
                   
-                  _buildSidebarItem(9, 'Create Ingredient', Icons.note_add_outlined, 
+                  _buildSidebarItem(8, 'Create Ingredient', Icons.note_add_outlined, 
                       () => Get.offAll(() => const CreateIngredientView(), binding: CreateIngredientBinding())),
                   const SizedBox(height: 10),
                   
-                  _buildSidebarItem(10, 'People', Icons.people_outline_rounded, 
+                  _buildSidebarItem(9, 'People', Icons.people_outline_rounded, 
                       () => Get.offAll(() => const PeopleView(), binding: PeopleBinding())),
                   const SizedBox(height: 10),
                   
-                  _buildSidebarItem(11, 'Event Summary', Icons.description_outlined, 
+                  _buildSidebarItem(10, 'Event Summary', Icons.description_outlined, 
                       () => Get.offAll(() => const EventSummaryView(), binding: EventSummaryBinding())),
                   const SizedBox(height: 10),
                   
-                  _buildSidebarItem(12, 'Ground Checklist', Icons.rule_folder_outlined, 
+                  _buildSidebarItem(11, 'Ground Checklist', Icons.rule_folder_outlined, 
                       () => Get.offAll(() => const GroundChecklistView(), binding: GroundChecklistBinding())),
                   const SizedBox(height: 24),
                 ],

@@ -5,14 +5,13 @@ class LayoutController extends GetxController {
   
   void setIndex(int index) => selectedIndex.value = index;
   
-  // Exact Menu list from React Web Sidebar images
+  // Exact Menu list from React Web Sidebar images (GST Billing Removed)
   final menuItems = [
     {'title': 'Create Dish', 'icon': 'room_service'},
     {'title': 'Category', 'icon': 'category'},
     {'title': 'Quotation', 'icon': 'assignment'},
     {'title': 'All Order', 'icon': 'checklist'},
     {'title': 'Invoice', 'icon': 'receipt'},
-    {'title': 'GST Billing', 'icon': 'receipt_long'},
     {'title': 'Stock', 'icon': 'shopping_bag'},
     {'title': 'Payment History', 'icon': 'history'},
     {'title': 'Expense', 'icon': 'payments'},
