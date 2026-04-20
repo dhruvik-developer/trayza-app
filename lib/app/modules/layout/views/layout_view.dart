@@ -18,8 +18,12 @@ import '../../quotation/views/quotation_view.dart';
 import '../../quotation/controllers/quotation_controller.dart';
 import '../../invoice/views/invoice_view.dart';
 import '../../invoice/controllers/invoice_controller.dart';
+import '../../expense/views/expense_view.dart';
+import '../../payment_history/views/payment_history_view.dart';
+import '../../create_ingredient/views/create_ingredient_view.dart';
+import '../../event_summary/views/event_summary_view.dart';
+import '../../ground_checklist/views/ground_checklist_view.dart';
 import '../controllers/navigation_placeholders.dart';
-import './navigation_placeholders_views.dart';
 
 class LayoutView extends GetView<LayoutController> {
   final Widget child;
@@ -75,7 +79,7 @@ class LayoutView extends GetView<LayoutController> {
                   errorBuilder: (_, __, ___) => const FlutterLogo(size: 60)),
             ),
 
-            // Scrollable Menu Items (GST Billing Removed)
+            // Scrollable Menu Items
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

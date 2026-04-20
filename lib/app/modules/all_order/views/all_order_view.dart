@@ -9,103 +9,137 @@ class AllOrderView extends GetView<AllOrderController> {
 
   @override
   Widget build(BuildContext context) {
+    bool isMobile = context.width < 900;
+
     return LayoutView(
       activeIndex: 3,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Padding(
-          padding: EdgeInsets.all(24.0),
-          child: Container(
-            padding: EdgeInsets.all(24.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                )
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildHeader(context),
-                const SizedBox(height: 24),
-                Expanded(
-                  child: Obx(() {
-                    if (controller.isLoading.value) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    if (controller.orders.isEmpty) {
-                      return _buildEmptyState();
-                    }
-                    return GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 600,
-                        mainAxisExtent: 260,
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 16,
-                      ),
-                      itemCount: controller.orders.length,
-                      itemBuilder: (context, index) {
-                        return _buildOrderCard(
-                            context, controller.orders[index]);
-                      },
-                    );
-                  }),
-                ),
-              ],
-            ),
+          padding: EdgeInsets.all(isMobile ? 12.0 : 24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHeader(context, isMobile),
+              const SizedBox(height: 24),
+              Expanded(
+                child: Obx(() {
+                  if (controller.isLoading.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (controller.orders.isEmpty) {
+                    return _buildEmptyState();
+                  }
+
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: isMobile ? 1 : 2,
+                      childAspectRatio: isMobile ? 1.4 : 1.8,
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 20,
+                    ),
+                    itemCount: controller.orders.length,
+                    itemBuilder: (context, index) {
+                      final order = controller.orders[index];
+                      return _buildOrderCard(order);
+                    },
+                  );
+                }),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _buildHeader(BuildContext context, bool isMobile) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: AppColors.primaryLight,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Icon(Icons.assignment_rounded,
-                  color: AppColors.primary, size: 22),
-            ),
-            const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
               children: [
-                const Text("All Orders",
-                    style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary)),
-                Obx(() => Text("${controller.orders.length} orders",
-                    style: const TextStyle(
-                        fontSize: 14, color: AppColors.textSecondary))),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF4EFFC),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(Icons.assignment_outlined, color: AppColors.primary, size: 24),
+                ),
+                const SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "All Orders",
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                    ),
+                    Obx(() => Text(
+                      "${controller.orders.length} orders found",
+                      style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
+                    )),
+                  ],
+                ),
               ],
             ),
           ],
         ),
-        // Search & Filter (To be implemented)
+        const SizedBox(height: 20),
+        // Search & Quick Filters (Single row layout from React)
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: const Color(0xFFE8E0F3)),
+          ),
+          child: Row(
+            children: [
+              const Icon(Icons.search, color: Colors.grey, size: 20),
+              const SizedBox(width: 12),
+              Expanded(
+                child: TextField(
+                  decoration: const InputDecoration(
+                    hintText: "Search name or mobile...",
+                    border: InputBorder.none,
+                    hintStyle: TextStyle(fontSize: 14),
+                  ),
+                  onChanged: (v) {},
+                ),
+              ),
+              if (!isMobile) ...[
+                const SizedBox(width: 12),
+                _buildQuickFilter("Today"),
+                const SizedBox(width: 8),
+                _buildQuickFilter("This Week"),
+                const SizedBox(width: 8),
+                _buildQuickFilter("Upcoming"),
+              ],
+            ],
+          ),
+        ),
       ],
     );
   }
 
-  Widget _buildOrderCard(BuildContext context, dynamic order) {
+  Widget _buildQuickFilter(String label) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(color: const Color(0xFFF3F4F6), borderRadius: BorderRadius.circular(6)),
+      child: Text(label, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF4B5563))),
+    );
+  }
+
+  Widget _buildOrderCard(dynamic order) {
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFFFAF8FD),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0xFFE8E0F3)),
       ),
       child: Column(
@@ -115,59 +149,38 @@ class AllOrderView extends GetView<AllOrderController> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             decoration: const BoxDecoration(
               color: Color(0xFFF4EFFC),
-              border: Border(bottom: BorderSide(color: Color(0xFFEDE7F6))),
-              borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 20,
-                      backgroundColor: AppColors.primary,
-                      child: Text(
-                        (order['name'] as String? ?? "?")
-                            .substring(0, 1)
-                            .toUpperCase(),
-                        style: const TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(order['name'] ?? "Unknown",
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16)),
-                        if (order['reference'] != null)
-                          Text("Ref: ${order['reference']}",
-                              style: const TextStyle(
-                                  fontSize: 12,
-                                  color: AppColors.textSecondary)),
-                      ],
-                    ),
-                  ],
+                CircleAvatar(
+                  radius: 18,
+                  backgroundColor: AppColors.primary,
+                  child: Text(
+                    (order.name ?? "?")[0].toUpperCase(),
+                    style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(order.name ?? "—", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+                      if (order.reference != null)
+                        Text("Ref: ${order.reference}", style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                    ],
+                  ),
                 ),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: const Color(0xFFEDE7F6)),
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), border: Border.all(color: const Color(0xFFEDE7F6))),
                   child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.calendar_today,
-                          size: 12, color: AppColors.primary),
+                      const Icon(Icons.calendar_today, size: 10, color: AppColors.primary),
                       const SizedBox(width: 6),
-                      Text(order['event_date'] ?? "No Date",
-                          style: const TextStyle(
-                              fontSize: 12,
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.bold)),
+                      Text(order.eventDate ?? "—", style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.primary)),
                     ],
                   ),
                 ),
@@ -178,54 +191,49 @@ class AllOrderView extends GetView<AllOrderController> {
           // Card Body
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: const Color(0xFFEDE7F6)),
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8), border: Border.all(color: const Color(0xFFEDE7F6))),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.phone,
-                            size: 14, color: AppColors.primary),
+                        const Icon(Icons.phone_outlined, size: 14, color: AppColors.primary),
                         const SizedBox(width: 8),
-                        Text(order['mobile_no'] ?? "--",
-                            style:
-                                const TextStyle(fontWeight: FontWeight.w500)),
+                        Text(order.mobileNo ?? "—", style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                       ],
                     ),
                   ),
                   const SizedBox(height: 12),
+                  // Detailed Order Summary Box
                   Container(
                     padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFEEF2FF), // bg-indigo-50/40
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: const Color(0xFFEDE7F6)),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10), border: Border.all(color: const Color(0xFFEDE7F6))),
+                    child: Column(
                       children: [
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Icon(Icons.assignment_outlined,
-                                size: 14, color: AppColors.primary),
-                            const SizedBox(width: 8),
-                            Text(
-                                "Total Sessions: ${order['sessions']?.length ?? 1}",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold)),
+                            Row(
+                              children: [
+                                const Icon(Icons.assignment_outlined, size: 14, color: AppColors.primary),
+                                const SizedBox(width: 8),
+                                const Text("Total Sessions", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                            const Icon(Icons.chevron_right, size: 16, color: AppColors.primary),
                           ],
                         ),
-                        const Icon(Icons.chevron_right,
-                            color: AppColors.primary),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            const SizedBox(width: 22),
+                            Text("Total Estimated Persons: ${order.estimatedPersons ?? 0}", style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -235,21 +243,16 @@ class AllOrderView extends GetView<AllOrderController> {
           ),
 
           // Card Footer
-          Padding(
+          Container(
             padding: const EdgeInsets.all(12),
+            decoration: const BoxDecoration(border: Border(top: BorderSide(color: Color(0xFFEDE7F6)))),
             child: Row(
               children: [
-                _buildActionButton("Complete", Icons.check_circle_outline,
-                    const Color(0xFFECFDF5), const Color(0xFF059669)),
+                _buildActionBtn(Icons.check_circle_outline, "Complete", Colors.emerald),
                 const SizedBox(width: 8),
-                _buildActionButton("Share", Icons.share_outlined,
-                    const Color(0xFFEFF6FF), const Color(0xFF2563EB)),
+                _buildActionBtn(Icons.share_outlined, "Share", Colors.blue),
                 const SizedBox(width: 8),
-                _buildActionButton("PDF", Icons.picture_as_pdf_outlined,
-                    const Color(0xFFF5F3FF), AppColors.primary),
-                const SizedBox(width: 8),
-                _buildActionButton("Cancel", Icons.cancel_outlined,
-                    const Color(0xFFFEF2F2), const Color(0xFFDC2626)),
+                _buildActionBtn(Icons.picture_as_pdf_outlined, "PDF", Colors.purple),
               ],
             ),
           ),
@@ -258,22 +261,17 @@ class AllOrderView extends GetView<AllOrderController> {
     );
   }
 
-  Widget _buildActionButton(String label, IconData icon, Color bg, Color text) {
+  Widget _buildActionBtn(IconData icon, String label, Color color) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-          color: bg,
-          borderRadius: BorderRadius.circular(8),
-        ),
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        decoration: BoxDecoration(color: color.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 14, color: text),
-            const SizedBox(width: 4),
-            Text(label,
-                style: TextStyle(
-                    color: text, fontSize: 13, fontWeight: FontWeight.bold)),
+            Icon(icon, size: 14, color: color),
+            const SizedBox(width: 6),
+            Text(label, style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: color)),
           ],
         ),
       ),
@@ -281,19 +279,14 @@ class AllOrderView extends GetView<AllOrderController> {
   }
 
   Widget _buildEmptyState() {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.warning_amber_rounded, size: 48, color: Colors.amber),
-          SizedBox(height: 12),
-          Text("No Orders Available",
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textSecondary)),
-          Text("Orders will appear here once created",
-              style: TextStyle(color: Colors.grey)),
+          Icon(Icons.assignment_late_outlined, size: 64, color: Colors.grey[300]),
+          const SizedBox(height: 16),
+          const Text("No Orders Found", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey)),
+          const Text("Orders will appear here once created", style: TextStyle(color: Colors.grey)),
         ],
       ),
     );
