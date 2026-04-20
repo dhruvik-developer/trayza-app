@@ -23,47 +23,52 @@ class DashboardView extends GetView<DashboardController> {
               children: [
                 Text(
                   "Dashboard Overview",
-                  style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 24),
+                  style: Theme.of(context)
+                      .textTheme
+                      .displayLarge
+                      ?.copyWith(fontSize: 24),
                 ),
                 const SizedBox(height: 24),
                 Obx(() => GridView.count(
-                  crossAxisCount: context.width > 1200 ? 4 : (context.width > 600 ? 2 : 1),
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  childAspectRatio: 1.5,
-                  children: [
-                    _buildStatCard(
-                      context,
-                      "Total Orders",
-                      controller.totalOrders.value.toString(),
-                      Icons.shopping_bag_rounded,
-                      AppColors.primary,
-                    ),
-                    _buildStatCard(
-                      context,
-                      "Pending Orders",
-                      controller.pendingOrders.value.toString(),
-                      Icons.pending_actions_rounded,
-                      AppColors.warning,
-                    ),
-                    _buildStatCard(
-                      context,
-                      "Total Revenue",
-                      "₹${NumberFormat('#,##,###').format(controller.totalRevenue.value)}",
-                      Icons.account_balance_wallet_rounded,
-                      AppColors.success,
-                    ),
-                    _buildStatCard(
-                      context,
-                      "Active Staff",
-                      "12", // Mocked for now
-                      Icons.people_rounded,
-                      AppColors.info,
-                    ),
-                  ],
-                )),
+                      crossAxisCount: context.width > 1200
+                          ? 4
+                          : (context.width > 600 ? 2 : 1),
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 1.5,
+                      children: [
+                        _buildStatCard(
+                          context,
+                          "Total Orders",
+                          controller.totalOrders.value.toString(),
+                          Icons.shopping_bag_rounded,
+                          AppColors.primary,
+                        ),
+                        _buildStatCard(
+                          context,
+                          "Pending Orders",
+                          controller.pendingOrders.value.toString(),
+                          Icons.pending_actions_rounded,
+                          AppColors.warning,
+                        ),
+                        _buildStatCard(
+                          context,
+                          "Total Revenue",
+                          "₹${NumberFormat('#,##,###').format(controller.totalRevenue.value)}",
+                          Icons.account_balance_wallet_rounded,
+                          AppColors.success,
+                        ),
+                        _buildStatCard(
+                          context,
+                          "Active Staff",
+                          "12", // Mocked for now
+                          Icons.people_rounded,
+                          AppColors.info,
+                        ),
+                      ],
+                    )),
                 const SizedBox(height: 32),
                 Text(
                   "Recent Activity",
@@ -76,7 +81,8 @@ class DashboardView extends GetView<DashboardController> {
                     child: Placeholder(
                       fallbackHeight: 200,
                       color: AppColors.primary.withOpacity(0.1),
-                      child: const Center(child: Text("Quick Actions & Recent Orders Table")),
+                      child: const Center(
+                          child: Text("Quick Actions & Recent Orders Table")),
                     ),
                   ),
                 ),
@@ -122,16 +128,16 @@ class DashboardView extends GetView<DashboardController> {
                 Text(
                   value,
                   style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   title,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppColors.textSecondaryLight,
-                  ),
+                        color: AppColors.textSecondaryLight,
+                      ),
                 ),
               ],
             ),

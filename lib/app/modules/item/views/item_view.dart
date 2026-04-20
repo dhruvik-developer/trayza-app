@@ -140,7 +140,7 @@ class ItemView extends GetView<ItemController> {
       child: Column(
         children: [
           InkWell(
-            onPressed: () => controller.toggleCategory(category.id),
+            onTap: () => controller.toggleCategory(category.id),
             borderRadius: BorderRadius.circular(12),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
