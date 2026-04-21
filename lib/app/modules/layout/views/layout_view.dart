@@ -48,7 +48,7 @@ class LayoutView extends GetView<LayoutController> {
           Expanded(
             child: Column(
               children: [
-                _buildHeader(context, isDesktop),
+                _buildMobileHeader(context),
                 Expanded(child: child),
               ],
             ),
@@ -238,10 +238,9 @@ class LayoutView extends GetView<LayoutController> {
     );
   }
 
-  Widget _buildHeader(BuildContext context, bool isDesktop) {
-    bool isSmallMobile = context.width < 400;
+  Widget _buildMobileHeader(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: isSmallMobile ? 12 : 24),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: const BoxDecoration(
         color: Colors.white,
         border: Border(bottom: BorderSide(color: AppColors.border)),
@@ -249,33 +248,42 @@ class LayoutView extends GetView<LayoutController> {
       child: SafeArea(
         bottom: false,
         child: SizedBox(
-          height: 64,
+          height: 56,
           child: Row(
             children: [
-              if (!isDesktop)
-                Builder(
-                  builder: (context) => IconButton(
-                    icon: const Icon(Icons.menu, color: AppColors.primary),
-                    onPressed: () => Scaffold.of(context).openDrawer(),
+              // Menu button
+              Builder(
+                builder: (context) => IconButton(
+                  icon: const Icon(Icons.menu, color: AppColors.primary),
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                ),
+              ),
+              const SizedBox(width: 12),
+
+              // Title (center)
+              const Expanded(
+                child: Text(
+                  "Home",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-              if (!isSmallMobile) ...[
-                const Icon(Icons.home_outlined, color: Colors.grey, size: 20),
-                const SizedBox(width: 8),
-                const Icon(Icons.chevron_right_rounded,
-                    color: Colors.grey, size: 16),
-                const SizedBox(width: 8),
-                const Text("Home",
-                    style: TextStyle(
-                        color: Colors.grey, fontWeight: FontWeight.w500)),
-              ],
-              const Spacer(),
-              _buildHeaderBadge("Low Stock"),
-              const SizedBox(width: 16),
-              const CircleAvatar(
-                radius: 18,
-                backgroundColor: Color(0xFFF3F4F6),
-                child: Icon(Icons.person_outline, size: 20, color: Colors.grey),
+              ),
+
+              // Right actions
+              Row(
+                children: [
+                  _buildHeaderBadge("Low"),
+                  const SizedBox(width: 8),
+                  const CircleAvatar(
+                    radius: 16,
+                    backgroundColor: Color(0xFFF3F4F6),
+                    child: Icon(Icons.person_outline,
+                        size: 18, color: Colors.grey),
+                  ),
+                ],
               ),
             ],
           ),

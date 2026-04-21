@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../layout/views/layout_view.dart';
 import '../controllers/create_ingredient_controller.dart';
@@ -104,45 +105,45 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
                 ),
               ],
             ),
-            if (!isMobile) _buildActionButtons(context),
+            // if (!isMobile) _buildActionButtons(context),
           ],
         ),
-        if (isMobile) ...[
-          const SizedBox(height: 16),
-          _buildActionButtons(context),
-        ],
+        // if (isMobile) ...[
+        //   const SizedBox(height: 16),
+        //   _buildActionButtons(context),
+        // ],
       ],
     );
   }
 
-  Widget _buildActionButtons(BuildContext context) {
-    return Wrap(
-      spacing: 12,
-      runSpacing: 8,
-      children: [
-        _buildActionButton("+ Add Category", true,
-            () => IngredientDialogs.showAddCategory(context, controller)),
-        _buildActionButton("+ Add Item", false,
-            () => IngredientDialogs.showAddItem(context, controller)),
-      ],
-    );
-  }
+  // Widget _buildActionButtons(BuildContext context) {
+  //   return Wrap(
+  //     spacing: 12,
+  //     runSpacing: 8,
+  //     children: [
+  //       _buildActionButton("+ Add Category", true,
+  //           () => IngredientDialogs.showAddCategory(context, controller)),
+  //       _buildActionButton("+ Add Item", false,
+  //           () => IngredientDialogs.showAddItem(context, controller)),
+  //     ],
+  //   );
+  // }
 
-  Widget _buildActionButton(String label, bool isPrimary, VoidCallback onTap) {
-    return ElevatedButton(
-      onPressed: onTap,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: isPrimary ? AppColors.primary : Colors.white,
-        foregroundColor: isPrimary ? Colors.white : AppColors.primary,
-        side: isPrimary ? null : const BorderSide(color: AppColors.primary),
-        elevation: isPrimary ? 2 : 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      ),
-      child: Text(label,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-    );
-  }
+  // Widget _buildActionButton(String label, bool isPrimary, VoidCallback onTap) {
+  //   return ElevatedButton(
+  //     onPressed: onTap,
+  //     style: ElevatedButton.styleFrom(
+  //       backgroundColor: isPrimary ? AppColors.primary : Colors.white,
+  //       foregroundColor: isPrimary ? Colors.white : AppColors.primary,
+  //       side: isPrimary ? null : const BorderSide(color: AppColors.primary),
+  //       elevation: isPrimary ? 2 : 0,
+  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+  //       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+  //     ),
+  //     child: Text(label,
+  //         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+  //   );
+  // }
 
   Widget _buildDesktopLayout(BuildContext context) {
     return Row(
@@ -192,18 +193,19 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
       mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
-          height: 110,
+          height: 90,
           child: ListView.separated(
-            padding: const EdgeInsets.symmetric(vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
             scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
             itemCount: controller.categories.length,
-            separatorBuilder: (_, __) => const SizedBox(width: 16),
+            separatorBuilder: (_, __) => const SizedBox(width: 10),
             itemBuilder: (context, index) => _buildCategoryMasterCard(
                 context, controller.categories[index], index + 1,
                 compact: true),
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 12),
         _buildDetailPanel(context),
       ],
     );
@@ -217,101 +219,124 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
 
       return AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        width: compact ? 190 : null,
+        curve: Curves.easeInOut,
+        width: 170,
+        margin: const EdgeInsets.symmetric(vertical: 4),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(16),
+          gradient: isActive
+              ? LinearGradient(
+                  colors: [
+                    AppColors.primary,
+                    AppColors.primary.withOpacity(0.8)
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                )
+              : const LinearGradient(
+                  colors: [Colors.white, Colors.white],
+                ),
           border: Border.all(
-            color: isActive ? AppColors.primary : Colors.transparent,
-            width: 2,
+            color: isActive ? Colors.transparent : const Color(0xFFE5E7EB),
+            width: 1,
           ),
-          color: isActive ? Colors.white : const Color(0xFFF9FAFB),
-          boxShadow: [
-            BoxShadow(
-              color: isActive
-                  ? AppColors.primary.withOpacity(0.15)
-                  : Colors.black.withOpacity(0.03),
-              blurRadius: isActive ? 20 : 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          boxShadow: isActive
+              ? [
+                  BoxShadow(
+                    color: AppColors.primary.withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  )
+                ]
+              : [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.02),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  )
+                ],
         ),
-        child: InkWell(
-          onTap: () => controller.selectCategory(cat.id),
-          onLongPress: () => IngredientDialogs.showDeleteConfirmation(
-            context: context,
-            title: "Delete Category",
-            message:
-                "Are you sure you want to delete '${cat.name}'? This will also delete all items in this category.",
-            onConfirm: () => controller.deleteCategory(cat.id),
-          ),
-          borderRadius: BorderRadius.circular(18),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                Container(
-                  width: 44,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    gradient: isActive
-                        ? const LinearGradient(
-                            colors: [AppColors.primary, Color(0xFFA78BFA)])
-                        : LinearGradient(
-                            colors: [Colors.grey[200]!, Colors.grey[100]!]),
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    "$position",
-                    style: TextStyle(
-                      color: isActive ? Colors.white : Colors.grey[600],
-                      fontWeight: FontWeight.w800,
-                      fontSize: 16,
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () => controller.selectCategory(cat.id),
+            // onLongPress: () => IngredientDialogs.showDeleteConfirmation(
+            //   context: context,
+            //   title: "Delete Category",
+            //   message:
+            //       "Are you sure you want to delete '${cat.name}'? This will also delete all items in this category.",
+            //   onConfirm: () => controller.deleteCategory(cat.id),
+            // ),
+            borderRadius: BorderRadius.circular(18),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: isActive
+                          ? Colors.white.withOpacity(0.2)
+                          : const Color(0xFFF3F4F6),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      "$position",
+                      style: GoogleFonts.inter(
+                        color:
+                            isActive ? Colors.white : const Color(0xFF6B7280),
+                        fontWeight: FontWeight.w800,
+                        fontSize: 12,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        cat.name,
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: isActive
-                              ? AppColors.primary
-                              : AppColors.textPrimary,
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          cat.name,
+                          style: GoogleFonts.inter(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color: isActive
+                                ? Colors.white
+                                : const Color(0xFF1F2937),
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 2),
-                      Row(
-                        children: [
-                          Icon(Icons.layers_outlined,
+                        const SizedBox(height: 2),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.layers_outlined,
                               size: 12,
                               color: isActive
-                                  ? AppColors.primary.withOpacity(0.6)
-                                  : Colors.grey),
-                          const SizedBox(width: 4),
-                          Text(
-                            "${cat.items.length} items",
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: isActive
-                                  ? AppColors.primary.withOpacity(0.7)
-                                  : Colors.grey[500],
+                                  ? Colors.white.withOpacity(0.8)
+                                  : const Color(0xFF9CA3AF),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                            const SizedBox(width: 4),
+                            Text(
+                              "${cat.items.length} items",
+                              style: GoogleFonts.inter(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w500,
+                                color: isActive
+                                    ? Colors.white.withOpacity(0.8)
+                                    : const Color(0xFF9CA3AF),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -338,7 +363,7 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
         children: [
           // Detail Header
           Padding(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(16),
             child: isMobile
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -364,7 +389,8 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
             if (items.isEmpty) return _buildDetailEmptyState();
 
             return GridView.builder(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.only(
+                  top: 12, bottom: 14, left: 14, right: 14),
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -390,7 +416,7 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(6),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: AppColors.primary.withOpacity(0.1),
                     shape: BoxShape.circle,
@@ -400,27 +426,28 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: Text(
-                    controller.selectedCategory?.name ?? "Select Category",
-                    style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: -0.5),
-                    overflow: TextOverflow.ellipsis,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        controller.selectedCategory?.name ?? "Select Category",
+                        style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: -0.5),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        "${controller.filteredItems.length} items in this category",
+                        style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey[500],
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ],
                   ),
                 ),
               ],
-            ),
-            const SizedBox(height: 6),
-            Padding(
-              padding: const EdgeInsets.only(left: 38),
-              child: Text(
-                "${controller.filteredItems.length} items in this category",
-                style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.grey[500],
-                    fontWeight: FontWeight.w500),
-              ),
             ),
           ],
         ));
@@ -428,25 +455,25 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
 
   Widget _buildSearchField({required double width}) {
     return Container(
-      width: width,
-      height: 52,
+      width: double.infinity,
+      height: 44,
       decoration: BoxDecoration(
         color: const Color(0xFFF9FAFB),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFF3F4F6)),
       ),
       child: TextField(
         onChanged: controller.onSearchChanged,
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+        style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w500),
         decoration: InputDecoration(
           hintText: "Search ingredients...",
           hintStyle:
-              TextStyle(color: Colors.grey[400], fontWeight: FontWeight.w500),
-          prefixIcon:
-              const Icon(Icons.search_rounded, size: 20, color: Colors.grey),
+              GoogleFonts.inter(color: const Color(0xFF9CA3AF), fontSize: 13),
+          prefixIcon: const Icon(Icons.search_rounded,
+              size: 18, color: Color(0xFF9CA3AF)),
           border: InputBorder.none,
           contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         ),
       ),
     );
@@ -467,12 +494,12 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
         ],
       ),
       child: InkWell(
-        onLongPress: () => IngredientDialogs.showDeleteConfirmation(
-          context: context,
-          title: "Delete Item",
-          message: "Are you sure you want to delete '${item.name}'?",
-          onConfirm: () => controller.deleteItem(item.id),
-        ),
+        // onLongPress: () => IngredientDialogs.showDeleteConfirmation(
+        //   context: context,
+        //   title: "Delete Item",
+        //   message: "Are you sure you want to delete '${item.name}'?",
+        //   onConfirm: () => controller.deleteItem(item.id),
+        // ),
         borderRadius: BorderRadius.circular(18),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
