@@ -514,7 +514,8 @@ class CategoryView extends GetView<CategoryController> {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () => CategoryDialogs.showViewIngredients(context, controller, item),
+          onTap: () =>
+              CategoryDialogs.showViewIngredients(context, controller, item),
           onLongPress: () => CategoryDialogs.showDeleteConfirmation(
             title: "Remove Product",
             message: "Permanently remove '${item.name}' from the menu?",
