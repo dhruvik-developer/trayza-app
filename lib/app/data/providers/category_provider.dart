@@ -45,9 +45,9 @@ class CategoryProvider {
     }
   }
 
-  Future<Response> getRecipes() async {
+  Future<Response> getRecipes({Map<String, dynamic>? params}) async {
     try {
-      final response = await ApiClient.dio.get('recipes/');
+      final response = await ApiClient.dio.get('recipes/', queryParameters: params);
       return response;
     } catch (e) {
       rethrow;

@@ -28,7 +28,9 @@ class CategoryController extends GetxController {
     isRecipeLoading.value = true;
     itemRecipeIngredients.clear();
     try {
-      final response = await _categoryProvider.getRecipes();
+      final response = await _categoryProvider.getRecipes(params: {
+        'item_id': itemId,
+      });
       final List allRecipes =
           response.data is Map && response.data['data'] != null
               ? response.data['data']

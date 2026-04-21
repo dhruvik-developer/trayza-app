@@ -538,12 +538,12 @@ class CategoryDialogs {
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(20))),
       child: Row(
         children: [
-          Obx(() => Text(
+          Text(
               "${rows.where((i) => i["ingredientId"] != null).length} ingredient(s)",
               style: const TextStyle(
                   fontSize: 12,
                   color: Colors.grey,
-                  fontWeight: FontWeight.bold))),
+                  fontWeight: FontWeight.bold)),
           const Spacer(),
           TextButton(
               onPressed: () => Get.back(),
@@ -584,6 +584,11 @@ class CategoryDialogs {
       BuildContext context, CategoryController controller, dynamic item) {
     controller.fetchRecipeForItem(item.id);
 
+    // Local mutable state for mode switching inside the dialog
+    String dialogMode = 'view'; // 'view' | 'edit' | 'add'
+    final personCountController = TextEditingController(text: '100');
+    final List<Map<String, dynamic>> editRows = [];
+
     Get.dialog(
       Dialog(
         backgroundColor: Colors.white,
@@ -591,48 +596,239 @@ class CategoryDialogs {
         child: Container(
           width: context.width < 600 ? context.width - 40 : 750,
           constraints: BoxConstraints(maxHeight: context.height * 0.9),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Header
-              header_view(item, context, controller),
-              const Divider(height: 1),
+          child: StatefulBuilder(
+            builder: (dialogContext, setDialogState) {
+              // ── Enter edit mode with pre-populated rows ──
+              void enterEditMode(List<Map<String, dynamic>> recipes) {
+                editRows.clear();
+                for (final r in recipes) {
+                  final match = controller.ingredients
+                      .firstWhereOrNull((i) => i['name'] == r['name']);
+                  editRows.add({
+                    'ingredientId': match?['id'],
+                    'quantity': r['quantity'] ?? '',
+                    'unit': r['unit'] ?? 'g',
+                  });
+                }
+                editRows
+                    .add({'ingredientId': null, 'quantity': '', 'unit': 'g'});
+                personCountController.text =
+                    controller.recipePersonCount.value.toString();
+                setDialogState(() => dialogMode = 'edit');
+              }
 
-              // Body
-              Expanded(
-                child: Obx(() {
-                  if (controller.isRecipeLoading.value) {
-                    return const Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(40.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CircularProgressIndicator(),
-                            SizedBox(height: 16),
-                            Text("Fetching Recipe Details...",
-                                style: TextStyle(color: Colors.grey)),
-                          ],
-                        ),
+              // ── Enter add mode with blank rows ──
+              void enterAddMode() {
+                editRows.clear();
+                editRows
+                    .add({'ingredientId': null, 'quantity': '', 'unit': 'g'});
+                personCountController.text = '100';
+                setDialogState(() => dialogMode = 'add');
+              }
+
+              final headerWidget = dialogMode == 'view'
+                  ? header_view(item, dialogContext, controller)
+                  : _buildIngredientModeHeader(
+                      isEdit: dialogMode == 'edit',
+                      itemName: item.name,
+                      onBack: () => setDialogState(() => dialogMode = 'view'),
+                    );
+
+              final bodyWidget = dialogMode == 'view'
+                  ? Obx(() {
+                      if (controller.isRecipeLoading.value) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(40.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CircularProgressIndicator(),
+                                SizedBox(height: 16),
+                                Text('Fetching Recipe Details...',
+                                    style: TextStyle(color: Colors.grey)),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                      final recipes = controller.itemRecipeIngredients;
+                      if (recipes.isEmpty) {
+                        return _buildNoRecipeView(
+                            item, dialogContext, controller,
+                            onAdd: enterAddMode);
+                      }
+                      return SingleChildScrollView(
+                        padding: const EdgeInsets.all(24),
+                        child: _buildRecipeView(
+                            item, dialogContext, controller, recipes,
+                            onEdit: () => enterEditMode(
+                                List<Map<String, dynamic>>.from(recipes))),
+                      );
+                    })
+                  : SingleChildScrollView(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildSectionLabel(Icons.people_outline,
+                              'RECIPE FOR PERSON COUNT', Colors.green),
+                          const SizedBox(height: 8),
+                          _buildPersonCountInput(personCountController),
+                          const SizedBox(height: 24),
+                          _buildSectionLabel(Icons.inventory_2_outlined,
+                              'INGREDIENTS', Colors.blue),
+                          const SizedBox(height: 16),
+                          _buildIngredientsTableHeader(),
+                          const SizedBox(height: 8),
+                          _buildIngredientsRows(
+                              editRows, controller, setDialogState),
+                        ],
                       ),
                     );
-                  }
 
-                  final recipes = controller.itemRecipeIngredients;
-                  if (recipes.isEmpty) {
-                    return _buildNoRecipeView(item, context, controller);
-                  }
-
-                  return SingleChildScrollView(
-                    padding: const EdgeInsets.all(24),
-                    child: _buildRecipeView(item, context, controller, recipes),
-                  );
-                }),
-              ),
-              const SizedBox(height: 12),
-            ],
+              return Column(
+                children: [
+                  headerWidget,
+                  const Divider(height: 1),
+                  Expanded(child: bodyWidget),
+                  if (dialogMode != 'view')
+                    _buildInlineIngredientFooter(
+                      rows: editRows,
+                      itemId: item.id,
+                      personCountController: personCountController,
+                      controller: controller,
+                      onCancel: () => setDialogState(() => dialogMode = 'view'),
+                      saveLabel: dialogMode == 'edit'
+                          ? 'Save Changes'
+                          : 'Save Ingredient',
+                    ),
+                ],
+              );
+            },
           ),
         ),
+      ),
+    );
+  }
+
+  // Header for edit / add mode within showViewIngredients
+  static Widget _buildIngredientModeHeader({
+    required bool isEdit,
+    required String itemName,
+    required VoidCallback onBack,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+            colors: [Color(0xFFF4EFFC), Colors.white],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: onBack,
+            icon: const Icon(Icons.arrow_back, size: 20),
+            style: IconButton.styleFrom(
+                backgroundColor: Colors.white,
+                side: const BorderSide(color: Color(0xFFE5E7EB))),
+          ),
+          const SizedBox(width: 12),
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                color: AppColors.primary,
+                borderRadius: BorderRadius.circular(12)),
+            child: Icon(isEdit ? Icons.edit_note : Icons.add,
+                color: Colors.white, size: 20),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  isEdit ? 'Edit Recipe' : 'Add Recipe Ingredient',
+                  style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1F2937)),
+                ),
+                Text(itemName,
+                    style: const TextStyle(
+                        fontSize: 13,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w500)),
+              ],
+            ),
+          ),
+          IconButton(
+            onPressed: () => Get.back(),
+            icon: const Icon(Icons.close, size: 20),
+            style: IconButton.styleFrom(foregroundColor: Colors.grey),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Footer for edit / add mode within showViewIngredients
+  static Widget _buildInlineIngredientFooter({
+    required List<Map<String, dynamic>> rows,
+    required int itemId,
+    required TextEditingController personCountController,
+    required CategoryController controller,
+    required VoidCallback onCancel,
+    required String saveLabel,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: const BoxDecoration(
+          color: Color(0xFFF9FAFB),
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20))),
+      child: Row(
+        children: [
+          Text(
+              "${rows.where((i) => i["ingredientId"] != null).length} ingredient(s)",
+              style: const TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold)),
+          const Spacer(),
+          TextButton(
+              onPressed: onCancel,
+              child: const Text('Cancel',
+                  style: TextStyle(
+                      color: Color(0xFF4B5563), fontWeight: FontWeight.bold))),
+          const SizedBox(width: 12),
+          ElevatedButton.icon(
+            onPressed: () {
+              if (rows.where((i) => i['ingredientId'] != null).isEmpty) {
+                Get.snackbar('Required', 'Please add at least one ingredient');
+                return;
+              }
+              controller.createRecipe({
+                'item': itemId,
+                'person_count': int.tryParse(personCountController.text) ?? 100,
+                'ingredients':
+                    rows.where((i) => i['ingredientId'] != null).toList(),
+              });
+            },
+            icon: const Icon(Icons.save_outlined, size: 16),
+            label: Text(saveLabel,
+                style: const TextStyle(fontWeight: FontWeight.bold)),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -738,7 +934,8 @@ class CategoryDialogs {
   }
 
   static Widget _buildRecipeView(dynamic item, BuildContext context,
-      CategoryController controller, List<Map<String, dynamic>> recipes) {
+      CategoryController controller, List<Map<String, dynamic>> recipes,
+      {VoidCallback? onEdit}) {
     if (recipes.isEmpty) {
       return Center(
         child: Padding(
@@ -809,7 +1006,7 @@ class CategoryDialogs {
                 "${recipes.length} Ingredients", Colors.blue),
             const Spacer(),
             TextButton.icon(
-              onPressed: () {
+              onPressed: onEdit ?? () {
                 Get.back();
                 // Pass existing data for editing
                 final existing = recipes.map((r) {
@@ -868,20 +1065,20 @@ class CategoryDialogs {
                   color: Color(0xFFF9FAFB),
                   borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
                     Expanded(
                         child: Text("INGREDIENT NAME",
-                            style: TextStyle(
+                            style: GoogleFonts.inter(
                                 fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF6B7280),
+                                fontWeight: FontWeight.w800,
+                                color: const Color(0xFF6B7280),
                                 letterSpacing: 0.8))),
                     Text("QUANTITY",
-                        style: TextStyle(
+                        style: GoogleFonts.inter(
                             fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF6B7280),
+                            fontWeight: FontWeight.w800,
+                            color: const Color(0xFF6B7280),
                             letterSpacing: 0.8)),
                   ],
                 ),
@@ -906,19 +1103,19 @@ class CategoryDialogs {
                                       borderRadius: BorderRadius.circular(6)),
                                   child: Center(
                                       child: Text("${i + 1}",
-                                          style: const TextStyle(
+                                          style: GoogleFonts.inter(
                                               fontSize: 10,
-                                              fontWeight: FontWeight.bold,
+                                              fontWeight: FontWeight.w800,
                                               color: AppColors.primary))),
                                 ),
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: Text(
                                     recipes[i]["name"],
-                                    style: const TextStyle(
+                                    style: GoogleFonts.inter(
                                         fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: Color(0xFF1F2937)),
+                                        fontWeight: FontWeight.w700,
+                                        color: const Color(0xFF1F2937)),
                                   ),
                                 ),
                                 // Quantity Badge
@@ -933,10 +1130,10 @@ class CategoryDialogs {
                                   ),
                                   child: Text(
                                     "${recipes[i]["quantity"]} ${recipes[i]["unit"]}",
-                                    style: const TextStyle(
+                                    style: GoogleFonts.inter(
                                         fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF374151)),
+                                        fontWeight: FontWeight.w800,
+                                        color: const Color(0xFF374151)),
                                   ),
                                 ),
                               ],
@@ -975,7 +1172,8 @@ class CategoryDialogs {
   }
 
   static Widget _buildNoRecipeView(
-      dynamic item, BuildContext context, CategoryController controller) {
+      dynamic item, BuildContext context, CategoryController controller,
+      {VoidCallback? onAdd}) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
       decoration: BoxDecoration(
@@ -1020,10 +1218,11 @@ class CategoryDialogs {
           ),
           const SizedBox(height: 32),
           ElevatedButton.icon(
-            onPressed: () {
-              Get.back();
-              showAddIngredient(context, controller, itemId: item.id);
-            },
+            onPressed: onAdd ??
+                () {
+                  Get.back();
+                  showAddIngredient(context, controller, itemId: item.id);
+                },
             icon: const Icon(Icons.add, size: 18),
             label: const Text("Add Recipe Ingredient",
                 style: TextStyle(fontWeight: FontWeight.bold)),
