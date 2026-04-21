@@ -109,6 +109,40 @@ class CreateIngredientController extends GetxController {
     }
   }
 
+  Future<void> deleteCategory(int id) async {
+    try {
+      isLoading.value = true;
+      final response = await _provider.deleteIngredientCategory(id);
+      if (response.statusCode == 200 ||
+          response.statusCode == 204 ||
+          response.data['status'] == true) {
+        if (selectedCategoryId.value == id) {
+          selectedCategoryId.value = null;
+        }
+        await fetchCategories();
+        Get.snackbar("Success", "Category deleted successfully!");
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Failed to delete category: ${e.toString()}");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> deleteItem(int id) async {
+    try {
+      final response = await _provider.deleteIngredientItem(id);
+      if (response.statusCode == 200 ||
+          response.statusCode == 204 ||
+          response.data['status'] == true) {
+        await fetchCategories();
+        Get.snackbar("Success", "Item deleted successfully!");
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Failed to delete item: ${e.toString()}");
+    }
+  }
+
   void selectCategory(int id) {
     selectedCategoryId.value = id;
     searchQuery.value = "";

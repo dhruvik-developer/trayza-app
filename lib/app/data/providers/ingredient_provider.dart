@@ -13,7 +13,8 @@ class IngredientProvider {
 
   Future<Response> addIngredientCategory(String name, bool isCommon) async {
     try {
-      final response = await ApiClient.dio.post('ingredients-categories/', data: {
+      final response =
+          await ApiClient.dio.post('ingredients-categories/', data: {
         'name': name,
         'is_common': isCommon,
       });
@@ -29,6 +30,25 @@ class IngredientProvider {
         'name': name,
         'category': categoryId,
       });
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> deleteIngredientCategory(int id) async {
+    try {
+      final response =
+          await ApiClient.dio.delete('ingredients-categories/$id/');
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> deleteIngredientItem(int id) async {
+    try {
+      final response = await ApiClient.dio.delete('ingredients-items/$id/');
       return response;
     } catch (e) {
       rethrow;

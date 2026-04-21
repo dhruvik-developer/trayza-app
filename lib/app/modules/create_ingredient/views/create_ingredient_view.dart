@@ -15,18 +15,22 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
     return LayoutView(
       activeIndex: 8,
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         backgroundColor: Colors.transparent,
-        body: Padding(
-          padding: EdgeInsets.all(isMobile ? 12.0 : 24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(context, isMobile),
-              const SizedBox(height: 24),
-              Expanded(
-                child: Obx(() {
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(isMobile ? 12.0 : 24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeader(context, isMobile),
+                const SizedBox(height: 24),
+                Obx(() {
                   if (controller.isLoading.value) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const SizedBox(
+                      height: 300,
+                      child: Center(child: CircularProgressIndicator()),
+                    );
                   }
 
                   if (controller.categories.isEmpty) {
@@ -35,10 +39,13 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
 
                   return isMobile
                       ? _buildMobileLayout(context)
-                      : _buildDesktopLayout(context);
+                      : SizedBox(
+                          height: context.height - 200,
+                          child: _buildDesktopLayout(context),
+                        );
                 }),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -57,7 +64,7 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF4EFFC),
+                    color: AppColors.primaryLight,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(Icons.note_add_outlined,
@@ -166,7 +173,7 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
                   separatorBuilder: (_, __) => const SizedBox(height: 12),
                   itemBuilder: (context, index) {
                     final cat = controller.categories[index];
-                    return _buildCategoryMasterCard(cat, index + 1);
+                    return _buildCategoryMasterCard(context, cat, index + 1);
                   },
                 ),
               ),
@@ -182,6 +189,7 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
 
   Widget _buildMobileLayout(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
           height: 110,
@@ -191,17 +199,18 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
             itemCount: controller.categories.length,
             separatorBuilder: (_, __) => const SizedBox(width: 16),
             itemBuilder: (context, index) => _buildCategoryMasterCard(
-                controller.categories[index], index + 1,
+                context, controller.categories[index], index + 1,
                 compact: true),
           ),
         ),
         const SizedBox(height: 20),
-        Expanded(child: _buildDetailPanel(context)),
+        _buildDetailPanel(context),
       ],
     );
   }
 
-  Widget _buildCategoryMasterCard(dynamic cat, int position,
+  Widget _buildCategoryMasterCard(
+      BuildContext context, dynamic cat, int position,
       {bool compact = false}) {
     return Obx(() {
       final isActive = controller.selectedCategoryId.value == cat.id;
@@ -228,6 +237,13 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
         ),
         child: InkWell(
           onTap: () => controller.selectCategory(cat.id),
+          onLongPress: () => IngredientDialogs.showDeleteConfirmation(
+            context: context,
+            title: "Delete Category",
+            message:
+                "Are you sure you want to delete '${cat.name}'? This will also delete all items in this category.",
+            onConfirm: () => controller.deleteCategory(cat.id),
+          ),
           borderRadius: BorderRadius.circular(18),
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -343,25 +359,25 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
           ),
           const Divider(height: 1, color: Color(0xFFF3F4F6)),
           // Items Grid
-          Expanded(
-            child: Obx(() {
-              final items = controller.filteredItems;
-              if (items.isEmpty) return _buildDetailEmptyState();
+          Obx(() {
+            final items = controller.filteredItems;
+            if (items.isEmpty) return _buildDetailEmptyState();
 
-              return GridView.builder(
-                padding: const EdgeInsets.all(24),
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 280,
-                  mainAxisExtent: 80,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                ),
-                itemCount: items.length,
-                itemBuilder: (context, index) =>
-                    _buildDetailItemCard(items[index]),
-              );
-            }),
-          ),
+            return GridView.builder(
+              padding: const EdgeInsets.all(24),
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 280,
+                mainAxisExtent: 80,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+              ),
+              itemCount: items.length,
+              itemBuilder: (context, index) =>
+                  _buildDetailItemCard(context, items[index]),
+            );
+          }),
         ],
       ),
     );
@@ -436,9 +452,8 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
     );
   }
 
-  Widget _buildDetailItemCard(dynamic item) {
+  Widget _buildDetailItemCard(BuildContext context, dynamic item) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: const Color(0xFFF3F4F6)),
@@ -451,30 +466,42 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
           ),
         ],
       ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF3F4F6),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Icon(Icons.restaurant_menu_outlined,
-                size: 18, color: AppColors.primary),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Text(
-              item.name,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary,
+      child: InkWell(
+        onLongPress: () => IngredientDialogs.showDeleteConfirmation(
+          context: context,
+          title: "Delete Item",
+          message: "Are you sure you want to delete '${item.name}'?",
+          onConfirm: () => controller.deleteItem(item.id),
+        ),
+        borderRadius: BorderRadius.circular(18),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF3F4F6),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(Icons.restaurant_menu_outlined,
+                    size: 18, color: AppColors.primary),
               ),
-              overflow: TextOverflow.ellipsis,
-            ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Text(
+                  item.name,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.textPrimary,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
