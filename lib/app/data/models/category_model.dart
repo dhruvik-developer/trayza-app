@@ -2,8 +2,8 @@ class CategoryItemModel {
   final int id;
   final String name;
   final int? category;
-  final double? baseCost;
-  final double? selectionRate;
+  final String? baseCost;
+  final String? selectionRate;
 
   CategoryItemModel({
     required this.id,
@@ -18,8 +18,8 @@ class CategoryItemModel {
       id: json['id'],
       name: json['name'] ?? '',
       category: json['category'],
-      baseCost: (json['base_cost'] ?? 0.0).toDouble(),
-      selectionRate: (json['selection_rate'] ?? 0.0).toDouble(),
+      baseCost: json['base_cost'] ?? '',
+      selectionRate: json['selection_rate'] ?? '',
     );
   }
 }

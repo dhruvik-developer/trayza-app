@@ -83,54 +83,92 @@ class LayoutView extends GetView<LayoutController> {
             // Scrollable Menu Items
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 children: [
-                  _buildSidebarItem(0, 'Create Dish', Icons.room_service_outlined, 
-                      () => Get.offAll(() => const BookingView(), binding: BookingBinding())),
+                  _buildSidebarItem(
+                      0,
+                      'Create Dish',
+                      Icons.room_service_outlined,
+                      () => Get.offAll(() => const BookingView(),
+                          binding: BookingBinding())),
                   const SizedBox(height: 10),
-                  
-                  _buildSidebarItem(1, 'Category', Icons.category_outlined, 
-                      () => Get.offAll(() => const CategoryView(), binding: CategoryBinding())),
+                  _buildSidebarItem(
+                      1,
+                      'Category',
+                      Icons.category_outlined,
+                      () => Get.offAll(() => const CategoryView(),
+                          binding: CategoryBinding())),
                   const SizedBox(height: 10),
-                  
-                  _buildSidebarItem(2, 'Quotation', Icons.edit_note_rounded, 
-                      () => Get.offAll(() => const QuotationView(), binding: QuotationBinding())),
+                  _buildSidebarItem(
+                      2,
+                      'Quotation',
+                      Icons.edit_note_rounded,
+                      () => Get.offAll(() => const QuotationView(),
+                          binding: QuotationBinding())),
                   const SizedBox(height: 10),
-                  
-                  _buildSidebarItem(3, 'All Order', Icons.checklist_rtl_rounded, 
-                      () => Get.offAll(() => const AllOrderView(), binding: AllOrderBinding())),
+                  _buildSidebarItem(
+                      3,
+                      'All Order',
+                      Icons.checklist_rtl_rounded,
+                      () => Get.offAll(() => const AllOrderView(),
+                          binding: AllOrderBinding())),
                   const SizedBox(height: 10),
-                  
-                  _buildSidebarItem(4, 'Invoice', Icons.receipt_outlined, 
-                      () => Get.offAll(() => const InvoiceView(), binding: InvoiceBinding())),
+                  _buildSidebarItem(
+                      4,
+                      'Invoice',
+                      Icons.receipt_outlined,
+                      () => Get.offAll(() => const InvoiceView(),
+                          binding: InvoiceBinding())),
                   const SizedBox(height: 10),
-                  
-                  _buildSidebarItem(5, 'Stock', Icons.shopping_bag_outlined, 
-                      () => Get.offAll(() => const StockView(), binding: StockBinding())),
+                  _buildSidebarItem(
+                      5,
+                      'Stock',
+                      Icons.shopping_bag_outlined,
+                      () => Get.offAll(() => const StockView(),
+                          binding: StockBinding())),
                   const SizedBox(height: 10),
-                  
-                  _buildSidebarItem(6, 'Payment History', Icons.history_rounded, 
-                      () => Get.offAll(() => const PaymentHistoryView(), binding: PaymentHistoryBinding())),
+                  _buildSidebarItem(
+                      6,
+                      'Payment History',
+                      Icons.history_rounded,
+                      () => Get.offAll(() => const PaymentHistoryView(),
+                          binding: PaymentHistoryBinding())),
                   const SizedBox(height: 10),
-                  
-                  _buildSidebarItem(7, 'Expense', Icons.payments_outlined, 
-                      () => Get.offAll(() => const ExpenseView(), binding: ExpenseBinding())),
+                  _buildSidebarItem(
+                      7,
+                      'Expense',
+                      Icons.payments_outlined,
+                      () => Get.offAll(() => const ExpenseView(),
+                          binding: ExpenseBinding())),
                   const SizedBox(height: 10),
-                  
-                  _buildSidebarItem(8, 'Create Ingredient', Icons.note_add_outlined, 
-                      () => Get.offAll(() => const CreateIngredientView(), binding: CreateIngredientBinding())),
+                  _buildSidebarItem(
+                      8,
+                      'Create Ingredient',
+                      Icons.note_add_outlined,
+                      () => Get.offAll(() => const CreateIngredientView(),
+                          binding: CreateIngredientBinding())),
                   const SizedBox(height: 10),
-                  
-                  _buildSidebarItem(9, 'People', Icons.people_outline_rounded, 
-                      () => Get.offAll(() => const PeopleView(), binding: PeopleBinding())),
+                  _buildSidebarItem(
+                      9,
+                      'People',
+                      Icons.people_outline_rounded,
+                      () => Get.offAll(() => const PeopleView(),
+                          binding: PeopleBinding())),
                   const SizedBox(height: 10),
-                  
-                  _buildSidebarItem(10, 'Event Summary', Icons.description_outlined, 
-                      () => Get.offAll(() => const EventSummaryView(), binding: EventSummaryBinding())),
+                  _buildSidebarItem(
+                      10,
+                      'Event Summary',
+                      Icons.description_outlined,
+                      () => Get.offAll(() => const EventSummaryView(),
+                          binding: EventSummaryBinding())),
                   const SizedBox(height: 10),
-                  
-                  _buildSidebarItem(11, 'Ground Checklist', Icons.rule_folder_outlined, 
-                      () => Get.offAll(() => const GroundChecklistView(), binding: GroundChecklistBinding())),
+                  _buildSidebarItem(
+                      11,
+                      'Ground Checklist',
+                      Icons.rule_folder_outlined,
+                      () => Get.offAll(() => const GroundChecklistView(),
+                          binding: GroundChecklistBinding())),
                   const SizedBox(height: 24),
                 ],
               ),
@@ -141,7 +179,8 @@ class LayoutView extends GetView<LayoutController> {
     );
   }
 
-  Widget _buildSidebarItem(int index, String title, IconData icon, VoidCallback onTap) {
+  Widget _buildSidebarItem(
+      int index, String title, IconData icon, VoidCallback onTap) {
     bool isActive = activeIndex == index;
 
     return MouseRegion(
@@ -170,9 +209,14 @@ class LayoutView extends GetView<LayoutController> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
-                  boxShadow: isActive ? null : [
-                    const BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2))
-                  ],
+                  boxShadow: isActive
+                      ? null
+                      : [
+                          const BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 4,
+                              offset: Offset(0, 2))
+                        ],
                 ),
                 child: Icon(icon, size: 22, color: AppColors.primary),
               ),
@@ -218,9 +262,12 @@ class LayoutView extends GetView<LayoutController> {
               if (!isSmallMobile) ...[
                 const Icon(Icons.home_outlined, color: Colors.grey, size: 20),
                 const SizedBox(width: 8),
-                const Icon(Icons.chevron_right_rounded, color: Colors.grey, size: 16),
+                const Icon(Icons.chevron_right_rounded,
+                    color: Colors.grey, size: 16),
                 const SizedBox(width: 8),
-                const Text("Home", style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500)),
+                const Text("Home",
+                    style: TextStyle(
+                        color: Colors.grey, fontWeight: FontWeight.w500)),
               ],
               const Spacer(),
               _buildHeaderBadge("Low Stock"),
@@ -240,13 +287,20 @@ class LayoutView extends GetView<LayoutController> {
   Widget _buildHeaderBadge(String label) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(color: const Color(0xFFFEF2F2), borderRadius: BorderRadius.circular(20), border: Border.all(color: const Color(0xFFFECACA))),
+      decoration: BoxDecoration(
+          color: const Color(0xFFFEF2F2),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: const Color(0xFFFECACA))),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           const Icon(Icons.warning_amber_rounded, color: Colors.red, size: 14),
           const SizedBox(width: 6),
-          Text(label, style: const TextStyle(color: Colors.red, fontSize: 11, fontWeight: FontWeight.bold)),
+          Text(label,
+              style: const TextStyle(
+                  color: Colors.red,
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold)),
         ],
       ),
     );

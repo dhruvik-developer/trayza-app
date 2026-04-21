@@ -7,31 +7,36 @@ import '../controllers/navigation_placeholders.dart';
 class PaymentHistoryView extends GetView<PaymentHistoryController> {
   const PaymentHistoryView({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context) => _buildPlaceholder(6, "Payment History", Icons.history_rounded);
+  Widget build(BuildContext context) =>
+      _buildPlaceholder(6, "Payment History", Icons.history_rounded);
 }
 
 class ExpenseView extends GetView<ExpenseController> {
   const ExpenseView({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context) => _buildPlaceholder(7, "Expense", Icons.payments_outlined);
+  Widget build(BuildContext context) =>
+      _buildPlaceholder(7, "Expense", Icons.payments_outlined);
 }
 
 class CreateIngredientView extends GetView<CreateIngredientController> {
   const CreateIngredientView({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context) => _buildPlaceholder(8, "Create Ingredient", Icons.note_add_outlined);
+  Widget build(BuildContext context) =>
+      _buildPlaceholder(8, "Create Ingredient", Icons.note_add_outlined);
 }
 
 class EventSummaryView extends GetView<EventSummaryController> {
   const EventSummaryView({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context) => _buildPlaceholder(10, "Event Summary", Icons.description_outlined);
+  Widget build(BuildContext context) =>
+      _buildPlaceholder(10, "Event Summary", Icons.description_outlined);
 }
 
 class GroundChecklistView extends GetView<GroundChecklistController> {
   const GroundChecklistView({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context) => _buildPlaceholder(11, "Ground Checklist", Icons.rule_folder_outlined);
+  Widget build(BuildContext context) =>
+      _buildPlaceholder(11, "Ground Checklist", Icons.rule_folder_outlined);
 }
 
 Widget _buildPlaceholder(int index, String title, IconData icon) {
@@ -45,8 +50,13 @@ Widget _buildPlaceholder(int index, String title, IconData icon) {
           children: [
             Icon(icon, size: 64, color: Colors.grey[300]),
             const SizedBox(height: 16),
-            Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey)),
-            const Text("Module migration in progress", style: TextStyle(color: Colors.grey)),
+            Text(title,
+                style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey)),
+            const Text("Module migration in progress",
+                style: TextStyle(color: Colors.grey)),
           ],
         ),
       ),

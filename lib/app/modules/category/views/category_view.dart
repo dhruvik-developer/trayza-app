@@ -33,7 +33,9 @@ class CategoryView extends GetView<CategoryController> {
                     return _buildEmptyState();
                   }
 
-                  return isMobile ? _buildMobileLayout() : _buildDesktopLayout(context);
+                  return isMobile
+                      ? _buildMobileLayout()
+                      : _buildDesktopLayout(context);
                 }),
               ),
             ],
@@ -58,7 +60,8 @@ class CategoryView extends GetView<CategoryController> {
                     color: const Color(0xFFF4EFFC),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(Icons.folder_outlined, color: AppColors.primary, size: 24),
+                  child: const Icon(Icons.folder_outlined,
+                      color: AppColors.primary, size: 24),
                 ),
                 const SizedBox(width: 12),
                 Column(
@@ -66,11 +69,15 @@ class CategoryView extends GetView<CategoryController> {
                   children: [
                     const Text(
                       "Categories",
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                      style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary),
                     ),
                     Obx(() => Text(
                           "${controller.categories.length} categories • ${controller.selectedCategory?.items.length ?? 0} subcategories",
-                          style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
+                          style: const TextStyle(
+                              fontSize: 14, color: AppColors.textSecondary),
                         )),
                   ],
                 ),
@@ -92,9 +99,12 @@ class CategoryView extends GetView<CategoryController> {
       spacing: 12,
       runSpacing: 8,
       children: [
-        _buildActionButton("+ Add Category", true, () => CategoryDialogs.showAddCategory(context, controller)),
-        _buildActionButton("+ Add Ingredient", false, () => CategoryDialogs.showAddIngredient(context, controller)),
-        _buildActionButton("+ Add Item", false, () => CategoryDialogs.showAddItem(context, controller)),
+        _buildActionButton("+ Add Category", true,
+            () => CategoryDialogs.showAddCategory(context, controller)),
+        _buildActionButton("+ Add Ingredient", false,
+            () => CategoryDialogs.showAddIngredient(context, controller)),
+        _buildActionButton("+ Add Item", false,
+            () => CategoryDialogs.showAddItem(context, controller)),
       ],
     );
   }
@@ -110,7 +120,8 @@ class CategoryView extends GetView<CategoryController> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       ),
-      child: Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+      child: Text(label,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
     );
   }
 
@@ -124,7 +135,12 @@ class CategoryView extends GetView<CategoryController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("CATEGORIES LIST", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey, letterSpacing: 1.2)),
+              const Text("CATEGORIES LIST",
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                      letterSpacing: 1.2)),
               const SizedBox(height: 12),
               Expanded(
                 child: ListView.separated(
@@ -155,7 +171,9 @@ class CategoryView extends GetView<CategoryController> {
             scrollDirection: Axis.horizontal,
             itemCount: controller.categories.length,
             separatorBuilder: (_, __) => const SizedBox(width: 12),
-            itemBuilder: (context, index) => _buildCategoryMasterCard(controller.categories[index], index + 1, compact: true),
+            itemBuilder: (context, index) => _buildCategoryMasterCard(
+                controller.categories[index], index + 1,
+                compact: true),
           ),
         ),
         const SizedBox(height: 16),
@@ -164,7 +182,8 @@ class CategoryView extends GetView<CategoryController> {
     );
   }
 
-  Widget _buildCategoryMasterCard(dynamic cat, int position, {bool compact = false}) {
+  Widget _buildCategoryMasterCard(dynamic cat, int position,
+      {bool compact = false}) {
     return Obx(() {
       final isActive = controller.selectedCategoryId.value == cat.id;
 
@@ -172,9 +191,17 @@ class CategoryView extends GetView<CategoryController> {
         width: compact ? 180 : null,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: isActive ? AppColors.primary : const Color(0xFFE8E0F3)),
+          border: Border.all(
+              color: isActive ? AppColors.primary : const Color(0xFFE8E0F3)),
           color: isActive ? const Color(0xFFF4EFFC) : Colors.white,
-          boxShadow: isActive ? [BoxShadow(color: AppColors.primary.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, 4))] : null,
+          boxShadow: isActive
+              ? [
+                  BoxShadow(
+                      color: AppColors.primary.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4))
+                ]
+              : null,
         ),
         child: InkWell(
           onTap: () => controller.selectCategory(cat.id),
@@ -186,11 +213,17 @@ class CategoryView extends GetView<CategoryController> {
                 Container(
                   width: 36,
                   height: 36,
-                  decoration: BoxDecoration(color: isActive ? AppColors.primary : const Color(0xFFF3F4F6), borderRadius: BorderRadius.circular(8)),
+                  decoration: BoxDecoration(
+                      color: isActive
+                          ? AppColors.primary
+                          : const Color(0xFFF3F4F6),
+                      borderRadius: BorderRadius.circular(8)),
                   alignment: Alignment.center,
                   child: Text(
                     "$position",
-                    style: TextStyle(color: isActive ? Colors.white : Colors.grey, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: isActive ? Colors.white : Colors.grey,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -199,12 +232,23 @@ class CategoryView extends GetView<CategoryController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(cat.name, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: isActive ? AppColors.primary : AppColors.textPrimary), overflow: TextOverflow.ellipsis),
-                      Text("${cat.items.length} items", style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                      Text(cat.name,
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: isActive
+                                  ? AppColors.primary
+                                  : AppColors.textPrimary),
+                          overflow: TextOverflow.ellipsis),
+                      Text("${cat.items.length} items",
+                          style: const TextStyle(
+                              fontSize: 11, color: Colors.grey)),
                     ],
                   ),
                 ),
-                if (!compact && isActive) const Icon(Icons.check_circle, size: 16, color: AppColors.primary),
+                if (!compact && isActive)
+                  const Icon(Icons.check_circle,
+                      size: 16, color: AppColors.primary),
               ],
             ),
           ),
@@ -234,18 +278,27 @@ class CategoryView extends GetView<CategoryController> {
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.folder_outlined, color: AppColors.primary, size: 18),
+                              const Icon(Icons.folder_outlined,
+                                  color: AppColors.primary, size: 18),
                               const SizedBox(width: 8),
-                              Text(controller.selectedCategory?.name ?? "Select Category", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                              Text(
+                                  controller.selectedCategory?.name ??
+                                      "Select Category",
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold)),
                             ],
                           ),
                           const SizedBox(height: 4),
-                          Text("${controller.filteredItems.length} items in this category", style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                          Text(
+                              "${controller.filteredItems.length} items in this category",
+                              style: const TextStyle(
+                                  fontSize: 12, color: Colors.grey)),
                         ],
                       )),
                 ),
                 const SizedBox(width: 16),
-                _buildSearchField(),
+                // _buildSearchField(),
               ],
             ),
           ),
@@ -258,9 +311,14 @@ class CategoryView extends GetView<CategoryController> {
 
               return GridView.builder(
                 padding: const EdgeInsets.all(20),
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 250, childAspectRatio: 3, crossAxisSpacing: 16, mainAxisSpacing: 16),
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 250,
+                    childAspectRatio: 3,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16),
                 itemCount: items.length,
-                itemBuilder: (context, index) => _buildDetailItemCard(items[index]),
+                itemBuilder: (context, index) =>
+                    _buildDetailItemCard(items[index]),
               );
             }),
           ),
@@ -272,7 +330,10 @@ class CategoryView extends GetView<CategoryController> {
   Widget _buildSearchField() {
     return Container(
       width: 250,
-      decoration: BoxDecoration(color: const Color(0xFFF9FAFB), borderRadius: BorderRadius.circular(12), border: Border.all(color: const Color(0xFFE8E0F3))),
+      decoration: BoxDecoration(
+          color: const Color(0xFFF9FAFB),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: const Color(0xFFE8E0F3))),
       child: TextField(
         onChanged: controller.onSearchChanged,
         decoration: const InputDecoration(
@@ -287,17 +348,26 @@ class CategoryView extends GetView<CategoryController> {
   Widget _buildDetailItemCard(dynamic item) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFFF3F4F6)), color: Colors.white),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFFF3F4F6)),
+          color: Colors.white),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(6),
-            decoration: BoxDecoration(color: const Color(0xFFF3F4F6), shape: BoxShape.circle),
+            decoration: BoxDecoration(
+                color: const Color(0xFFF3F4F6), shape: BoxShape.circle),
             child: const Icon(Icons.tag, size: 14, color: AppColors.primary),
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(item.name, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.textPrimary), overflow: TextOverflow.ellipsis),
+            child: Text(item.name,
+                style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary),
+                overflow: TextOverflow.ellipsis),
           ),
         ],
       ),
@@ -311,7 +381,9 @@ class CategoryView extends GetView<CategoryController> {
         children: [
           Icon(Icons.inventory_2_outlined, size: 48, color: Colors.grey[200]),
           const SizedBox(height: 12),
-          const Text("No Items Found", style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+          const Text("No Items Found",
+              style:
+                  TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
         ],
       ),
     );
