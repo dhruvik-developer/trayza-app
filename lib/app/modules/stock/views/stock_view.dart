@@ -17,30 +17,60 @@ class StockView extends GetView<StockController> {
         backgroundColor: Colors.transparent,
         body: Padding(
           padding: EdgeInsets.all(isMobile ? 12.0 : 24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(context, isMobile),
-              const SizedBox(height: 24),
-              _buildStatsSection(isMobile),
-              const SizedBox(height: 24),
-              _buildFilterSection(context, isMobile),
-              const SizedBox(height: 16),
-              Expanded(
-                child: Obx(() {
-                  if (controller.isLoading.value) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+          child: isMobile
+              ? SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildHeader(context, isMobile),
+                      const SizedBox(height: 24),
+                      _buildStatsSection(isMobile),
+                      const SizedBox(height: 24),
+                      _buildFilterSection(context, isMobile),
+                      const SizedBox(height: 16),
+                      Obx(() {
+                        if (controller.isLoading.value) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
 
-                  if (controller.filteredStocks.isEmpty) {
-                    return _buildEmptyState();
-                  }
+                        if (controller.filteredStocks.isEmpty) {
+                          return _buildEmptyState();
+                        }
 
-                  return isMobile ? _buildMobileList() : _buildDesktopTable();
-                }),
-              ),
-            ],
-          ),
+                        return _buildMobileList(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics());
+                      }),
+                    ],
+                  ),
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildHeader(context, isMobile),
+                    const SizedBox(height: 24),
+                    _buildStatsSection(isMobile),
+                    const SizedBox(height: 24),
+                    _buildFilterSection(context, isMobile),
+                    const SizedBox(height: 16),
+                    Expanded(
+                      child: Obx(() {
+                        if (controller.isLoading.value) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+
+                        if (controller.filteredStocks.isEmpty) {
+                          return _buildEmptyState();
+                        }
+
+                        return _buildDesktopTable();
+                      }),
+                    ),
+                  ],
+                ),
         ),
       ),
     );
@@ -528,10 +558,12 @@ class StockView extends GetView<StockController> {
     );
   }
 
-  Widget _buildMobileList() {
+  Widget _buildMobileList({bool shrinkWrap = false, ScrollPhysics? physics}) {
     return ListView.separated(
+      padding: const EdgeInsets.all(0),
       itemCount: controller.filteredStocks.length,
-      physics: const BouncingScrollPhysics(),
+      shrinkWrap: shrinkWrap,
+      physics: physics ?? const BouncingScrollPhysics(),
       separatorBuilder: (context, index) => const SizedBox(height: 18),
       itemBuilder: (context, index) {
         final stock = controller.filteredStocks[index];
@@ -627,7 +659,7 @@ class StockView extends GetView<StockController> {
                       ),
                     IconButton(
                       icon: Icon(Icons.delete_sweep_outlined,
-                          color: Colors.grey[300], size: 22),
+                          color: Colors.grey[500], size: 22),
                       onPressed: () => controller.deleteItem(stock),
                     ),
                   ],
@@ -660,7 +692,7 @@ class StockView extends GetView<StockController> {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
@@ -676,7 +708,7 @@ class StockView extends GetView<StockController> {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                 child: Row(
