@@ -90,7 +90,7 @@ class IngredientDialogs {
 
   static void showAddItem(BuildContext context, CreateIngredientController controller) {
     final nameController = TextEditingController();
-    final selectedCatId = RxnInt();
+    final selectedCatId = controller.selectedCategoryId.value.obs;
 
     Get.dialog(
       Dialog(

@@ -30,7 +30,8 @@ class CreateIngredientController extends GetxController {
     if (cat == null) return [];
     if (searchQuery.value.isEmpty) return cat.items;
     return cat.items
-        .where((i) => i.name.toLowerCase().contains(searchQuery.value.toLowerCase()))
+        .where((i) =>
+            i.name.toLowerCase().contains(searchQuery.value.toLowerCase()))
         .toList();
   }
 
@@ -39,7 +40,7 @@ class CreateIngredientController extends GetxController {
     try {
       final response = await _provider.getIngredientCategories();
       List data = [];
-      
+
       // Robust response parsing
       if (response.data is List) {
         data = response.data;
@@ -51,14 +52,16 @@ class CreateIngredientController extends GetxController {
         }
       }
 
-      final fetched = data.map((e) => IngredientCategoryModel.fromJson(e)).toList();
+      final fetched =
+          data.map((e) => IngredientCategoryModel.fromJson(e)).toList();
       categories.assignAll(fetched);
-      
+
       if (selectedCategoryId.value == null && categories.isNotEmpty) {
         selectedCategoryId.value = categories.first.id;
       }
     } catch (e) {
-      Get.snackbar("Error", "Failed to fetch ingredient categories: ${e.toString()}");
+      Get.snackbar(
+          "Error", "Failed to fetch ingredient categories: ${e.toString()}");
     } finally {
       isLoading.value = false;
     }
@@ -70,14 +73,18 @@ class CreateIngredientController extends GetxController {
       return;
     }
     try {
-      final response = await _provider.addIngredientCategory(name.trim(), isCommon);
-      if (response.statusCode == 201 || response.statusCode == 200 || response.data['status'] == true) {
+      final response =
+          await _provider.addIngredientCategory(name.trim(), isCommon);
+      if (response.statusCode == 201 ||
+          response.statusCode == 200 ||
+          response.data['status'] == true) {
         await fetchCategories();
         Get.back();
         Get.snackbar("Success", "Ingredient Category added successfully!");
       }
     } catch (e) {
-      Get.snackbar("Error", "Failed to add ingredient category: ${e.toString()}");
+      Get.snackbar(
+          "Error", "Failed to add ingredient category: ${e.toString()}");
     }
   }
 
@@ -87,14 +94,18 @@ class CreateIngredientController extends GetxController {
       return;
     }
     try {
-      final response = await _provider.addIngredientItem(name.trim(), categoryId);
-      if (response.statusCode == 201 || response.statusCode == 200 || response.data['status'] == true) {
+      final response =
+          await _provider.addIngredientItem(name.trim(), categoryId);
+      if (response.statusCode == 201 ||
+          response.statusCode == 200 ||
+          response.data['status'] == true) {
         await fetchCategories();
         Get.back();
         Get.snackbar("Success", "Ingredient item created successfully!");
       }
     } catch (e) {
-      Get.snackbar("Error", "Failed to create ingredient item: ${e.toString()}");
+      Get.snackbar(
+          "Error", "Failed to create ingredient item: ${e.toString()}");
     }
   }
 

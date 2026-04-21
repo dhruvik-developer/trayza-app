@@ -34,7 +34,7 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
                   }
 
                   return isMobile
-                      ? _buildMobileLayout()
+                      ? _buildMobileLayout(context)
                       : _buildDesktopLayout(context);
                 }),
               ),
@@ -67,17 +67,31 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       "Create Ingredient Items",
                       style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary),
+                        fontSize: isMobile ? 20 : 28,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.textPrimary,
+                        letterSpacing: -0.5,
+                      ),
                     ),
-                    Obx(() => Text(
-                          "${controller.categories.length} categories • ${controller.categories.fold(0, (sum, c) => sum + c.items.length)} items",
-                          style: const TextStyle(
-                              fontSize: 14, color: AppColors.textSecondary),
+                    const SizedBox(height: 4),
+                    Obx(() => Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            "${controller.categories.length} categories • ${controller.categories.fold(0, (sum, c) => sum + c.items.length)} items",
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.primary,
+                            ),
+                          ),
                         )),
                   ],
                 ),
@@ -129,20 +143,26 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
       children: [
         // Left Column: Master List
         SizedBox(
-          width: 300,
+          width: 320,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("INGREDIENT CATEGORIES",
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, bottom: 12),
+                child: Text(
+                  "INGREDIENT CATEGORIES",
                   style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey,
-                      letterSpacing: 1.2)),
-              const SizedBox(height: 12),
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.grey[600],
+                    letterSpacing: 1.5,
+                  ),
+                ),
+              ),
               Expanded(
                 child: ListView.separated(
                   itemCount: controller.categories.length,
+                  padding: const EdgeInsets.only(bottom: 24),
                   separatorBuilder: (_, __) => const SizedBox(height: 12),
                   itemBuilder: (context, index) {
                     final cat = controller.categories[index];
@@ -153,29 +173,30 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
             ],
           ),
         ),
-        const SizedBox(width: 24),
+        const SizedBox(width: 32),
         // Right Column: Detail List
-        Expanded(child: _buildDetailPanel()),
+        Expanded(child: _buildDetailPanel(context)),
       ],
     );
   }
 
-  Widget _buildMobileLayout() {
+  Widget _buildMobileLayout(BuildContext context) {
     return Column(
       children: [
         SizedBox(
-          height: 100,
+          height: 110,
           child: ListView.separated(
+            padding: const EdgeInsets.symmetric(vertical: 8),
             scrollDirection: Axis.horizontal,
             itemCount: controller.categories.length,
-            separatorBuilder: (_, __) => const SizedBox(width: 12),
+            separatorBuilder: (_, __) => const SizedBox(width: 16),
             itemBuilder: (context, index) => _buildCategoryMasterCard(
                 controller.categories[index], index + 1,
                 compact: true),
           ),
         ),
-        const SizedBox(height: 16),
-        Expanded(child: _buildDetailPanel()),
+        const SizedBox(height: 20),
+        Expanded(child: _buildDetailPanel(context)),
       ],
     );
   }
@@ -185,62 +206,92 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
     return Obx(() {
       final isActive = controller.selectedCategoryId.value == cat.id;
 
-      return Container(
-        width: compact ? 180 : null,
+      return AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        width: compact ? 190 : null,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(
-              color: isActive ? AppColors.primary : const Color(0xFFE8E0F3)),
-          color: isActive ? const Color(0xFFF4EFFC) : Colors.white,
-          boxShadow: isActive
-              ? [
-                  BoxShadow(
-                      color: AppColors.primary.withOpacity(0.1),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4))
-                ]
-              : null,
+            color: isActive ? AppColors.primary : Colors.transparent,
+            width: 2,
+          ),
+          color: isActive ? Colors.white : const Color(0xFFF9FAFB),
+          boxShadow: [
+            BoxShadow(
+              color: isActive
+                  ? AppColors.primary.withOpacity(0.15)
+                  : Colors.black.withOpacity(0.03),
+              blurRadius: isActive ? 20 : 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: InkWell(
           onTap: () => controller.selectCategory(cat.id),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(18),
           child: Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(16),
             child: Row(
               children: [
                 Container(
-                  width: 36,
-                  height: 36,
+                  width: 44,
+                  height: 44,
                   decoration: BoxDecoration(
-                      color: isActive
-                          ? AppColors.primary
-                          : const Color(0xFFF3F4F6),
-                      borderRadius: BorderRadius.circular(8)),
+                    gradient: isActive
+                        ? const LinearGradient(
+                            colors: [AppColors.primary, Color(0xFFA78BFA)])
+                        : LinearGradient(
+                            colors: [Colors.grey[200]!, Colors.grey[100]!]),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
                   alignment: Alignment.center,
                   child: Text(
                     "$position",
                     style: TextStyle(
-                        color: isActive ? Colors.white : Colors.grey,
-                        fontWeight: FontWeight.bold),
+                      color: isActive ? Colors.white : Colors.grey[600],
+                      fontWeight: FontWeight.w800,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(cat.name,
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
+                      Text(
+                        cat.name,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: isActive
+                              ? AppColors.primary
+                              : AppColors.textPrimary,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 2),
+                      Row(
+                        children: [
+                          Icon(Icons.layers_outlined,
+                              size: 12,
                               color: isActive
-                                  ? AppColors.primary
-                                  : AppColors.textPrimary),
-                          overflow: TextOverflow.ellipsis),
-                      Text("${cat.items.length} items",
-                          style: const TextStyle(
-                              fontSize: 11, color: Colors.grey)),
+                                  ? AppColors.primary.withOpacity(0.6)
+                                  : Colors.grey),
+                          const SizedBox(width: 4),
+                          Text(
+                            "${cat.items.length} items",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: isActive
+                                  ? AppColors.primary.withOpacity(0.7)
+                                  : Colors.grey[500],
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -252,52 +303,45 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
     });
   }
 
-  Widget _buildDetailPanel() {
+  Widget _buildDetailPanel(BuildContext context) {
+    bool isMobile = context.width < 600;
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: const Color(0xFFE8E0F3)),
+        borderRadius: BorderRadius.circular(32),
+        border: Border.all(color: const Color(0xFFE8E0F3).withOpacity(0.5)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 30,
+            offset: const Offset(0, 10),
+          ),
+        ],
       ),
       child: Column(
         children: [
           // Detail Header
           Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Obx(() => Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.grid_view,
-                                  color: AppColors.primary, size: 18),
-                              const SizedBox(width: 8),
-                              Text(
-                                  controller.selectedCategory?.name ??
-                                      "Select Category",
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                              "${controller.filteredItems.length} items in this category",
-                              style: const TextStyle(
-                                  fontSize: 12, color: Colors.grey)),
-                        ],
-                      )),
-                ),
-                const SizedBox(width: 16),
-                _buildSearchField(),
-              ],
-            ),
+            padding: const EdgeInsets.all(24),
+            child: isMobile
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildDetailHeaderInfo(),
+                      const SizedBox(height: 16),
+                      _buildSearchField(width: double.infinity),
+                    ],
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(child: _buildDetailHeaderInfo()),
+                      const SizedBox(width: 24),
+                      _buildSearchField(width: 280),
+                    ],
+                  ),
           ),
-          const Divider(height: 1),
+          const Divider(height: 1, color: Color(0xFFF3F4F6)),
           // Items Grid
           Expanded(
             child: Obx(() {
@@ -305,12 +349,13 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
               if (items.isEmpty) return _buildDetailEmptyState();
 
               return GridView.builder(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(24),
                 gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 250,
-                    childAspectRatio: 3,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16),
+                  maxCrossAxisExtent: 280,
+                  mainAxisExtent: 80,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                ),
                 itemCount: items.length,
                 itemBuilder: (context, index) =>
                     _buildDetailItemCard(items[index]),
@@ -322,20 +367,71 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
     );
   }
 
-  Widget _buildSearchField() {
+  Widget _buildDetailHeaderInfo() {
+    return Obx(() => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.grid_view_rounded,
+                      color: AppColors.primary, size: 20),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    controller.selectedCategory?.name ?? "Select Category",
+                    style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: -0.5),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Padding(
+              padding: const EdgeInsets.only(left: 38),
+              child: Text(
+                "${controller.filteredItems.length} items in this category",
+                style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.grey[500],
+                    fontWeight: FontWeight.w500),
+              ),
+            ),
+          ],
+        ));
+  }
+
+  Widget _buildSearchField({required double width}) {
     return Container(
-      width: 250,
+      width: width,
+      height: 52,
       decoration: BoxDecoration(
-          color: const Color(0xFFF9FAFB),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFFE8E0F3))),
+        color: const Color(0xFFF9FAFB),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFE5E7EB)),
+      ),
       child: TextField(
         onChanged: controller.onSearchChanged,
-        decoration: const InputDecoration(
-            hintText: "Search ingredients...",
-            prefixIcon: Icon(Icons.search, size: 18, color: Colors.grey),
-            border: InputBorder.none,
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12)),
+        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+        decoration: InputDecoration(
+          hintText: "Search ingredients...",
+          hintStyle:
+              TextStyle(color: Colors.grey[400], fontWeight: FontWeight.w500),
+          prefixIcon:
+              const Icon(Icons.search_rounded, size: 20, color: Colors.grey),
+          border: InputBorder.none,
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        ),
       ),
     );
   }
@@ -344,26 +440,39 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFF3F4F6)),
-          color: Colors.white),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: const Color(0xFFF3F4F6)),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(6),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-                color: const Color(0xFFF3F4F6), shape: BoxShape.circle),
-            child: const Icon(Icons.shopping_basket_outlined,
-                size: 14, color: AppColors.primary),
+              color: const Color(0xFFF3F4F6),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Icon(Icons.restaurant_menu_outlined,
+                size: 18, color: AppColors.primary),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 14),
           Expanded(
-            child: Text(item.name,
-                style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary),
-                overflow: TextOverflow.ellipsis),
+            child: Text(
+              item.name,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                color: AppColors.textPrimary,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ],
       ),
