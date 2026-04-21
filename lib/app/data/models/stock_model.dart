@@ -1,19 +1,28 @@
 class StockCategoryModel {
   final int? id;
   final String? name;
+  final List<StockItemModel>? stokeItems;
 
-  StockCategoryModel({this.id, this.name});
+  StockCategoryModel({this.id, this.name, this.stokeItems});
 
   factory StockCategoryModel.fromJson(Map<String, dynamic> json) {
+    var itemsJson = json['stokeitem'] ?? json['stoke_item'] ?? json['items'];
+    List<StockItemModel>? items;
+    if (itemsJson != null) {
+      items = (itemsJson as List).map((i) => StockItemModel.fromJson(i)).toList();
+    }
+    
     return StockCategoryModel(
       id: json['id'],
       name: json['name'],
+      stokeItems: items,
     );
   }
 
   Map<String, dynamic> toJson() => {
     'id': id,
     'name': name,
+    'stokeitem': stokeItems?.map((e) => e.toJson()).toList(),
   };
 }
 
@@ -46,11 +55,11 @@ class StockItemModel {
       name: json['name'],
       category: json['category'],
       categoryName: json['category_name'],
-      quantity: json['quantity'],
-      alert: json['alert'],
-      type: json['type'],
-      ntePrice: json['nte_price'],
-      totalPrice: json['total_price'],
+      quantity: json['quantity']?.toString(),
+      alert: json['alert']?.toString(),
+      type: json['type']?.toString(),
+      ntePrice: json['nte_price']?.toString(),
+      totalPrice: json['total_price']?.toString(),
     );
   }
 
