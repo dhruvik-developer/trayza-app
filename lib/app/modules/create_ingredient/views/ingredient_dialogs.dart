@@ -13,7 +13,7 @@ class IngredientDialogs {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Container(
           padding: const EdgeInsets.all(32),
-          width: 450,
+          constraints: BoxConstraints(maxWidth: context.width > 600 ? 450 : context.width * 0.9),
           decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -96,7 +96,7 @@ class IngredientDialogs {
       Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Container(
-          width: 500,
+          constraints: BoxConstraints(maxWidth: context.width > 600 ? 500 : context.width * 0.9),
           decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -109,25 +109,29 @@ class IngredientDialogs {
                   borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                 ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(12)),
-                          child: const Icon(Icons.tag_outlined, color: Colors.white, size: 20),
-                        ),
-                        const SizedBox(width: 16),
-                        const Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Add Ingredient Item", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF1F2937))),
-                            Text("Add a new ingredient item to a category", style: TextStyle(fontSize: 13, color: Color(0xFF9CA3AF))),
-                          ],
-                        ),
-                      ],
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(12)),
+                            child: const Icon(Icons.tag_outlined, color: Colors.white, size: 20),
+                          ),
+                          const SizedBox(width: 16),
+                          const Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Add Ingredient Item", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF1F2937)), overflow: TextOverflow.ellipsis),
+                                Text("Add a new ingredient item to a category", style: TextStyle(fontSize: 13, color: Color(0xFF9CA3AF)), overflow: TextOverflow.ellipsis),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
+                    const SizedBox(width: 8),
                     IconButton(
                       icon: const Icon(Icons.close),
                       onPressed: () => Get.back(),
