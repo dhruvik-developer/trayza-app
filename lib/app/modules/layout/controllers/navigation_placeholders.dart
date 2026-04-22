@@ -16,13 +16,6 @@ class PaymentHistoryBinding extends Bindings {
   }
 }
 
-class ExpenseController extends GetxController {}
-class ExpenseBinding extends Bindings {
-  @override
-  void dependencies() {
-    Get.lazyPut<ExpenseController>(() => ExpenseController());
-  }
-}
 
 
 class EventSummaryController extends GetxController {}

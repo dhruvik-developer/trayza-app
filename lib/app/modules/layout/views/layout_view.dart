@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:trayza_app/app/modules/expense/bindings/expense_binding.dart';
 import '../../../core/theme/app_colors.dart';
 import '../controllers/layout_controller.dart';
 
