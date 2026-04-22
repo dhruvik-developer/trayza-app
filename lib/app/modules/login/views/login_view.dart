@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../data/services/business_profile_service.dart';
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
-  const LoginView({Key? key}) : super(key: key);
+  const LoginView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,18 +40,7 @@ class LoginView extends GetView<LoginController> {
                   Center(
                     child: Hero(
                       tag: 'logo',
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary.withOpacity(0.1),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.restaurant_menu_rounded,
-                          size: 64,
-                          color: AppColors.primary,
-                        ),
-                      ),
+                      child: _buildBrandLogo(),
                     ),
                   ),
                   const SizedBox(height: 32),
@@ -184,8 +174,8 @@ class LoginView extends GetView<LoginController> {
                 : null,
             filled: true,
             fillColor: Theme.of(context).brightness == Brightness.dark
-                ? Colors.white.withOpacity(0.05)
-                : Colors.grey.withOpacity(0.05),
+                ? Colors.white.withValues(alpha: 0.05)
+                : Colors.grey.withValues(alpha: 0.05),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide.none,
@@ -201,6 +191,23 @@ class LoginView extends GetView<LoginController> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildBrandLogo() {
+    final logoUrl = Get.isRegistered<BusinessProfileService>()
+        ? BusinessProfileService.to.logoUrl
+        : null;
+
+    if (logoUrl == null || logoUrl.isEmpty) {
+      return const SizedBox(height: 100);
+    }
+
+    return Image.network(
+      logoUrl,
+      height: 100,
+      fit: BoxFit.contain,
+      errorBuilder: (_, __, ___) => const SizedBox(height: 100),
     );
   }
 }
