@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 class GstBillingController extends GetxController {}
+
 class GstBillingBinding extends Bindings {
   @override
   void dependencies() {
@@ -8,17 +9,8 @@ class GstBillingBinding extends Bindings {
   }
 }
 
-class PaymentHistoryController extends GetxController {}
-class PaymentHistoryBinding extends Bindings {
-  @override
-  void dependencies() {
-    Get.lazyPut<PaymentHistoryController>(() => PaymentHistoryController());
-  }
-}
-
-
-
 class EventSummaryController extends GetxController {}
+
 class EventSummaryBinding extends Bindings {
   @override
   void dependencies() {
@@ -27,6 +19,7 @@ class EventSummaryBinding extends Bindings {
 }
 
 class GroundChecklistController extends GetxController {}
+
 class GroundChecklistBinding extends Bindings {
   @override
   void dependencies() {

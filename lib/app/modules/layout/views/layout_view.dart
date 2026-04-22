@@ -21,6 +21,7 @@ import '../../invoice/views/invoice_view.dart';
 import '../../invoice/controllers/invoice_controller.dart';
 import '../../expense/views/expense_view.dart';
 import '../../payment_history/views/payment_history_view.dart';
+import '../../payment_history/bindings/payment_history_binding.dart';
 import '../../create_ingredient/views/create_ingredient_view.dart';
 import '../../create_ingredient/controllers/create_ingredient_controller.dart';
 import '../../event_summary/views/event_summary_view.dart';
@@ -32,10 +33,10 @@ class LayoutView extends GetView<LayoutController> {
   final int activeIndex; // To highlight the active menu item
 
   const LayoutView({
-    Key? key,
+    super.key,
     required this.child,
     this.activeIndex = -1,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -197,7 +198,7 @@ class LayoutView extends GetView<LayoutController> {
             boxShadow: isActive
                 ? [
                     BoxShadow(
-                        color: AppColors.primary.withOpacity(0.3),
+                        color: AppColors.primary.withValues(alpha: 0.3),
                         blurRadius: 15,
                         offset: const Offset(0, 8))
                   ]
