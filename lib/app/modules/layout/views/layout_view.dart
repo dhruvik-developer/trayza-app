@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:trayza_app/app/data/services/auth_service.dart';
 import 'package:trayza_app/app/modules/expense/bindings/expense_binding.dart';
 import 'package:trayza_app/app/data/services/business_profile_service.dart';
 import '../../../core/theme/app_colors.dart';
@@ -303,11 +304,25 @@ class LayoutView extends GetView<LayoutController> {
                 children: [
                   _buildHeaderBadge("Low"),
                   const SizedBox(width: 8),
-                  const CircleAvatar(
-                    radius: 16,
-                    backgroundColor: Color(0xFFF3F4F6),
-                    child: Icon(Icons.person_outline,
-                        size: 18, color: Colors.grey),
+                  PopupMenuButton<String>(
+                    padding: EdgeInsets.zero,
+                    onSelected: (value) {
+                      if (value == 'logout') {
+                        AuthService.to.logout();
+                      }
+                    },
+                    itemBuilder: (context) => const [
+                      PopupMenuItem<String>(
+                        value: 'logout',
+                        child: Text('Logout'),
+                      ),
+                    ],
+                    child: const CircleAvatar(
+                      radius: 16,
+                      backgroundColor: Color(0xFFF3F4F6),
+                      child: Icon(Icons.person_outline,
+                          size: 18, color: Colors.grey),
+                    ),
                   ),
                 ],
               ),

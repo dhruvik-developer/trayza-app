@@ -1,10 +1,11 @@
 import 'package:get/get.dart';
 import '../../routes/app_routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'business_profile_service.dart';
 
 class AuthService extends GetxService {
   static AuthService get to => Get.find();
-  
+
   late SharedPreferences _prefs;
   final _isLoggedIn = false.obs;
   final _token = RxnString();
@@ -21,7 +22,7 @@ class AuthService extends GetxService {
     _token.value = _prefs.getString('token');
     _username.value = _prefs.getString('username');
     _userType.value = _prefs.getString('userType');
-    
+
     if (_token.value != null) {
       _isLoggedIn.value = true;
     }
@@ -33,22 +34,26 @@ class AuthService extends GetxService {
     _username.value = username;
     _userType.value = userType;
     _isLoggedIn.value = true;
-    
+
     _prefs.setString('token', token);
     _prefs.setString('username', username);
     _prefs.setString('userType', userType);
   }
 
-  void logout() {
+  Future<void> logout() async {
     _token.value = null;
     _username.value = null;
     _userType.value = null;
     _isLoggedIn.value = false;
-    
-    _prefs.remove('token');
-    _prefs.remove('username');
-    _prefs.remove('userType');
-    
+
+    await _prefs.remove('token');
+    await _prefs.remove('username');
+    await _prefs.remove('userType');
+
+    if (Get.isRegistered<BusinessProfileService>()) {
+      await BusinessProfileService.to.fetchProfile();
+    }
+
     Get.offAllNamed(Routes.LOGIN);
   }
 }
