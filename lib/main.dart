@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'app/modules/login/views/login_view.dart';
-import 'app/modules/login/bindings/login_binding.dart';
 import 'app/core/theme/app_theme.dart';
 import 'app/data/services/auth_service.dart';
 import 'app/data/services/business_profile_service.dart';
+import 'app/routes/app_pages.dart';
+import 'app/routes/app_routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,8 +15,8 @@ void main() async {
   runApp(
     GetMaterialApp(
       title: "Trayza Admin",
-      home: const LoginView(),
-      initialBinding: LoginBinding(),
+      initialRoute: AuthService.to.isLoggedIn ? Routes.DISH : Routes.LOGIN,
+      getPages: AppPages.routes,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
@@ -27,8 +27,6 @@ void main() async {
 }
 
 Future<void> initServices() async {
-  print('Starting services...');
   await Get.putAsync(() => BusinessProfileService().init());
   await Get.putAsync(() => AuthService().init());
-  print('All services started.');
 }
