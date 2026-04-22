@@ -25,8 +25,10 @@ import '../../payment_history/bindings/payment_history_binding.dart';
 import '../../create_ingredient/views/create_ingredient_view.dart';
 import '../../create_ingredient/controllers/create_ingredient_controller.dart';
 import '../../event_summary/views/event_summary_view.dart';
+import '../../ground_checklist/bindings/ground_checklist_binding.dart';
 import '../../ground_checklist/views/ground_checklist_view.dart';
-import '../controllers/navigation_placeholders.dart';
+import '../controllers/navigation_placeholders.dart'
+    hide GroundChecklistBinding;
 
 class LayoutView extends GetView<LayoutController> {
   final Widget child;
