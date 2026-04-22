@@ -16,21 +16,26 @@ class ExpenseView extends GetView<ExpenseController> {
       activeIndex: 7,
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: Padding(
-          padding: EdgeInsets.all(isMobile ? 12.0 : 24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(context, isMobile),
-              const SizedBox(height: 24),
-              _buildSummaryCard(),
-              const SizedBox(height: 20),
-              _buildCategoryFilters(),
-              const SizedBox(height: 16),
-              Expanded(
-                child: Obx(() {
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(isMobile ? 12.0 : 24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeader(context, isMobile),
+                const SizedBox(height: 24),
+                _buildSummaryCard(),
+                const SizedBox(height: 20),
+                _buildCategoryFilters(),
+                const SizedBox(height: 16),
+                Obx(() {
                   if (controller.isLoading.value) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(32.0),
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
                   }
 
                   if (controller.filteredExpenses.isEmpty) {
@@ -39,8 +44,8 @@ class ExpenseView extends GetView<ExpenseController> {
 
                   return isMobile ? _buildMobileList() : _buildDataTable();
                 }),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -377,6 +382,8 @@ class ExpenseView extends GetView<ExpenseController> {
 
   Widget _buildMobileList() {
     return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       padding: const EdgeInsets.only(bottom: 24),
       itemCount: controller.filteredExpenses.length,
       separatorBuilder: (context, index) => const SizedBox(height: 12),
