@@ -35,7 +35,7 @@ class LoginView extends GetView<LoginController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                   // Logo / Title
+                  // Logo / Title
                   Center(
                     child: Hero(
                       tag: 'logo',
@@ -45,7 +45,7 @@ class LoginView extends GetView<LoginController> {
                           color: AppColors.primary.withOpacity(0.1),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.restaurant_menu_rounded,
                           size: 64,
                           color: AppColors.primary,
@@ -68,7 +68,7 @@ class LoginView extends GetView<LoginController> {
                         ),
                   ),
                   const SizedBox(height: 40),
-                  
+
                   // Username Field
                   _buildTextField(
                     context: context,
@@ -78,20 +78,20 @@ class LoginView extends GetView<LoginController> {
                     icon: Icons.person_outline_rounded,
                   ),
                   const SizedBox(height: 20),
-                  
+
                   // Password Field
                   Obx(() => _buildTextField(
-                    context: context,
-                    controller: controller.passwordController,
-                    label: "Password",
-                    hint: "Enter your password",
-                    icon: Icons.lock_outline_rounded,
-                    isPassword: true,
-                    obscureText: !controller.showPassword.value,
-                    onTogglePassword: controller.toggleShowPassword,
-                  )),
+                        context: context,
+                        controller: controller.passwordController,
+                        label: "Password",
+                        hint: "Enter your password",
+                        icon: Icons.lock_outline_rounded,
+                        isPassword: true,
+                        obscureText: !controller.showPassword.value,
+                        onTogglePassword: controller.toggleShowPassword,
+                      )),
                   const SizedBox(height: 12),
-                  
+
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
@@ -100,41 +100,41 @@ class LoginView extends GetView<LoginController> {
                     ),
                   ),
                   const SizedBox(height: 32),
-                  
+
                   // Login Button
                   Obx(() => SizedBox(
-                    width: double.infinity,
-                    height: 56,
-                    child: ElevatedButton(
-                      onPressed: controller.isLoading.value 
-                          ? null 
-                          : () => controller.login(),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          elevation: 0,
-                        ),
-                      child: controller.isLoading.value
-                          ? const SizedBox(
-                              height: 24,
-                              width: 24,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                          : const Text(
-                              "Login",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
+                        width: double.infinity,
+                        height: 56,
+                        child: ElevatedButton(
+                          onPressed: controller.isLoading.value
+                              ? null
+                              : () => controller.login(),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                    ),
-                  )),
+                            elevation: 0,
+                          ),
+                          child: controller.isLoading.value
+                              ? const SizedBox(
+                                  height: 24,
+                                  width: 24,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : const Text(
+                                  "Login",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                        ),
+                      )),
                 ],
               ),
             ),
@@ -192,7 +192,7 @@ class LoginView extends GetView<LoginController> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+              borderSide: BorderSide(color: AppColors.primary, width: 1.5),
             ),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,

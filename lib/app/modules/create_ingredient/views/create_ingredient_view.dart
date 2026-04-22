@@ -68,7 +68,7 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
                     color: AppColors.primaryLight,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(Icons.note_add_outlined,
+                  child: Icon(Icons.note_add_outlined,
                       color: AppColors.primary, size: 24),
                 ),
                 const SizedBox(width: 12),
@@ -94,7 +94,7 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
                           ),
                           child: Text(
                             "${controller.categories.length} categories • ${controller.categories.fold(0, (sum, c) => sum + c.items.length)} items",
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                               color: AppColors.primary,
@@ -386,22 +386,20 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
           // Items Grid
           Obx(() {
             final items = controller.filteredItems;
+
             if (items.isEmpty) return _buildDetailEmptyState();
 
-            return GridView.builder(
-              padding: const EdgeInsets.only(
-                  top: 12, bottom: 14, left: 14, right: 14),
+            return ListView.builder(
+              padding: const EdgeInsets.all(18),
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 280,
-                mainAxisExtent: 80,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-              ),
               itemCount: items.length,
-              itemBuilder: (context, index) =>
-                  _buildDetailItemCard(context, items[index]),
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: _buildDetailItemCard(context, items[index]),
+                );
+              },
             );
           }),
         ],
@@ -421,7 +419,7 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
                     color: AppColors.primary.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.grid_view_rounded,
+                  child: Icon(Icons.grid_view_rounded,
                       color: AppColors.primary, size: 20),
                 ),
                 const SizedBox(width: 12),
@@ -511,7 +509,7 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
                   color: const Color(0xFFF3F4F6),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(Icons.restaurant_menu_outlined,
+                child: Icon(Icons.restaurant_menu_outlined,
                     size: 18, color: AppColors.primary),
               ),
               const SizedBox(width: 14),

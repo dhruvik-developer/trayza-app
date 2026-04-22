@@ -54,8 +54,8 @@ class PaymentHistoryView extends GetView<PaymentHistoryController> {
           decoration: BoxDecoration(
               color: const Color(0xFFF4EFFC),
               borderRadius: BorderRadius.circular(12)),
-          child: const Icon(Icons.history_rounded,
-              color: AppColors.primary, size: 24),
+          child:
+              Icon(Icons.history_rounded, color: AppColors.primary, size: 24),
         ),
         const SizedBox(width: 12),
         const Column(
@@ -160,7 +160,7 @@ class PaymentHistoryView extends GetView<PaymentHistoryController> {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           colors: [AppColors.primary, Color(0xFF6A3FA0)],
         ),
         borderRadius: BorderRadius.circular(24),

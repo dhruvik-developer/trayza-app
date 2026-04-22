@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:trayza_app/app/modules/expense/bindings/expense_binding.dart';
+import 'package:trayza_app/app/data/services/business_profile_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../controllers/layout_controller.dart';
 
@@ -78,10 +79,7 @@ class LayoutView extends GetView<LayoutController> {
             // Logo Section
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 20),
-              child: Image.asset('assets/images/logo.png',
-                  height: 100,
-                  fit: BoxFit.contain,
-                  errorBuilder: (_, __, ___) => const FlutterLogo(size: 60)),
+              child: _buildBrandLogo(),
             ),
 
             // Scrollable Menu Items
@@ -183,6 +181,30 @@ class LayoutView extends GetView<LayoutController> {
     );
   }
 
+  Widget _buildBrandLogo() {
+    final logoUrl = Get.isRegistered<BusinessProfileService>()
+        ? BusinessProfileService.to.logoUrl
+        : null;
+
+    Widget fallbackLogo() => Image.asset(
+          'assets/images/logo.png',
+          height: 100,
+          fit: BoxFit.contain,
+          errorBuilder: (_, __, ___) => const FlutterLogo(size: 60),
+        );
+
+    if (logoUrl == null || logoUrl.isEmpty) {
+      return fallbackLogo();
+    }
+
+    return Image.network(
+      logoUrl,
+      height: 100,
+      fit: BoxFit.contain,
+      errorBuilder: (_, __, ___) => fallbackLogo(),
+    );
+  }
+
   Widget _buildSidebarItem(
       int index, String title, IconData icon, VoidCallback onTap) {
     bool isActive = activeIndex == index;
@@ -258,7 +280,7 @@ class LayoutView extends GetView<LayoutController> {
               // Menu button
               Builder(
                 builder: (context) => IconButton(
-                  icon: const Icon(Icons.menu, color: AppColors.primary),
+                  icon: Icon(Icons.menu, color: AppColors.primary),
                   onPressed: () => Scaffold.of(context).openDrawer(),
                 ),
               ),

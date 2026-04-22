@@ -69,7 +69,8 @@ class AllOrderView extends GetView<AllOrderController> {
                     color: const Color(0xFFF4EFFC),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(Icons.assignment_outlined, color: AppColors.primary, size: 24),
+                  child: Icon(Icons.assignment_outlined,
+                      color: AppColors.primary, size: 24),
                 ),
                 const SizedBox(width: 12),
                 Column(
@@ -77,12 +78,16 @@ class AllOrderView extends GetView<AllOrderController> {
                   children: [
                     const Text(
                       "All Orders",
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                      style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary),
                     ),
                     Obx(() => Text(
-                      "${controller.orders.length} orders found",
-                      style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
-                    )),
+                          "${controller.orders.length} orders found",
+                          style: const TextStyle(
+                              fontSize: 14, color: AppColors.textSecondary),
+                        )),
                   ],
                 ),
               ],
@@ -130,8 +135,14 @@ class AllOrderView extends GetView<AllOrderController> {
   Widget _buildQuickFilter(String label) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(color: const Color(0xFFF3F4F6), borderRadius: BorderRadius.circular(6)),
-      child: Text(label, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF4B5563))),
+      decoration: BoxDecoration(
+          color: const Color(0xFFF3F4F6),
+          borderRadius: BorderRadius.circular(6)),
+      child: Text(label,
+          style: const TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF4B5563))),
     );
   }
 
@@ -158,7 +169,10 @@ class AllOrderView extends GetView<AllOrderController> {
                   backgroundColor: AppColors.primary,
                   child: Text(
                     (order.name ?? "?")[0].toUpperCase(),
-                    style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -166,21 +180,36 @@ class AllOrderView extends GetView<AllOrderController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(order.name ?? "—", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+                      Text(order.name ?? "—",
+                          style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textPrimary)),
                       if (order.reference != null)
-                        Text("Ref: ${order.reference}", style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                        Text("Ref: ${order.reference}",
+                            style: const TextStyle(
+                                fontSize: 11, color: Colors.grey)),
                     ],
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), border: Border.all(color: const Color(0xFFEDE7F6))),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: const Color(0xFFEDE7F6))),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.calendar_today, size: 10, color: AppColors.primary),
+                      Icon(Icons.calendar_today,
+                          size: 10, color: AppColors.primary),
                       const SizedBox(width: 6),
-                      Text(order.eventDate ?? "—", style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.primary)),
+                      Text(order.eventDate ?? "—",
+                          style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary)),
                     ],
                   ),
                 ),
@@ -196,14 +225,21 @@ class AllOrderView extends GetView<AllOrderController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8), border: Border.all(color: const Color(0xFFEDE7F6))),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: const Color(0xFFEDE7F6))),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.phone_outlined, size: 14, color: AppColors.primary),
+                        Icon(Icons.phone_outlined,
+                            size: 14, color: AppColors.primary),
                         const SizedBox(width: 8),
-                        Text(order.mobileNo ?? "—", style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                        Text(order.mobileNo ?? "—",
+                            style: const TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.w600)),
                       ],
                     ),
                   ),
@@ -211,7 +247,10 @@ class AllOrderView extends GetView<AllOrderController> {
                   // Detailed Order Summary Box
                   Container(
                     padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10), border: Border.all(color: const Color(0xFFEDE7F6))),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: const Color(0xFFEDE7F6))),
                     child: Column(
                       children: [
                         Row(
@@ -219,19 +258,27 @@ class AllOrderView extends GetView<AllOrderController> {
                           children: [
                             Row(
                               children: [
-                                const Icon(Icons.assignment_outlined, size: 14, color: AppColors.primary),
+                                Icon(Icons.assignment_outlined,
+                                    size: 14, color: AppColors.primary),
                                 const SizedBox(width: 8),
-                                const Text("Total Sessions", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                const Text("Total Sessions",
+                                    style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold)),
                               ],
                             ),
-                            const Icon(Icons.chevron_right, size: 16, color: AppColors.primary),
+                            Icon(Icons.chevron_right,
+                                size: 16, color: AppColors.primary),
                           ],
                         ),
                         const SizedBox(height: 4),
                         Row(
                           children: [
                             const SizedBox(width: 22),
-                            Text("Total Estimated Persons: ${order.estimatedPersons ?? 0}", style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                            Text(
+                                "Total Estimated Persons: ${order.estimatedPersons ?? 0}",
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.grey)),
                           ],
                         ),
                       ],
@@ -245,14 +292,17 @@ class AllOrderView extends GetView<AllOrderController> {
           // Card Footer
           Container(
             padding: const EdgeInsets.all(12),
-            decoration: const BoxDecoration(border: Border(top: BorderSide(color: Color(0xFFEDE7F6)))),
+            decoration: const BoxDecoration(
+                border: Border(top: BorderSide(color: Color(0xFFEDE7F6)))),
             child: Row(
               children: [
-                _buildActionBtn(Icons.check_circle_outline, "Complete", Colors.green),
+                _buildActionBtn(
+                    Icons.check_circle_outline, "Complete", Colors.green),
                 const SizedBox(width: 8),
                 _buildActionBtn(Icons.share_outlined, "Share", Colors.blue),
                 const SizedBox(width: 8),
-                _buildActionBtn(Icons.picture_as_pdf_outlined, "PDF", Colors.purple),
+                _buildActionBtn(
+                    Icons.picture_as_pdf_outlined, "PDF", Colors.purple),
               ],
             ),
           ),
@@ -265,13 +315,17 @@ class AllOrderView extends GetView<AllOrderController> {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8),
-        decoration: BoxDecoration(color: color.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
+        decoration: BoxDecoration(
+            color: color.withOpacity(0.05),
+            borderRadius: BorderRadius.circular(8)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, size: 14, color: color),
             const SizedBox(width: 6),
-            Text(label, style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: color)),
+            Text(label,
+                style: TextStyle(
+                    fontSize: 11, fontWeight: FontWeight.bold, color: color)),
           ],
         ),
       ),
@@ -283,10 +337,16 @@ class AllOrderView extends GetView<AllOrderController> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.assignment_late_outlined, size: 64, color: Colors.grey[300]),
+          Icon(Icons.assignment_late_outlined,
+              size: 64, color: Colors.grey[300]),
           const SizedBox(height: 16),
-          const Text("No Orders Found", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey)),
-          const Text("Orders will appear here once created", style: TextStyle(color: Colors.grey)),
+          const Text("No Orders Found",
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey)),
+          const Text("Orders will appear here once created",
+              style: TextStyle(color: Colors.grey)),
         ],
       ),
     );

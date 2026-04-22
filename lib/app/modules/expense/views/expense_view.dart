@@ -79,7 +79,7 @@ class ExpenseView extends GetView<ExpenseController> {
               decoration: BoxDecoration(
                   color: const Color(0xFFF4EFFC),
                   borderRadius: BorderRadius.circular(12)),
-              child: const Icon(Icons.attach_money_rounded,
+              child: Icon(Icons.attach_money_rounded,
                   color: AppColors.primary, size: 24),
             ),
             const SizedBox(width: 12),
@@ -122,7 +122,7 @@ class ExpenseView extends GetView<ExpenseController> {
           label: const Text("Add Category"),
           style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.primary,
-              side: const BorderSide(color: AppColors.primary),
+              side: BorderSide(color: AppColors.primary),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8))),
@@ -266,7 +266,7 @@ class ExpenseView extends GetView<ExpenseController> {
               dataRowMinHeight: 60,
               dataRowMaxHeight: 60,
               horizontalMargin: 16,
-              columns: const [
+              columns: [
                 DataColumn(
                     label: Text("#",
                         style: TextStyle(
@@ -441,7 +441,7 @@ class ExpenseView extends GetView<ExpenseController> {
                     ),
                   ),
                   Text("₹ ${expense.amount}",
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primary)),

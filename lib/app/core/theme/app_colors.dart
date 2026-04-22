@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../data/services/business_profile_service.dart';
 
 class AppColors {
   // Primary Palette
-  static const Color primary = Color(0xFF845CBD);
-  static const Color primaryLight = Color(0xFFF4EFFC);
-  
+  static const Color _defaultPrimary = Color(0xFF845CBD);
+  static const Color _defaultPrimaryLight = Color(0xFFF4EFFC);
+  static Color get primary => Get.isRegistered<BusinessProfileService>()
+      ? BusinessProfileService.to.primaryColor
+      : _defaultPrimary;
+  static Color get primaryLight => Get.isRegistered<BusinessProfileService>()
+      ? BusinessProfileService.to.primaryLightColor
+      : _defaultPrimaryLight;
+
   // Neutral Palette
   static const Color backgroundLight = Color(0xFFF5F5F5);
   static const Color backgroundDark = Color(0xFF0F172A);
@@ -14,7 +23,7 @@ class AppColors {
   static const Color cardDark = Color(0xFF1E293B);
   static const Color sidebarBackground = Color(0xFFFCFCFD);
   static const Color border = Color(0xFFF3F4F6); // Grey-100
-  
+
   // Status Colors
   static const Color success = Color(0xFF10B981); // Emerald
   static const Color warning = Color(0xFFF59E0B);

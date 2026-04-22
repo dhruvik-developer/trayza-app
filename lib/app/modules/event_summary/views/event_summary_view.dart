@@ -37,15 +37,23 @@ class EventSummaryView extends GetView<EventSummaryController> {
       children: [
         Container(
           padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(color: const Color(0xFFF4EFFC), borderRadius: BorderRadius.circular(12)),
-          child: const Icon(Icons.description_outlined, color: AppColors.primary, size: 24),
+          decoration: BoxDecoration(
+              color: const Color(0xFFF4EFFC),
+              borderRadius: BorderRadius.circular(12)),
+          child: Icon(Icons.description_outlined,
+              color: AppColors.primary, size: 24),
         ),
         const SizedBox(width: 12),
         const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Event Summary", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
-            Text("Consolidated reports for staffing and logistics", style: TextStyle(fontSize: 14, color: AppColors.textSecondary)),
+            Text("Event Summary",
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary)),
+            Text("Consolidated reports for staffing and logistics",
+                style: TextStyle(fontSize: 14, color: AppColors.textSecondary)),
           ],
         ),
       ],
@@ -59,8 +67,13 @@ class EventSummaryView extends GetView<EventSummaryController> {
         children: [
           Icon(Icons.analytics_outlined, size: 64, color: Colors.grey[300]),
           const SizedBox(height: 16),
-          const Text("No Summaries Generated", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey)),
-          const Text("Summaries will appear here as events progress", style: TextStyle(color: Colors.grey)),
+          const Text("No Summaries Generated",
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey)),
+          const Text("Summaries will appear here as events progress",
+              style: TextStyle(color: Colors.grey)),
         ],
       ),
     );

@@ -397,8 +397,7 @@ class StockController extends GetxController {
                   borderSide: const BorderSide(color: Color(0xFFE8E0F3))),
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
-                  borderSide:
-                      const BorderSide(color: AppColors.primary, width: 1.5)),
+                  borderSide: BorderSide(color: AppColors.primary, width: 1.5)),
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             ),

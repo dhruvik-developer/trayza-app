@@ -250,8 +250,7 @@ class StockView extends GetView<StockController> {
                       label: const Text("Add Item"),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: AppColors.primary,
-                        side: const BorderSide(
-                            color: AppColors.primary, width: 1.5),
+                        side: BorderSide(color: AppColors.primary, width: 1.5),
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14)),
@@ -324,8 +323,7 @@ class StockView extends GetView<StockController> {
                     label: const Text("Add Item"),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: AppColors.primary,
-                      side: const BorderSide(
-                          color: AppColors.primary, width: 1.5),
+                      side: BorderSide(color: AppColors.primary, width: 1.5),
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 15),
                       shape: RoundedRectangleBorder(
@@ -368,7 +366,7 @@ class StockView extends GetView<StockController> {
                 color: const Color(0xFFF4EFFC),
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: const Icon(Icons.inventory_2_rounded,
+              child: Icon(Icons.inventory_2_rounded,
                   color: AppColors.primary, size: 24),
             ),
             const SizedBox(width: 14),
@@ -537,7 +535,7 @@ class StockView extends GetView<StockController> {
                 DataCell(Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.edit_note_rounded,
+                      icon: Icon(Icons.edit_note_rounded,
                           size: 22, color: AppColors.primary),
                       onPressed: () {},
                       tooltip: "Edit",

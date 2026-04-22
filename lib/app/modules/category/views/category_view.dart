@@ -87,7 +87,7 @@ class CategoryView extends GetView<CategoryController> {
                         )
                       ],
                     ),
-                    child: const Icon(Icons.folder_copy_rounded,
+                    child: Icon(Icons.folder_copy_rounded,
                         color: AppColors.primary, size: 24),
                   ),
                   const SizedBox(width: 16),
@@ -276,7 +276,7 @@ class CategoryView extends GetView<CategoryController> {
                       children: [
                         Row(
                           children: [
-                            const Icon(Icons.auto_awesome_mosaic_rounded,
+                            Icon(Icons.auto_awesome_mosaic_rounded,
                                 color: AppColors.primary, size: 18),
                             const SizedBox(width: 8),
                             Text(

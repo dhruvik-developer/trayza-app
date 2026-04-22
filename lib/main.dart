@@ -4,13 +4,14 @@ import 'app/modules/login/views/login_view.dart';
 import 'app/modules/login/bindings/login_binding.dart';
 import 'app/core/theme/app_theme.dart';
 import 'app/data/services/auth_service.dart';
+import 'app/data/services/business_profile_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Initialize Services
   await initServices();
-  
+
   runApp(
     GetMaterialApp(
       title: "Trayza Admin",
@@ -27,6 +28,7 @@ void main() async {
 
 Future<void> initServices() async {
   print('Starting services...');
+  await Get.putAsync(() => BusinessProfileService().init());
   await Get.putAsync(() => AuthService().init());
   print('All services started.');
 }

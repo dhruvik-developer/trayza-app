@@ -20,7 +20,10 @@ class RecipeView extends GetView<RecipeController> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
-                BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 4))
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4))
               ],
             ),
             child: Column(
@@ -53,15 +56,25 @@ class RecipeView extends GetView<RecipeController> {
           children: [
             Container(
               padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(12)),
-              child: const Icon(Icons.receipt_long_rounded, color: AppColors.primary, size: 22),
+              decoration: BoxDecoration(
+                  color: AppColors.primaryLight,
+                  borderRadius: BorderRadius.circular(12)),
+              child: Icon(Icons.receipt_long_rounded,
+                  color: AppColors.primary, size: 22),
             ),
             const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("${controller.itemName} Recipe", style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
-                Obx(() => Text("Ingredients for ${controller.personCount} persons", style: const TextStyle(fontSize: 14, color: AppColors.textSecondary))),
+                Text("${controller.itemName} Recipe",
+                    style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary)),
+                Obx(() => Text(
+                    "Ingredients for ${controller.personCount} persons",
+                    style: const TextStyle(
+                        fontSize: 14, color: AppColors.textSecondary))),
               ],
             ),
           ],
@@ -71,13 +84,20 @@ class RecipeView extends GetView<RecipeController> {
             return const SizedBox();
           }
           return ElevatedButton.icon(
-            onPressed: controller.recipeEntries.isEmpty ? controller.startAdd : controller.startEdit,
-            icon: Icon(controller.recipeEntries.isEmpty ? Icons.add : Icons.edit_note_rounded),
-            label: Text(controller.recipeEntries.isEmpty ? "Create Recipe" : "Edit Recipe"),
+            onPressed: controller.recipeEntries.isEmpty
+                ? controller.startAdd
+                : controller.startEdit,
+            icon: Icon(controller.recipeEntries.isEmpty
+                ? Icons.add
+                : Icons.edit_note_rounded),
+            label: Text(controller.recipeEntries.isEmpty
+                ? "Create Recipe"
+                : "Edit Recipe"),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
             ),
           );
         }),
@@ -106,12 +126,16 @@ class RecipeView extends GetView<RecipeController> {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.circle, size: 8, color: AppColors.primary),
+                  Icon(Icons.circle, size: 8, color: AppColors.primary),
                   const SizedBox(width: 12),
-                  Text(entry.ingredient?.name ?? "Unknown Ingredient", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                  Text(entry.ingredient?.name ?? "Unknown Ingredient",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 15)),
                 ],
               ),
-              Text("${entry.quantity} ${entry.unit}", style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary)),
+              Text("${entry.quantity} ${entry.unit}",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: AppColors.primary)),
             ],
           ),
         );
@@ -124,16 +148,20 @@ class RecipeView extends GetView<RecipeController> {
       children: [
         Expanded(
           child: Obx(() => ListView.builder(
-            itemCount: controller.builderEntries.length,
-            itemBuilder: (context, index) => _buildBuilderRow(index),
-          )),
+                itemCount: controller.builderEntries.length,
+                itemBuilder: (context, index) => _buildBuilderRow(index),
+              )),
         ),
         const SizedBox(height: 16),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            OutlinedButton(onPressed: controller.cancelAction, child: const Text("Cancel")),
-            ElevatedButton(onPressed: controller.saveRecipe, child: const Text("Save Recipe")),
+            OutlinedButton(
+                onPressed: controller.cancelAction,
+                child: const Text("Cancel")),
+            ElevatedButton(
+                onPressed: controller.saveRecipe,
+                child: const Text("Save Recipe")),
           ],
         ),
       ],
@@ -145,15 +173,21 @@ class RecipeView extends GetView<RecipeController> {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(border: Border.all(color: Colors.grey[200]!), borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey[200]!),
+          borderRadius: BorderRadius.circular(12)),
       child: Row(
         children: [
           Expanded(
             flex: 3,
             child: DropdownButtonFormField<int>(
               value: row.ingredientId,
-              decoration: const InputDecoration(labelText: "Ingredient", border: OutlineInputBorder()),
-              items: controller.ingredientOptions.map((opt) => DropdownMenuItem(value: opt.id, child: Text(opt.name ?? ""))).toList(),
+              decoration: const InputDecoration(
+                  labelText: "Ingredient", border: OutlineInputBorder()),
+              items: controller.ingredientOptions
+                  .map((opt) => DropdownMenuItem(
+                      value: opt.id, child: Text(opt.name ?? "")))
+                  .toList(),
               onChanged: (val) => row.ingredientId = val,
             ),
           ),
@@ -162,7 +196,8 @@ class RecipeView extends GetView<RecipeController> {
             flex: 1,
             child: TextFormField(
               initialValue: row.quantity,
-              decoration: const InputDecoration(labelText: "Qty", border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                  labelText: "Qty", border: OutlineInputBorder()),
               onChanged: (val) => row.quantity = val,
             ),
           ),
@@ -171,11 +206,14 @@ class RecipeView extends GetView<RecipeController> {
             flex: 1,
             child: TextFormField(
               initialValue: row.unit,
-              decoration: const InputDecoration(labelText: "Unit", border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                  labelText: "Unit", border: OutlineInputBorder()),
               onChanged: (val) => row.unit = val,
             ),
           ),
-          IconButton(icon: const Icon(Icons.delete_outline, color: Colors.red), onPressed: () => controller.removeBuilderRow(index)),
+          IconButton(
+              icon: const Icon(Icons.delete_outline, color: Colors.red),
+              onPressed: () => controller.removeBuilderRow(index)),
         ],
       ),
     );
@@ -188,9 +226,14 @@ class RecipeView extends GetView<RecipeController> {
         children: [
           const Icon(Icons.receipt_long_rounded, size: 48, color: Colors.grey),
           const SizedBox(height: 12),
-          const Text("No Recipe for this Item", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey)),
+          const Text("No Recipe for this Item",
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey)),
           const SizedBox(height: 8),
-          ElevatedButton(onPressed: controller.startAdd, child: const Text("Create Now")),
+          ElevatedButton(
+              onPressed: controller.startAdd, child: const Text("Create Now")),
         ],
       ),
     );

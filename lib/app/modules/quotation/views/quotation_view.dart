@@ -53,7 +53,8 @@ class QuotationView extends GetView<QuotationController> {
                 color: const Color(0xFFF4EFFC),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(Icons.edit_note_rounded, color: AppColors.primary, size: 24),
+              child: Icon(Icons.edit_note_rounded,
+                  color: AppColors.primary, size: 24),
             ),
             const SizedBox(width: 12),
             const Column(
@@ -61,11 +62,15 @@ class QuotationView extends GetView<QuotationController> {
               children: [
                 Text(
                   "Quotation",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary),
                 ),
                 Text(
                   "Generate and manage client quotes",
-                  style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
+                  style:
+                      TextStyle(fontSize: 14, color: AppColors.textSecondary),
                 ),
               ],
             ),
@@ -79,7 +84,8 @@ class QuotationView extends GetView<QuotationController> {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             ),
           ),
@@ -126,7 +132,8 @@ class QuotationView extends GetView<QuotationController> {
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
               ),
             ),
           ),
@@ -142,12 +149,19 @@ class QuotationView extends GetView<QuotationController> {
         children: [
           Container(
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(color: Colors.yellow[50], shape: BoxShape.circle),
-            child: Icon(Icons.warning_amber_rounded, size: 48, color: Colors.yellow[700]),
+            decoration:
+                BoxDecoration(color: Colors.yellow[50], shape: BoxShape.circle),
+            child: Icon(Icons.warning_amber_rounded,
+                size: 48, color: Colors.yellow[700]),
           ),
           const SizedBox(height: 16),
-          const Text("No Quotations Found", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey)),
-          const Text("Quotations will appear here once created", style: TextStyle(color: Colors.grey)),
+          const Text("No Quotations Found",
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey)),
+          const Text("Quotations will appear here once created",
+              style: TextStyle(color: Colors.grey)),
         ],
       ),
     );

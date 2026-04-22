@@ -27,33 +27,39 @@ class PeopleView extends StatelessWidget {
                     _buildTabCard(
                       context,
                       title: "Event Staff",
-                      description: "Manage staff profiles, roles, and staffing rates.",
+                      description:
+                          "Manage staff profiles, roles, and staffing rates.",
                       icon: Icons.people_outline_rounded,
                       onTap: () {
                         // TODO: Navigate to Staff Management
-                        Get.snackbar("Coming Soon", "Staff Management implementation in progress");
+                        Get.snackbar("Coming Soon",
+                            "Staff Management implementation in progress");
                       },
                     ),
                     const SizedBox(height: 16),
                     _buildTabCard(
                       context,
                       title: "Vendors",
-                      description: "Track suppliers and category-wise vendor pricing.",
+                      description:
+                          "Track suppliers and category-wise vendor pricing.",
                       icon: Icons.local_shipping_outlined,
                       onTap: () {
                         // TODO: Navigate to Vendor Management
-                        Get.snackbar("Coming Soon", "Vendor Management implementation in progress");
+                        Get.snackbar("Coming Soon",
+                            "Vendor Management implementation in progress");
                       },
                     ),
                     const SizedBox(height: 16),
                     _buildTabCard(
                       context,
                       title: "Waiter Types",
-                      description: "Define waiter categories and per-person pricing.",
+                      description:
+                          "Define waiter categories and per-person pricing.",
                       icon: Icons.work_outline_rounded,
                       onTap: () {
                         // TODO: Navigate to Waiter Type Management
-                        Get.snackbar("Coming Soon", "Waiter Type Management implementation in progress");
+                        Get.snackbar("Coming Soon",
+                            "Waiter Type Management implementation in progress");
                       },
                     ),
                   ],
@@ -75,14 +81,21 @@ class PeopleView extends StatelessWidget {
             color: AppColors.primaryLight,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: const Icon(Icons.people_rounded, color: AppColors.primary, size: 22),
+          child: Icon(Icons.people_rounded, color: AppColors.primary, size: 22),
         ),
         const SizedBox(width: 12),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("People & CRM", style: TextStyle(fontSize: isMobile ? 20 : 24, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
-            Text("Manage your internal team and external partners", style: TextStyle(fontSize: isMobile ? 12 : 14, color: AppColors.textSecondary)),
+            Text("People & CRM",
+                style: TextStyle(
+                    fontSize: isMobile ? 20 : 24,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary)),
+            Text("Manage your internal team and external partners",
+                style: TextStyle(
+                    fontSize: isMobile ? 12 : 14,
+                    color: AppColors.textSecondary)),
           ],
         ),
       ],
@@ -129,9 +142,15 @@ class PeopleView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+                  Text(title,
+                      style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary)),
                   const SizedBox(height: 4),
-                  Text(description, style: const TextStyle(fontSize: 14, color: AppColors.textSecondary)),
+                  Text(description,
+                      style: const TextStyle(
+                          fontSize: 14, color: AppColors.textSecondary)),
                 ],
               ),
             ),

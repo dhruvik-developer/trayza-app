@@ -49,7 +49,7 @@ class BookingView extends GetView<BookingController> {
   Widget _buildStepperHeader(BuildContext context) {
     bool isMobile = context.width < 600;
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.primary,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(12),
@@ -385,7 +385,7 @@ class BookingView extends GetView<BookingController> {
           Container(
             width: 6,
             height: 60, // Fixed height for accent bar
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
                   colors: [AppColors.primary, Color(0xFF6A3FAF)],
                   begin: Alignment.topCenter,
@@ -404,11 +404,11 @@ class BookingView extends GetView<BookingController> {
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.access_time_rounded,
+                          Icon(Icons.access_time_rounded,
                               color: AppColors.primary, size: 14),
                           const SizedBox(width: 4),
                           Text("SLOT ${slotIndex + 1}",
-                              style: const TextStyle(
+                              style: TextStyle(
                                   color: AppColors.primary,
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold)),
