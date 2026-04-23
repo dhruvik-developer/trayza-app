@@ -10,15 +10,18 @@ class BusinessProfileService extends GetxService {
 
   static const Color _defaultPrimaryColor = Color(0xFF845CBD);
   static const Color _defaultPrimaryLightColor = Color(0xFFF4EFFC);
+  static const String _catersNameKey = 'business_profile_caters_name';
   static const String _logoUrlKey = 'business_profile_logo_url';
   static const String _colorCodeKey = 'business_profile_color_code';
 
   late SharedPreferences _prefs;
 
+  final RxnString _catersName = RxnString();
   final RxnString _logoUrl = RxnString();
   final Rx<Color> _primaryColor = _defaultPrimaryColor.obs;
   final Rx<Color> _primaryLightColor = _defaultPrimaryLightColor.obs;
 
+  String? get catersName => _catersName.value;
   String? get logoUrl => _logoUrl.value;
   Color get primaryColor => _primaryColor.value;
   Color get primaryLightColor => _primaryLightColor.value;
@@ -48,14 +51,21 @@ class BusinessProfileService extends GetxService {
       if (data is! List || data.isEmpty || data.first is! Map) return;
 
       final profile = Map<String, dynamic>.from(data.first as Map);
+      final catersName = _normalizeText(profile['caters_name']?.toString());
       final logoUrl = _normalizeLogoUrl(profile['logo']?.toString());
       final colorCode = profile['color_code']?.toString();
       final primaryColor = _parseHexColor(colorCode) ?? _defaultPrimaryColor;
 
+      _catersName.value = catersName;
       _logoUrl.value = logoUrl;
       _primaryColor.value = primaryColor;
       _primaryLightColor.value = _buildPrimaryLight(primaryColor);
 
+      if (catersName == null) {
+        await _prefs.remove(_catersNameKey);
+      } else {
+        await _prefs.setString(_catersNameKey, catersName);
+      }
       if (logoUrl == null || logoUrl.isEmpty) {
         await _prefs.remove(_logoUrlKey);
       } else {
@@ -68,15 +78,26 @@ class BusinessProfileService extends GetxService {
   }
 
   void _loadCachedProfile() {
+    final cachedCatersName = _prefs.getString(_catersNameKey);
     final cachedLogoUrl = _prefs.getString(_logoUrlKey);
     final cachedColorCode = _prefs.getString(_colorCodeKey);
     final cachedPrimaryColor =
         _parseHexColor(cachedColorCode) ?? _defaultPrimaryColor;
 
+    _catersName.value = _normalizeText(cachedCatersName);
     _logoUrl.value =
         (cachedLogoUrl == null || cachedLogoUrl.isEmpty) ? null : cachedLogoUrl;
     _primaryColor.value = cachedPrimaryColor;
     _primaryLightColor.value = _buildPrimaryLight(cachedPrimaryColor);
+  }
+
+  String? _normalizeText(String? value) {
+    if (value == null) return null;
+
+    final trimmedValue = value.trim();
+    if (trimmedValue.isEmpty) return null;
+
+    return trimmedValue;
   }
 
   String? _normalizeLogoUrl(String? logoUrl) {

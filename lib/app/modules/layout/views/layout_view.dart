@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:trayza_app/app/data/services/auth_service.dart';
 import 'package:trayza_app/app/modules/expense/bindings/expense_binding.dart';
+import 'package:trayza_app/app/core/widgets/business_logo.dart';
 import 'package:trayza_app/app/data/services/business_profile_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../controllers/layout_controller.dart';
@@ -183,26 +184,11 @@ class LayoutView extends GetView<LayoutController> {
   }
 
   Widget _buildBrandLogo() {
-    final logoUrl = Get.isRegistered<BusinessProfileService>()
-        ? BusinessProfileService.to.logoUrl
-        : null;
-
-    Widget fallbackLogo() => Image.asset(
-          'assets/images/logo.png',
-          height: 100,
-          fit: BoxFit.contain,
-          errorBuilder: (_, __, ___) => const FlutterLogo(size: 60),
-        );
-
-    if (logoUrl == null || logoUrl.isEmpty) {
-      return fallbackLogo();
-    }
-
-    return Image.network(
-      logoUrl,
+    return BusinessLogo(
+      logoUrl: Get.isRegistered<BusinessProfileService>()
+          ? BusinessProfileService.to.logoUrl
+          : null,
       height: 100,
-      fit: BoxFit.contain,
-      errorBuilder: (_, __, ___) => fallbackLogo(),
     );
   }
 

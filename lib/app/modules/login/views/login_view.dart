@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/business_logo.dart';
 import '../../../data/services/business_profile_service.dart';
 import '../controllers/login_controller.dart';
 
@@ -41,7 +42,11 @@ class LoginView extends GetView<LoginController> {
                     Center(
                       child: Hero(
                         tag: 'logo',
-                        child: _buildBrandLogo(),
+                        child: BusinessLogo(
+                          logoUrl: Get.isRegistered<BusinessProfileService>()
+                              ? BusinessProfileService.to.logoUrl
+                              : null,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 32),
@@ -193,30 +198,6 @@ class LoginView extends GetView<LoginController> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildBrandLogo() {
-    final logoUrl = Get.isRegistered<BusinessProfileService>()
-        ? BusinessProfileService.to.logoUrl
-        : null;
-
-    Widget fallbackLogo() => Image.asset(
-          'assets/images/logo.png',
-          height: 100,
-          fit: BoxFit.contain,
-          errorBuilder: (_, __, ___) => const FlutterLogo(size: 60),
-        );
-
-    if (logoUrl == null || logoUrl.isEmpty) {
-      return fallbackLogo();
-    }
-
-    return Image.network(
-      logoUrl,
-      height: 100,
-      fit: BoxFit.contain,
-      errorBuilder: (_, __, ___) => fallbackLogo(),
     );
   }
 }
