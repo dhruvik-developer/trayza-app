@@ -16,7 +16,7 @@ class GroundChecklistView extends GetView<GroundChecklistController> {
     final isMobile = context.width < 900;
 
     return LayoutView(
-      activeIndex: 11,
+      activeIndex: 8,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Container(

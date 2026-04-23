@@ -15,7 +15,7 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
     bool isMobile = context.width < 900;
 
     return LayoutView(
-      activeIndex: 8,
+      activeIndex: 6,
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.transparent,

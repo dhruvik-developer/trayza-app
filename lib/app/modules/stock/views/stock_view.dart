@@ -13,7 +13,7 @@ class StockView extends GetView<StockController> {
     bool isMobile = context.width < 900;
 
     return LayoutView(
-      activeIndex: 5,
+      activeIndex: 3,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Padding(

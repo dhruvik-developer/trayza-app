@@ -1,38 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:trayza_app/app/core/widgets/loading.dart';
 import 'package:trayza_app/app/data/services/auth_service.dart';
 import 'package:trayza_app/app/modules/expense/bindings/expense_binding.dart';
 import 'package:trayza_app/app/core/widgets/business_logo.dart';
 import 'package:trayza_app/app/data/services/business_profile_service.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../routes/app_routes.dart';
 import '../controllers/layout_controller.dart';
 
 // Import all views and bindings for direct navigation
 import '../../booking/views/booking_view.dart';
 import '../../booking/bindings/booking_binding.dart';
-import '../../all_order/views/all_order_view.dart';
-import '../../all_order/bindings/all_order_binding.dart';
 import '../../stock/views/stock_view.dart';
 import '../../stock/bindings/stock_binding.dart';
 import '../../category/views/category_view.dart';
 import '../../category/bindings/category_binding.dart';
 import '../../people/views/people_view.dart';
 import '../../people/bindings/people_binding.dart';
-import '../../quotation/views/quotation_view.dart';
-import '../../quotation/controllers/quotation_controller.dart';
-import '../../invoice/views/invoice_view.dart';
-import '../../invoice/controllers/invoice_controller.dart';
 import '../../expense/views/expense_view.dart';
 import '../../payment_history/views/payment_history_view.dart';
 import '../../payment_history/bindings/payment_history_binding.dart';
 import '../../create_ingredient/views/create_ingredient_view.dart';
 import '../../create_ingredient/controllers/create_ingredient_controller.dart';
-import '../../event_summary/views/event_summary_view.dart';
 import '../../ground_checklist/bindings/ground_checklist_binding.dart';
 import '../../ground_checklist/views/ground_checklist_view.dart';
-import '../controllers/navigation_placeholders.dart'
-    hide GroundChecklistBinding;
 
 class LayoutView extends GetView<LayoutController> {
   final Widget child;
@@ -107,69 +98,47 @@ class LayoutView extends GetView<LayoutController> {
                   const SizedBox(height: 10),
                   _buildSidebarItem(
                       2,
-                      'Quotation',
-                      Icons.edit_note_rounded,
-                      () => Get.offAll(() => const QuotationView(),
-                          binding: QuotationBinding())),
+                      'Order Management',
+                      Icons.assignment_outlined,
+                      () => Get.offAllNamed(Routes.QUOTATION)),
                   const SizedBox(height: 10),
                   _buildSidebarItem(
                       3,
-                      'All Order',
-                      Icons.checklist_rtl_rounded,
-                      () => Get.offAll(() => const AllOrderView(),
-                          binding: AllOrderBinding())),
-                  const SizedBox(height: 10),
-                  _buildSidebarItem(
-                      4,
-                      'Invoice',
-                      Icons.receipt_outlined,
-                      () => Get.offAll(() => const InvoiceView(),
-                          binding: InvoiceBinding())),
-                  const SizedBox(height: 10),
-                  _buildSidebarItem(
-                      5,
                       'Stock',
                       Icons.shopping_bag_outlined,
                       () => Get.offAll(() => const StockView(),
                           binding: StockBinding())),
                   const SizedBox(height: 10),
                   _buildSidebarItem(
-                      6,
+                      4,
                       'Payment History',
                       Icons.history_rounded,
                       () => Get.offAll(() => const PaymentHistoryView(),
                           binding: PaymentHistoryBinding())),
                   const SizedBox(height: 10),
                   _buildSidebarItem(
-                      7,
+                      5,
                       'Expense',
                       Icons.payments_outlined,
                       () => Get.offAll(() => const ExpenseView(),
                           binding: ExpenseBinding())),
                   const SizedBox(height: 10),
                   _buildSidebarItem(
-                      8,
+                      6,
                       'Create Ingredient',
                       Icons.note_add_outlined,
                       () => Get.offAll(() => const CreateIngredientView(),
                           binding: CreateIngredientBinding())),
                   const SizedBox(height: 10),
                   _buildSidebarItem(
-                      9,
+                      7,
                       'People',
                       Icons.people_outline_rounded,
                       () => Get.offAll(() => const PeopleView(),
                           binding: PeopleBinding())),
                   const SizedBox(height: 10),
                   _buildSidebarItem(
-                      10,
-                      'Event Summary',
-                      Icons.description_outlined,
-                      () => Get.offAll(() => const EventSummaryView(),
-                          binding: EventSummaryBinding())),
-                  const SizedBox(height: 10),
-                  _buildSidebarItem(
-                      11,
+                      8,
                       'Ground Checklist',
                       Icons.rule_folder_outlined,
                       () => Get.offAll(() => const GroundChecklistView(),

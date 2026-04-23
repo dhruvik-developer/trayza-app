@@ -15,7 +15,7 @@ class PaymentHistoryView extends GetView<PaymentHistoryController> {
     bool isMobile = context.width < 900;
 
     return LayoutView(
-      activeIndex: 6,
+      activeIndex: 4,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: RefreshIndicator(

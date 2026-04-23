@@ -14,7 +14,7 @@ class ExpenseView extends GetView<ExpenseController> {
     bool isMobile = context.width < 900;
 
     return LayoutView(
-      activeIndex: 7,
+      activeIndex: 5,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
