@@ -74,7 +74,7 @@ class LayoutView extends GetView<LayoutController> {
           children: [
             // Logo Section
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 26, horizontal: 20),
               child: _buildBrandLogo(),
             ),
 
@@ -82,7 +82,7 @@ class LayoutView extends GetView<LayoutController> {
             Expanded(
               child: ListView(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
                 children: [
                   _buildSidebarItem(
                       0,
@@ -226,8 +226,8 @@ class LayoutView extends GetView<LayoutController> {
   Widget _buildMobileHeader(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(
+        color: AppColors.primary,
         border: Border(bottom: BorderSide(color: AppColors.border)),
       ),
       child: SafeArea(
@@ -239,7 +239,7 @@ class LayoutView extends GetView<LayoutController> {
               // Menu button
               Builder(
                 builder: (context) => IconButton(
-                  icon: Icon(Icons.menu, color: AppColors.primary),
+                  icon: Icon(Icons.menu, color: Colors.white),
                   onPressed: () => Scaffold.of(context).openDrawer(),
                 ),
               ),
@@ -252,6 +252,7 @@ class LayoutView extends GetView<LayoutController> {
                   textAlign: TextAlign.left,
                   style: const TextStyle(
                     fontSize: 16,
+                    color: Colors.white,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

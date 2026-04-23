@@ -6,7 +6,9 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/loading.dart';
 import '../../../routes/app_routes.dart';
 import '../../order_management/utils/order_management_utils.dart';
+import '../../order_management/widgets/order_management_date_range_field.dart';
 import '../../order_management/widgets/order_management_page_scaffold.dart';
+import '../../order_management/widgets/order_management_search_field.dart';
 import '../../order_management/widgets/order_management_tabs.dart';
 import '../controllers/quotation_controller.dart';
 
@@ -93,73 +95,59 @@ class _QuotationFilterBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: Column(
-        children: [
-          TextField(
-            controller: controller.searchController,
-            onChanged: controller.setSearchQuery,
-            decoration: InputDecoration(
-              hintText: 'Search name or mobile...',
-              prefixIcon: const Icon(Icons.search_rounded),
-              suffixIcon: controller.searchQuery.value.isEmpty
-                  ? null
-                  : IconButton(
-                      onPressed: controller.clearSearch,
-                      icon: const Icon(Icons.close_rounded),
-                    ),
-              filled: true,
-              fillColor: const Color(0xFFF9FAFB),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
-              ),
+    return Obx(() {
+      final hasDateRange = controller.startDate.value != null ||
+          controller.endDate.value != null;
+
+      return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: AppColors.border),
+        ),
+        child: Column(
+          children: [
+            OrderManagementSearchField(
+              controller: controller.searchController,
+              onChanged: controller.setSearchQuery,
+              hasValue: controller.searchQuery.value.isNotEmpty,
+              onClear: controller.clearSearch,
             ),
-          ),
-          const SizedBox(height: 14),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              _QuickFilterChip(
-                label: 'Today',
-                onTap: () => controller.applyQuickFilter('today'),
-              ),
-              _QuickFilterChip(
-                label: 'Next 7 Days',
-                onTap: () => controller.applyQuickFilter('next7Days'),
-              ),
-              _QuickFilterChip(
-                label: 'Next 30 Days',
-                onTap: () => controller.applyQuickFilter('next30Days'),
-              ),
-              OutlinedButton.icon(
-                onPressed: () => controller.pickDateRange(context),
-                icon: const Icon(Icons.date_range_outlined, size: 18),
-                label: Text(
-                  controller.startDate.value == null ||
-                          controller.endDate.value == null
-                      ? 'Select date range'
-                      : '${OrderManagementUtils.formatDisplayDate(controller.startDate.value.toString())} - ${OrderManagementUtils.formatDisplayDate(controller.endDate.value.toString())}',
+            const SizedBox(height: 14),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                _QuickFilterChip(
+                  label: 'Today',
+                  onTap: () => controller.applyQuickFilter('today'),
                 ),
-              ),
-              if (controller.startDate.value != null ||
-                  controller.endDate.value != null)
-                TextButton(
-                  onPressed: controller.clearDateRange,
-                  child: const Text('Clear'),
+                _QuickFilterChip(
+                  label: 'Next 7 Days',
+                  onTap: () => controller.applyQuickFilter('next7Days'),
                 ),
-            ],
-          ),
-        ],
-      ),
-    );
+                _QuickFilterChip(
+                  label: 'Next 30 Days',
+                  onTap: () => controller.applyQuickFilter('next30Days'),
+                ),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 360),
+                  child: OrderManagementDateRangeField(
+                    label: hasDateRange
+                        ? '${OrderManagementUtils.formatDateValue(controller.startDate.value)} - ${OrderManagementUtils.formatDateValue(controller.endDate.value)}'
+                        : 'Select date range',
+                    onTap: () => controller.pickDateRange(context),
+                    hasValue: hasDateRange,
+                    onClear: hasDateRange ? controller.clearDateRange : null,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    });
   }
 }
 
@@ -257,7 +245,7 @@ class _QuotationCard extends StatelessWidget {
                     border: Border.all(color: AppColors.border),
                   ),
                   child: Text(
-                    quotation.eventDateSummary,
+                    quotation.formattedEventDateSummary,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,

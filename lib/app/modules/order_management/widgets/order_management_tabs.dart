@@ -72,7 +72,7 @@ class OrderManagementTabs extends StatelessWidget {
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 180),
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(18),
                     gradient: isActive
@@ -106,7 +106,7 @@ class OrderManagementTabs extends StatelessWidget {
                           color: isActive ? Colors.white : AppColors.primary,
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 8),
                       Text(
                         tab.label,
                         style: TextStyle(

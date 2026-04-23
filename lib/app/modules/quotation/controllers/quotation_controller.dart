@@ -124,7 +124,7 @@ class QuotationController extends GetxController {
         ...quotation.rawData,
         'name': quotation.name,
         'mobile_no': quotation.mobileNo,
-        'date': quotation.eventDateSummary,
+        'date': quotation.formattedEventDateSummary,
         'grandTotalAmount': quotation.totalAmount.toStringAsFixed(2),
       },
     );
@@ -134,7 +134,8 @@ class QuotationController extends GetxController {
     final shouldCancel = await Get.dialog<bool>(
           AlertDialog(
             title: const Text('Cancel quotation?'),
-            content: Text('This will cancel the quotation for ${quotation.name}.'),
+            content:
+                Text('This will cancel the quotation for ${quotation.name}.'),
             actions: [
               TextButton(
                 onPressed: () => Get.back(result: false),
@@ -217,7 +218,8 @@ class QuotationController extends GetxController {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                OrderManagementUtils.formatCurrency(totalAmount),
+                                OrderManagementUtils.formatCurrency(
+                                    totalAmount),
                                 style: const TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.w800,
@@ -234,7 +236,8 @@ class QuotationController extends GetxController {
                             border: OutlineInputBorder(),
                           ),
                           items: const [
-                            DropdownMenuItem(value: 'CASH', child: Text('Cash')),
+                            DropdownMenuItem(
+                                value: 'CASH', child: Text('Cash')),
                             DropdownMenuItem(
                               value: 'CHEQUE',
                               child: Text('Cheque'),
@@ -247,7 +250,8 @@ class QuotationController extends GetxController {
                               value: 'ONLINE',
                               child: Text('Online'),
                             ),
-                            DropdownMenuItem(value: 'OTHER', child: Text('Other')),
+                            DropdownMenuItem(
+                                value: 'OTHER', child: Text('Other')),
                           ],
                           onChanged: (value) {
                             if (value == null) return;
@@ -343,7 +347,8 @@ class QuotationController extends GetxController {
       await _orderProvider.addPayment({
         'booking': quotation.id,
         'total_amount': detailedQuotation.totalAmount,
-        'pending_amount': math.max(0, detailedQuotation.totalAmount - advanceAmount),
+        'pending_amount':
+            math.max(0, detailedQuotation.totalAmount - advanceAmount),
         'advance_amount': advanceAmount,
         'payment_date': OrderManagementUtils.formatApiDate(DateTime.now()),
         'transaction_amount': advanceAmount,

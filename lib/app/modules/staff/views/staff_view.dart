@@ -191,14 +191,14 @@ class StaffView extends GetView<StaffController> {
       margin: const EdgeInsets.only(top: 4),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
-          color: const Color(0xFFF5F3FF),
+          color: AppColors.primaryLight,
           borderRadius: BorderRadius.circular(6),
           border: Border.all(color: const Color(0xFFDDD6FE))),
       child: Text(type?.toUpperCase() ?? "STAFF",
-          style: const TextStyle(
+          style: TextStyle(
               fontSize: 9,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF7C3AED))),
+              color: AppColors.primaryLight)),
     );
   }
 

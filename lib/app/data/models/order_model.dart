@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class OrderSessionModel {
   final int? id;
   final String? eventDate;
@@ -141,8 +143,9 @@ class OrderModel {
     );
   }
 
-  List<OrderSessionModel> get effectiveSessions =>
-      sessions.isNotEmpty ? sessions : [OrderSessionModel.fallbackFromOrder(this)];
+  List<OrderSessionModel> get effectiveSessions => sessions.isNotEmpty
+      ? sessions
+      : [OrderSessionModel.fallbackFromOrder(this)];
 
   int get totalSessions => effectiveSessions.length;
 
@@ -183,9 +186,48 @@ class OrderModel {
     return values.toList();
   }
 
-  String get eventDateSummary => uniqueEventDates.isEmpty ? '—' : uniqueEventDates.join(', ');
+  String get eventDateSummary =>
+      uniqueEventDates.isEmpty ? '—' : uniqueEventDates.join(', ');
 
-  String get displayInitial => name.trim().isEmpty ? '?' : name.trim()[0].toUpperCase();
+  String get formattedEventDateSummary => uniqueEventDates.isEmpty
+      ? '—'
+      : uniqueEventDates.map(_formatDisplayDate).join(', ');
+
+  String get displayInitial =>
+      name.trim().isEmpty ? '?' : name.trim()[0].toUpperCase();
+
+  static String _formatDisplayDate(String value) {
+    final input = value.trim();
+    if (input.isEmpty) return '—';
+
+    final ddmmyyyy = RegExp(r'^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$');
+    final yyyymmdd = RegExp(r'^(\d{4})[-/](\d{1,2})[-/](\d{1,2})$');
+
+    final ddmmyyyyMatch = ddmmyyyy.firstMatch(input);
+    if (ddmmyyyyMatch != null) {
+      final parsed = DateTime(
+        int.parse(ddmmyyyyMatch.group(3)!),
+        int.parse(ddmmyyyyMatch.group(2)!),
+        int.parse(ddmmyyyyMatch.group(1)!),
+      );
+      return DateFormat('dd MMM yyyy').format(parsed);
+    }
+
+    final yyyymmddMatch = yyyymmdd.firstMatch(input);
+    if (yyyymmddMatch != null) {
+      final parsed = DateTime(
+        int.parse(yyyymmddMatch.group(1)!),
+        int.parse(yyyymmddMatch.group(2)!),
+        int.parse(yyyymmddMatch.group(3)!),
+      );
+      return DateFormat('dd MMM yyyy').format(parsed);
+    }
+
+    final parsed = DateTime.tryParse(input);
+    if (parsed == null) return input;
+
+    return DateFormat('dd MMM yyyy').format(parsed);
+  }
 
   static int? _toInt(dynamic value) {
     if (value == null) return null;

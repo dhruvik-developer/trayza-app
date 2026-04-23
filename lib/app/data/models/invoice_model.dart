@@ -56,21 +56,20 @@ class InvoiceModel {
 
   bool get isPaid => paymentStatus.toUpperCase() == 'PAID';
 
-  double get displayPendingAmount =>
-      isPaid
-          ? 0
-          : math.max(
-              0,
-              pendingAmount > 0
-                  ? pendingAmount
-                  : totalAmount -
-                      advanceAmount -
-                      transactionAmount -
-                      settlementAmount,
-            );
+  double get displayPendingAmount => isPaid
+      ? 0
+      : math.max(
+          0,
+          pendingAmount > 0
+              ? pendingAmount
+              : totalAmount -
+                  advanceAmount -
+                  transactionAmount -
+                  settlementAmount,
+        );
 
   String get eventDateSummary {
-    final bookingDates = booking.eventDateSummary;
+    final bookingDates = booking.formattedEventDateSummary;
     if (bookingDates != '—') return bookingDates;
 
     final fallbackDate = formattedEventDate?.trim();

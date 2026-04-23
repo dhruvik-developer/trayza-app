@@ -97,9 +97,10 @@ class AllOrderController extends GetxController {
         startDate.value = DateTime(today.year, today.month, 1);
         endDate.value = DateTime(today.year, today.month + 1, 0);
         break;
+      case 'next7Days':
       case 'upcoming':
         startDate.value = normalizedToday;
-        endDate.value = normalizedToday.add(const Duration(days: 7));
+        endDate.value = normalizedToday.add(const Duration(days: 6));
         break;
       default:
         startDate.value = null;
@@ -173,7 +174,7 @@ class AllOrderController extends GetxController {
                       ),
                       _DetailPill(
                         icon: Icons.calendar_today_outlined,
-                        label: detailedOrder.eventDateSummary,
+                        label: detailedOrder.formattedEventDateSummary,
                       ),
                       _DetailPill(
                         icon: Icons.group_outlined,
@@ -222,7 +223,8 @@ class AllOrderController extends GetxController {
                           Text(
                             'Dish rate: ${OrderManagementUtils.formatCurrency(session.perDishAmount)}',
                           ),
-                          Text('Estimated persons: ${session.estimatedPersons}'),
+                          Text(
+                              'Estimated persons: ${session.estimatedPersons}'),
                           if (session.extraServiceAmount > 0)
                             Text(
                               'Extra service: ${OrderManagementUtils.formatCurrency(session.extraServiceAmount)}',
@@ -366,8 +368,9 @@ class AllOrderController extends GetxController {
 
                           return Container(
                             margin: EdgeInsets.only(
-                              bottom:
-                                  index == editableSessions.length - 1 ? 16 : 12,
+                              bottom: index == editableSessions.length - 1
+                                  ? 16
+                                  : 12,
                             ),
                             padding: const EdgeInsets.all(14),
                             decoration: BoxDecoration(
@@ -389,8 +392,8 @@ class AllOrderController extends GetxController {
                                     Expanded(
                                       child: TextField(
                                         controller: session.perDishController,
-                                        keyboardType:
-                                            const TextInputType.numberWithOptions(
+                                        keyboardType: const TextInputType
+                                            .numberWithOptions(
                                           decimal: true,
                                         ),
                                         decoration: const InputDecoration(
@@ -499,7 +502,8 @@ class AllOrderController extends GetxController {
                             border: OutlineInputBorder(),
                           ),
                           items: const [
-                            DropdownMenuItem(value: 'CASH', child: Text('Cash')),
+                            DropdownMenuItem(
+                                value: 'CASH', child: Text('Cash')),
                             DropdownMenuItem(
                               value: 'ONLINE',
                               child: Text('Online'),
@@ -512,7 +516,8 @@ class AllOrderController extends GetxController {
                               value: 'BANK_TRANSFER',
                               child: Text('Bank Transfer'),
                             ),
-                            DropdownMenuItem(value: 'OTHER', child: Text('Other')),
+                            DropdownMenuItem(
+                                value: 'OTHER', child: Text('Other')),
                           ],
                           onChanged: (value) {
                             if (value == null) return;
@@ -569,7 +574,8 @@ class AllOrderController extends GetxController {
                   FilledButton(
                     onPressed: () {
                       final completionAmount =
-                          double.tryParse(completionController.text.trim()) ?? 0;
+                          double.tryParse(completionController.text.trim()) ??
+                              0;
                       if (completionAmount > currentPendingAmount()) {
                         setState(() {
                           validationMessage =
@@ -599,7 +605,8 @@ class AllOrderController extends GetxController {
 
       final completionAmount =
           double.tryParse(completionController.text.trim()) ?? 0;
-      final updatedAdvanceAmount = detailedOrder.advanceAmount + completionAmount;
+      final updatedAdvanceAmount =
+          detailedOrder.advanceAmount + completionAmount;
       final paymentNote = noteController.text.trim().isEmpty
           ? 'Order completion payment'
           : noteController.text.trim();
@@ -639,9 +646,9 @@ class AllOrderController extends GetxController {
       await _orderProvider.addPayment({
         'booking': order.id,
         'total_amount': editableSessions.fold<double>(
-              0,
-              (sum, session) => sum + session.totalAmount,
-            ),
+          0,
+          (sum, session) => sum + session.totalAmount,
+        ),
         'pending_amount': math.max(
           0,
           editableSessions.fold<double>(

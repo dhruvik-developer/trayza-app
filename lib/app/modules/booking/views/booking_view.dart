@@ -287,84 +287,92 @@ class BookingView extends GetView<BookingController> {
   }
 
   Widget _buildDayCard(BuildContext context, int dayIndex) {
-    final day = controller.schedule[dayIndex];
     bool isMobile = context.width < 600;
-    return Container(
-      margin: const EdgeInsets.only(bottom: 24),
-      padding: EdgeInsets.all(isMobile ? 12 : 20),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFAF8FD),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFF3E8FF)),
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Center(
-                    child: Text("${dayIndex + 1}",
-                        style: const TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold))),
-              ),
-              const SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text("Event Date:",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-                  InkWell(
-                    onTap: () async {
-                      final picked = await showDatePicker(
-                        context: context,
-                        initialDate: day.eventDate,
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime.now().add(const Duration(days: 365)),
-                      );
-                      if (picked != null)
-                        controller.updateScheduleDate(dayIndex, picked);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(color: const Color(0xFFE9D5FF)),
-                      ),
-                      child: Text(
-                          DateFormat('dd/MM/yyyy').format(day.eventDate),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 13)),
-                    ),
+    return Obx(() {
+      final day = controller.schedule[dayIndex];
+
+      return Container(
+        margin: const EdgeInsets.only(bottom: 24),
+        padding: EdgeInsets.all(isMobile ? 12 : 20),
+        decoration: BoxDecoration(
+          color: const Color(0xFFFAF8FD),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: const Color(0xFFF3E8FF)),
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                ],
+                  child: Center(
+                      child: Text("${dayIndex + 1}",
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold))),
+                ),
+                const SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("Event Date:",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 12)),
+                    InkWell(
+                      onTap: () async {
+                        final picked = await showDatePicker(
+                          context: context,
+                          initialDate: day.eventDate,
+                          firstDate: DateTime.now(),
+                          lastDate:
+                              DateTime.now().add(const Duration(days: 365)),
+                        );
+                        if (picked != null) {
+                          controller.updateScheduleDate(dayIndex, picked);
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(color: const Color(0xFFE9D5FF)),
+                        ),
+                        child: Text(
+                            DateFormat('dd/MM/yyyy').format(day.eventDate),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 13)),
+                      ),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                if (controller.schedule.length > 1)
+                  IconButton(
+                      icon: const Icon(Icons.delete_outline,
+                          color: Colors.red, size: 20),
+                      onPressed: () => controller.removeSchedule(dayIndex)),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Column(
+              children: List.generate(
+                day.timeSlots.length,
+                (slotIndex) => _buildSlotCard(dayIndex, slotIndex),
               ),
-              const Spacer(),
-              if (controller.schedule.length > 1)
-                IconButton(
-                    icon: const Icon(Icons.delete_outline,
-                        color: Colors.red, size: 20),
-                    onPressed: () => controller.removeSchedule(dayIndex)),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Obx(() => Column(
-                children: List.generate(day.timeSlots.length,
-                    (slotIndex) => _buildSlotCard(dayIndex, slotIndex)),
-              )),
-          const SizedBox(height: 12),
-          _buildAddSlotButton(dayIndex),
-        ],
-      ),
-    );
+            ),
+            const SizedBox(height: 12),
+            _buildAddSlotButton(dayIndex),
+          ],
+        ),
+      );
+    });
   }
 
   Widget _buildSlotCard(int dayIndex, int slotIndex) {
@@ -587,13 +595,13 @@ class BookingView extends GetView<BookingController> {
       label: Text(isMobile ? "Add Date" : "Add Event Date",
           style: const TextStyle(fontSize: 12)),
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFFF5F3FF),
+        backgroundColor: AppColors.primaryLight,
         foregroundColor: AppColors.primary,
         padding:
             EdgeInsets.symmetric(horizontal: isMobile ? 12 : 20, vertical: 10),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
-            side: const BorderSide(color: Color(0xFFE9D5FF))),
+            side: BorderSide(color: AppColors.primaryLight)),
       ),
     );
   }

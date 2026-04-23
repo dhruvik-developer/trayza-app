@@ -7,6 +7,7 @@ import '../../../data/models/invoice_model.dart';
 import '../../../routes/app_routes.dart';
 import '../../order_management/utils/order_management_utils.dart';
 import '../../order_management/widgets/order_management_page_scaffold.dart';
+import '../../order_management/widgets/order_management_search_field.dart';
 import '../../order_management/widgets/order_management_tabs.dart';
 import '../controllers/invoice_controller.dart';
 
@@ -124,25 +125,11 @@ class _InvoiceFilterBar extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 14),
-          TextField(
+          OrderManagementSearchField(
             controller: controller.searchController,
             onChanged: controller.setSearchQuery,
-            decoration: InputDecoration(
-              hintText: 'Search name or mobile...',
-              prefixIcon: const Icon(Icons.search_rounded),
-              suffixIcon: controller.searchQuery.value.isEmpty
-                  ? null
-                  : IconButton(
-                      onPressed: controller.clearSearch,
-                      icon: const Icon(Icons.close_rounded),
-                    ),
-              filled: true,
-              fillColor: const Color(0xFFF9FAFB),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
-              ),
-            ),
+            hasValue: controller.searchQuery.value.isNotEmpty,
+            onClear: controller.clearSearch,
           ),
           const SizedBox(height: 14),
           Wrap(

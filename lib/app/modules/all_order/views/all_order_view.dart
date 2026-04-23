@@ -6,7 +6,9 @@ import '../../../core/widgets/loading.dart';
 import '../../../data/models/order_model.dart';
 import '../../../routes/app_routes.dart';
 import '../../order_management/utils/order_management_utils.dart';
+import '../../order_management/widgets/order_management_date_range_field.dart';
 import '../../order_management/widgets/order_management_page_scaffold.dart';
+import '../../order_management/widgets/order_management_search_field.dart';
 import '../../order_management/widgets/order_management_tabs.dart';
 import '../controllers/all_order_controller.dart';
 
@@ -103,86 +105,68 @@ class _AllOrderFilterBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '$filteredCount${filteredCount == totalCount ? '' : ' of $totalCount'} order${filteredCount == 1 ? '' : 's'}',
-            style: const TextStyle(
-              fontWeight: FontWeight.w700,
-              color: AppColors.textSecondary,
-            ),
-          ),
-          const SizedBox(height: 14),
-          TextField(
-            controller: controller.searchController,
-            onChanged: controller.setSearchQuery,
-            decoration: InputDecoration(
-              hintText: 'Search name or mobile...',
-              prefixIcon: const Icon(Icons.search_rounded),
-              suffixIcon: controller.searchQuery.value.isEmpty
-                  ? null
-                  : IconButton(
-                      onPressed: controller.clearSearch,
-                      icon: const Icon(Icons.close_rounded),
-                    ),
-              filled: true,
-              fillColor: const Color(0xFFF9FAFB),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
+    return Obx(() {
+      final hasDateRange = controller.startDate.value != null ||
+          controller.endDate.value != null;
+
+      return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: AppColors.border),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '$filteredCount${filteredCount == totalCount ? '' : ' of $totalCount'} order${filteredCount == 1 ? '' : 's'}',
+              style: const TextStyle(
+                fontWeight: FontWeight.w700,
+                color: AppColors.textSecondary,
               ),
             ),
-          ),
-          const SizedBox(height: 14),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              _QuickFilterChip(
-                label: 'Today',
-                onTap: () => controller.applyQuickFilter('today'),
-              ),
-              _QuickFilterChip(
-                label: 'This Week',
-                onTap: () => controller.applyQuickFilter('thisWeek'),
-              ),
-              _QuickFilterChip(
-                label: 'This Month',
-                onTap: () => controller.applyQuickFilter('thisMonth'),
-              ),
-              _QuickFilterChip(
-                label: 'Upcoming',
-                onTap: () => controller.applyQuickFilter('upcoming'),
-              ),
-              OutlinedButton.icon(
-                onPressed: () => controller.pickDateRange(context),
-                icon: const Icon(Icons.date_range_outlined, size: 18),
-                label: Text(
-                  controller.startDate.value == null ||
-                          controller.endDate.value == null
-                      ? 'Select event date range'
-                      : '${OrderManagementUtils.formatDisplayDate(controller.startDate.value.toString())} - ${OrderManagementUtils.formatDisplayDate(controller.endDate.value.toString())}',
+            const SizedBox(height: 14),
+            OrderManagementSearchField(
+              controller: controller.searchController,
+              onChanged: controller.setSearchQuery,
+              hasValue: controller.searchQuery.value.isNotEmpty,
+              onClear: controller.clearSearch,
+            ),
+            const SizedBox(height: 14),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                _QuickFilterChip(
+                  label: 'Today',
+                  onTap: () => controller.applyQuickFilter('today'),
                 ),
-              ),
-              if (controller.startDate.value != null ||
-                  controller.endDate.value != null)
-                TextButton(
-                  onPressed: controller.clearDateRange,
-                  child: const Text('Clear'),
+                _QuickFilterChip(
+                  label: 'This Week',
+                  onTap: () => controller.applyQuickFilter('thisWeek'),
                 ),
-            ],
-          ),
-        ],
-      ),
-    );
+                _QuickFilterChip(
+                  label: 'This Month',
+                  onTap: () => controller.applyQuickFilter('thisMonth'),
+                ),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 360),
+                  child: OrderManagementDateRangeField(
+                    label: hasDateRange
+                        ? '${OrderManagementUtils.formatDateValue(controller.startDate.value)} - ${OrderManagementUtils.formatDateValue(controller.endDate.value)}'
+                        : 'Select event date range',
+                    onTap: () => controller.pickDateRange(context),
+                    hasValue: hasDateRange,
+                    onClear: hasDateRange ? controller.clearDateRange : null,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    });
   }
 }
 
@@ -280,7 +264,7 @@ class _OrderCard extends StatelessWidget {
                     border: Border.all(color: AppColors.border),
                   ),
                   child: Text(
-                    order.eventDateSummary,
+                    order.formattedEventDateSummary,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
