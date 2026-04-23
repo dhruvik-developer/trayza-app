@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/loading.dart';
 import '../../layout/views/layout_view.dart';
 import '../controllers/staff_controller.dart';
 
@@ -36,7 +37,7 @@ class StaffView extends GetView<StaffController> {
                 const SizedBox(height: 24),
                 Obx(() {
                   if (controller.isLoading.value) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Expanded(child: LoaderWebView());
                   }
                   if (controller.staffList.isEmpty) {
                     return _buildEmptyState();

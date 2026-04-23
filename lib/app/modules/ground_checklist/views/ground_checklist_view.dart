@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/loading.dart';
 import '../../../data/models/ground_checklist_model.dart';
 import '../controllers/ground_checklist_controller.dart';
 import 'ground_checklist_dialogs.dart';
@@ -30,7 +31,7 @@ class GroundChecklistView extends GetView<GroundChecklistController> {
                 Expanded(
                   child: Obx(() {
                     if (controller.isLoading.value) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const LoaderWebView();
                     }
 
                     if (controller.categories.isEmpty) {

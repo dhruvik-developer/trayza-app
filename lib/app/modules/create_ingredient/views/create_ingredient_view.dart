@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/loading.dart';
 import '../../layout/views/layout_view.dart';
 import '../controllers/create_ingredient_controller.dart';
 import 'ingredient_dialogs.dart';
@@ -30,7 +31,7 @@ class CreateIngredientView extends GetView<CreateIngredientController> {
                   if (controller.isLoading.value) {
                     return const SizedBox(
                       height: 300,
-                      child: Center(child: CircularProgressIndicator()),
+                      child: LoaderWebView(),
                     );
                   }
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -60,7 +62,7 @@ class BusinessProfileService extends GetxService {
       _logoUrl.value = logoUrl;
       _primaryColor.value = primaryColor;
       _primaryLightColor.value = _buildPrimaryLight(primaryColor);
-
+      log(_logoUrl.value.toString() + ' LOGO URLSS');
       if (catersName == null) {
         await _prefs.remove(_catersNameKey);
       } else {

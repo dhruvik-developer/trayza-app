@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/loading.dart';
 import '../../layout/views/layout_view.dart';
 import '../controllers/invoice_controller.dart';
 
@@ -27,7 +28,7 @@ class InvoiceView extends GetView<InvoiceController> {
               Expanded(
                 child: Obx(() {
                   if (controller.isLoading.value) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const LoaderWebView();
                   }
 
                   return _buildEmptyState();
@@ -52,7 +53,8 @@ class InvoiceView extends GetView<InvoiceController> {
                 color: const Color(0xFFE0F2FE),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(Icons.receipt_outlined, color: Colors.blue, size: 24),
+              child: const Icon(Icons.receipt_outlined,
+                  color: Colors.blue, size: 24),
             ),
             const SizedBox(width: 12),
             const Column(
@@ -60,11 +62,15 @@ class InvoiceView extends GetView<InvoiceController> {
               children: [
                 Text(
                   "Invoice",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary),
                 ),
                 Text(
                   "Manage billing and billing history",
-                  style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
+                  style:
+                      TextStyle(fontSize: 14, color: AppColors.textSecondary),
                 ),
               ],
             ),
@@ -107,8 +113,13 @@ class InvoiceView extends GetView<InvoiceController> {
         children: [
           Icon(Icons.receipt_long_outlined, size: 64, color: Colors.grey[300]),
           const SizedBox(height: 16),
-          const Text("No Invoices Found", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey)),
-          const Text("Completed orders will generate invoices here", style: TextStyle(color: Colors.grey)),
+          const Text("No Invoices Found",
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey)),
+          const Text("Completed orders will generate invoices here",
+              style: TextStyle(color: Colors.grey)),
         ],
       ),
     );

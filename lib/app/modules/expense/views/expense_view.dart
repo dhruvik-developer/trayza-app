@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:trayza_app/app/modules/expense/controllers/expense_controller.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/loading.dart';
 import '../../layout/views/layout_view.dart';
 import 'package:intl/intl.dart';
 
@@ -33,7 +34,7 @@ class ExpenseView extends GetView<ExpenseController> {
                     return const Center(
                       child: Padding(
                         padding: EdgeInsets.all(32.0),
-                        child: CircularProgressIndicator(),
+                        child: LoaderWebView(),
                       ),
                     );
                   }

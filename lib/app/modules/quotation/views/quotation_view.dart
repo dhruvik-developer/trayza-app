@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/loading.dart';
 import '../../layout/views/layout_view.dart';
 import '../controllers/quotation_controller.dart';
 
@@ -27,7 +28,7 @@ class QuotationView extends GetView<QuotationController> {
               Expanded(
                 child: Obx(() {
                   if (controller.isLoading.value) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const LoaderWebView();
                   }
 
                   // Sample / Empty State check

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/loading.dart';
 import '../../layout/views/layout_view.dart';
 import '../controllers/all_order_controller.dart';
 
@@ -25,7 +26,7 @@ class AllOrderView extends GetView<AllOrderController> {
               Expanded(
                 child: Obx(() {
                   if (controller.isLoading.value) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const LoaderWebView();
                   }
 
                   if (controller.orders.isEmpty) {

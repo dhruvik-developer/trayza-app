@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/loading.dart';
 import '../../layout/views/layout_view.dart';
 import '../controllers/stock_controller.dart';
 
@@ -31,8 +32,7 @@ class StockView extends GetView<StockController> {
                       const SizedBox(height: 16),
                       Obx(() {
                         if (controller.isLoading.value) {
-                          return const Center(
-                              child: CircularProgressIndicator());
+                          return const LoaderWebView();
                         }
 
                         if (controller.filteredStocks.isEmpty) {
@@ -58,8 +58,7 @@ class StockView extends GetView<StockController> {
                     Expanded(
                       child: Obx(() {
                         if (controller.isLoading.value) {
-                          return const Center(
-                              child: CircularProgressIndicator());
+                          return const LoaderWebView();
                         }
 
                         if (controller.filteredStocks.isEmpty) {

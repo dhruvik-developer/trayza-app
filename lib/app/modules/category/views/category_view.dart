@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/loading.dart';
 import '../../layout/views/layout_view.dart';
 import '../controllers/category_controller.dart';
 
@@ -24,7 +25,7 @@ class CategoryView extends GetView<CategoryController> {
                 const SizedBox(height: 20),
                 Obx(() {
                   if (controller.isLoading.value) {
-                    return _buildLoadingState();
+                    return _buildLoadingState(context);
                   }
 
                   if (controller.categories.isEmpty) {
@@ -498,13 +499,14 @@ class CategoryView extends GetView<CategoryController> {
     );
   }
 
-  Widget _buildLoadingState() {
+  Widget _buildLoadingState(BuildContext context) {
     return Container(
+      height: context.height * 0.7,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
       ),
-      child: const Center(child: CircularProgressIndicator()),
+      child: const LoaderWebView(),
     );
   }
 }

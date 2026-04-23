@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class BusinessLogo extends StatelessWidget {
@@ -33,12 +34,14 @@ class BusinessLogo extends StatelessWidget {
       return fallbackLogo();
     }
 
-    return Image.network(
-      normalizedLogoUrl,
+    return CachedNetworkImage(
+      imageUrl: normalizedLogoUrl,
       height: height,
       width: width,
       fit: fit,
-      errorBuilder: (_, __, ___) => fallbackLogo(),
+      fadeInDuration: const Duration(milliseconds: 150),
+      placeholder: (_, __) => fallbackLogo(),
+      errorWidget: (_, __, ___) => fallbackLogo(),
     );
   }
 }
