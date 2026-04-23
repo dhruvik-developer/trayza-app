@@ -279,9 +279,9 @@ class CategoryDialogs {
   static Widget _buildIngredientHeader(String itemName, BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
-            colors: [Color(0xFFF4EFFC), Colors.white],
+            colors: [AppColors.primaryLight, Colors.white],
             begin: Alignment.centerLeft,
             end: Alignment.centerRight),
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -679,7 +679,7 @@ class CategoryDialogs {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            mode == "view" ? const Color(0xFFF9FAFB) : const Color(0xFFF4EFFC),
+            mode == "view" ? const Color(0xFFF9FAFB) : AppColors.primaryLight,
             Colors.white
           ],
           begin: Alignment.centerLeft,
@@ -703,7 +703,7 @@ class CategoryDialogs {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color:
-                  mode == "view" ? const Color(0xFFF4EFFC) : AppColors.primary,
+                  mode == "view" ? AppColors.primaryLight : AppColors.primary,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon,
@@ -1113,7 +1113,7 @@ class CategoryDialogs {
               label: const Text("Edit Recipe",
                   style: TextStyle(fontWeight: FontWeight.bold)),
               style: TextButton.styleFrom(
-                backgroundColor: const Color(0xFFF4EFFC),
+                backgroundColor: AppColors.primaryLight,
                 foregroundColor: AppColors.primary,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -1474,9 +1474,9 @@ class _DialogWrapper extends StatelessWidget {
               // Header
               Container(
                 padding: const EdgeInsets.all(24),
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Color(0xFFF4EFFC), Colors.white],
+                    colors: [AppColors.primaryLight, Colors.white],
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
                   ),

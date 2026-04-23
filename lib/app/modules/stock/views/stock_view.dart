@@ -363,7 +363,7 @@ class StockView extends GetView<StockController> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color(0xFFF4EFFC),
+                color: AppColors.primaryLight,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Icon(Icons.inventory_2_rounded,
@@ -715,7 +715,7 @@ class StockView extends GetView<StockController> {
                       child: _buildActionButton(
                           Icons.add_rounded,
                           "Increase",
-                          const Color(0xFFF4EFFC),
+                          AppColors.primaryLight,
                           AppColors.primary,
                           () => controller.increaseStock(stock)),
                     ),

@@ -66,7 +66,7 @@ class AllOrderView extends GetView<AllOrderController> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF4EFFC),
+                    color: AppColors.primaryLight,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(Icons.assignment_outlined,
@@ -158,8 +158,8 @@ class AllOrderView extends GetView<AllOrderController> {
           // Card Header
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            decoration: const BoxDecoration(
-              color: Color(0xFFF4EFFC),
+            decoration: BoxDecoration(
+              color: AppColors.primaryLight,
               borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
             ),
             child: Row(

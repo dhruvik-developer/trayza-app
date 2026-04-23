@@ -132,7 +132,7 @@ class PeopleView extends StatelessWidget {
               width: 56,
               height: 56,
               decoration: BoxDecoration(
-                color: const Color(0xFFF4EFFC),
+                color: AppColors.primaryLight,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(icon, color: AppColors.primary, size: 28),

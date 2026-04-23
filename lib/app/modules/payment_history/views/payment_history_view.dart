@@ -52,7 +52,7 @@ class PaymentHistoryView extends GetView<PaymentHistoryController> {
         Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-              color: const Color(0xFFF4EFFC),
+              color: AppColors.primaryLight,
               borderRadius: BorderRadius.circular(12)),
           child:
               Icon(Icons.history_rounded, color: AppColors.primary, size: 24),

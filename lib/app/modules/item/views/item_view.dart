@@ -22,7 +22,10 @@ class ItemView extends GetView<ItemController> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
-                BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 4))
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4))
               ],
             ),
             child: Column(
@@ -41,7 +44,8 @@ class ItemView extends GetView<ItemController> {
                     child: ListView.builder(
                       itemCount: controller.categories.length,
                       itemBuilder: (context, index) {
-                        return _buildCategoryAccordion(context, controller.categories[index]);
+                        return _buildCategoryAccordion(
+                            context, controller.categories[index]);
                       },
                     ),
                   );
@@ -56,48 +60,58 @@ class ItemView extends GetView<ItemController> {
   }
 
   Widget _buildHeader(bool isMobile) {
-    return isMobile 
-      ? Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                _buildIconBox(18),
-                const SizedBox(width: 12),
-                const Text("Items", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
-              ],
-            ),
-            const SizedBox(height: 8),
-            _buildSelectionText(),
-            const SizedBox(height: 12),
-            _buildAddItemBtn(true),
-          ],
-        )
-      : Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                _buildIconBox(22),
-                const SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("Items", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
-                    _buildSelectionText(),
-                  ],
-                ),
-              ],
-            ),
-            _buildAddItemBtn(false),
-          ],
-        );
+    return isMobile
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  _buildIconBox(18),
+                  const SizedBox(width: 12),
+                  const Text("Items",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary)),
+                ],
+              ),
+              const SizedBox(height: 8),
+              _buildSelectionText(),
+              const SizedBox(height: 12),
+              _buildAddItemBtn(true),
+            ],
+          )
+        : Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  _buildIconBox(22),
+                  const SizedBox(width: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text("Items",
+                          style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textPrimary)),
+                      _buildSelectionText(),
+                    ],
+                  ),
+                ],
+              ),
+              _buildAddItemBtn(false),
+            ],
+          );
   }
 
   Widget _buildIconBox(double size) {
     return Container(
       padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(
+          color: AppColors.primaryLight,
+          borderRadius: BorderRadius.circular(12)),
       child: Icon(Icons.list_alt_rounded, color: AppColors.primary, size: size),
     );
   }
@@ -107,7 +121,10 @@ class ItemView extends GetView<ItemController> {
       final total = controller.getGrandTotalSelected();
       return Text(
         total > 0 ? "$total items selected" : "Select items for your order",
-        style: TextStyle(fontSize: 13, color: total > 0 ? AppColors.primary : AppColors.textSecondary, fontWeight: total > 0 ? FontWeight.bold : FontWeight.normal),
+        style: TextStyle(
+            fontSize: 13,
+            color: total > 0 ? AppColors.primary : AppColors.textSecondary,
+            fontWeight: total > 0 ? FontWeight.bold : FontWeight.normal),
       );
     });
   }
@@ -136,7 +153,10 @@ class ItemView extends GetView<ItemController> {
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.grey[200]!)),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.grey[200]!)),
       child: Column(
         children: [
           InkWell(
@@ -145,26 +165,55 @@ class ItemView extends GetView<ItemController> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(colors: [Color(0xFFF8F5FC), Colors.white], begin: Alignment.centerLeft, end: Alignment.centerRight),
-                borderRadius: BorderRadius.vertical(top: const Radius.circular(12), bottom: Radius.circular(isExpanded ? 0 : 12)),
+                gradient: const LinearGradient(
+                    colors: [Color(0xFFF8F5FC), Colors.white],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight),
+                borderRadius: BorderRadius.vertical(
+                    top: const Radius.circular(12),
+                    bottom: Radius.circular(isExpanded ? 0 : 12)),
               ),
               child: Row(
                 children: [
                   Container(
-                    width: 32, height: 32,
-                    decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(8)),
-                    child: Center(child: Text("${category.positions ?? ""}", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13))),
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(8)),
+                    child: Center(
+                        child: Text("${category.positions ?? ""}",
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13))),
                   ),
                   const SizedBox(width: 12),
-                  Expanded(child: Text(category.name ?? "", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15), overflow: TextOverflow.ellipsis)),
+                  Expanded(
+                      child: Text(category.name ?? "",
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 15),
+                          overflow: TextOverflow.ellipsis)),
                   if (selectedCount > 0)
                     Container(
                       margin: const EdgeInsets.only(right: 8),
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(color: const Color(0xFFECFDF5), borderRadius: BorderRadius.circular(20)),
-                      child: Text("$selectedCount", style: const TextStyle(color: Color(0xFF059669), fontSize: 10, fontWeight: FontWeight.bold)),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                          color: const Color(0xFFECFDF5),
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Text("$selectedCount",
+                          style: const TextStyle(
+                              color: Color(0xFF059669),
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold)),
                     ),
-                  Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: Colors.grey, size: 20),
+                  Icon(
+                      isExpanded
+                          ? Icons.keyboard_arrow_up
+                          : Icons.keyboard_arrow_down,
+                      color: Colors.grey,
+                      size: 20),
                 ],
               ),
             ),
@@ -172,7 +221,8 @@ class ItemView extends GetView<ItemController> {
           if (isExpanded)
             Container(
               padding: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(border: Border(top: BorderSide(color: Color(0xFFF3F4F6)))),
+              decoration: const BoxDecoration(
+                  border: Border(top: BorderSide(color: Color(0xFFF3F4F6)))),
               child: GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -183,7 +233,8 @@ class ItemView extends GetView<ItemController> {
                   mainAxisSpacing: 8,
                 ),
                 itemCount: category.items?.length ?? 0,
-                itemBuilder: (context, iIndex) => _buildItemChip(category.id, category.items![iIndex]),
+                itemBuilder: (context, iIndex) =>
+                    _buildItemChip(category.id, category.items![iIndex]),
               ),
             ),
         ],
@@ -199,15 +250,29 @@ class ItemView extends GetView<ItemController> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFFF4EFFC) : Colors.white,
+          color: isSelected ? AppColors.primaryLight : Colors.white,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: isSelected ? AppColors.primary : const Color(0xFFF3F4F6)),
+          border: Border.all(
+              color: isSelected ? AppColors.primary : const Color(0xFFF3F4F6)),
         ),
         child: Row(
           children: [
-            Icon(isSelected ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded, size: 16, color: isSelected ? AppColors.primary : Colors.grey[400]),
+            Icon(
+                isSelected
+                    ? Icons.check_box_rounded
+                    : Icons.check_box_outline_blank_rounded,
+                size: 16,
+                color: isSelected ? AppColors.primary : Colors.grey[400]),
             const SizedBox(width: 8),
-            Expanded(child: Text(item.name ?? "", style: TextStyle(fontSize: 12, color: isSelected ? AppColors.primary : Colors.grey[700], fontWeight: isSelected ? FontWeight.bold : FontWeight.normal), overflow: TextOverflow.ellipsis)),
+            Expanded(
+                child: Text(item.name ?? "",
+                    style: TextStyle(
+                        fontSize: 12,
+                        color:
+                            isSelected ? AppColors.primary : Colors.grey[700],
+                        fontWeight:
+                            isSelected ? FontWeight.bold : FontWeight.normal),
+                    overflow: TextOverflow.ellipsis)),
           ],
         ),
       ),
@@ -224,7 +289,11 @@ class ItemView extends GetView<ItemController> {
             onPressed: () => Get.back(),
             icon: const Icon(Icons.arrow_back, size: 16),
             label: const Text("Back", style: TextStyle(fontSize: 13)),
-            style: OutlinedButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+            style: OutlinedButton.styleFrom(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10))),
           ),
           ElevatedButton(
             onPressed: () {},
@@ -232,9 +301,12 @@ class ItemView extends GetView<ItemController> {
               backgroundColor: AppColors.primary,
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
             ),
-            child: Text(isMobile ? "Submit" : "Submit Selection", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+            child: Text(isMobile ? "Submit" : "Submit Selection",
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
           ),
         ],
       ),
@@ -242,6 +314,8 @@ class ItemView extends GetView<ItemController> {
   }
 
   Widget _buildEmptyState() {
-    return const Center(child: Text("No Items Available", style: TextStyle(color: Colors.grey)));
+    return const Center(
+        child:
+            Text("No Items Available", style: TextStyle(color: Colors.grey)));
   }
 }

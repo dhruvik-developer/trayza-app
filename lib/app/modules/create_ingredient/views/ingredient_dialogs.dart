@@ -4,7 +4,8 @@ import '../../../core/theme/app_colors.dart';
 import '../controllers/create_ingredient_controller.dart';
 
 class IngredientDialogs {
-  static void showAddCategory(BuildContext context, CreateIngredientController controller) {
+  static void showAddCategory(
+      BuildContext context, CreateIngredientController controller) {
     final nameController = TextEditingController();
     final isCommon = false.obs;
 
@@ -13,26 +14,42 @@ class IngredientDialogs {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Container(
           padding: const EdgeInsets.all(32),
-          constraints: BoxConstraints(maxWidth: context.width > 600 ? 450 : context.width * 0.9),
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+          constraints: BoxConstraints(
+              maxWidth: context.width > 600 ? 450 : context.width * 0.9),
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(16)),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text("Add Ingredient Category", style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF4B4B4B))),
+              const Text("Add Ingredient Category",
+                  style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF4B4B4B))),
               const SizedBox(height: 32),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Category Name", style: TextStyle(fontWeight: FontWeight.w500, color: Color(0xFF4B4B4B))),
+                  const Text("Category Name",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF4B4B4B))),
                   const SizedBox(height: 8),
                   TextField(
                     controller: nameController,
                     decoration: InputDecoration(
                       hintText: "Please Enter Category Name",
                       hintStyle: const TextStyle(color: Color(0xFFD1D5DB)),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFFE5E7EB))),
-                      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFFE5E7EB))),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide:
+                              const BorderSide(color: Color(0xFFE5E7EB))),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide:
+                              const BorderSide(color: Color(0xFFE5E7EB))),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 16),
                     ),
                   ),
                 ],
@@ -43,7 +60,10 @@ class IngredientDialogs {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text("Is Common", style: TextStyle(fontWeight: FontWeight.w500, color: Color(0xFF4B4B4B))),
+                  const Text("Is Common",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF4B4B4B))),
                   Obx(() => Switch(
                         value: isCommon.value,
                         onChanged: (v) => isCommon.value = v,
@@ -56,14 +76,18 @@ class IngredientDialogs {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () => controller.saveIngredientCategory(nameController.text, isCommon.value),
+                      onPressed: () => controller.saveIngredientCategory(
+                          nameController.text, isCommon.value),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
                       ),
-                      child: const Text("Submit", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                      child: const Text("Submit",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16)),
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -74,9 +98,12 @@ class IngredientDialogs {
                         backgroundColor: const Color(0xFF6B7280),
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
                       ),
-                      child: const Text("Cancel", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                      child: const Text("Cancel",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16)),
                     ),
                   ),
                 ],
@@ -88,7 +115,8 @@ class IngredientDialogs {
     );
   }
 
-  static void showAddItem(BuildContext context, CreateIngredientController controller) {
+  static void showAddItem(
+      BuildContext context, CreateIngredientController controller) {
     // ... (existing code remains as is)
     final nameController = TextEditingController();
     final selectedCatId = controller.selectedCategoryId.value.obs;
@@ -97,16 +125,19 @@ class IngredientDialogs {
       Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Container(
-          constraints: BoxConstraints(maxWidth: context.width > 600 ? 500 : context.width * 0.9),
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
+          constraints: BoxConstraints(
+              maxWidth: context.width > 600 ? 500 : context.width * 0.9),
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(20)),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               // Header
               Container(
                 padding: const EdgeInsets.all(24),
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(colors: [Color(0xFFF4EFFC), Colors.white]),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [AppColors.primaryLight, Colors.white]),
                   borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                 ),
                 child: Row(
@@ -116,16 +147,27 @@ class IngredientDialogs {
                         children: [
                           Container(
                             padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(12)),
-                            child: const Icon(Icons.tag_outlined, color: Colors.white, size: 20),
+                            decoration: BoxDecoration(
+                                color: AppColors.primary,
+                                borderRadius: BorderRadius.circular(12)),
+                            child: const Icon(Icons.tag_outlined,
+                                color: Colors.white, size: 20),
                           ),
                           const SizedBox(width: 16),
                           const Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Add Ingredient Item", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF1F2937)), overflow: TextOverflow.ellipsis),
-                                Text("Add a new ingredient item to a category", style: TextStyle(fontSize: 13, color: Color(0xFF9CA3AF)), overflow: TextOverflow.ellipsis),
+                                Text("Add Ingredient Item",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF1F2937)),
+                                    overflow: TextOverflow.ellipsis),
+                                Text("Add a new ingredient item to a category",
+                                    style: TextStyle(
+                                        fontSize: 13, color: Color(0xFF9CA3AF)),
+                                    overflow: TextOverflow.ellipsis),
                               ],
                             ),
                           ),
@@ -136,7 +178,9 @@ class IngredientDialogs {
                     IconButton(
                       icon: const Icon(Icons.close),
                       onPressed: () => Get.back(),
-                      style: IconButton.styleFrom(backgroundColor: Colors.white, side: const BorderSide(color: Color(0xFFE5E7EB))),
+                      style: IconButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          side: const BorderSide(color: Color(0xFFE5E7EB))),
                     ),
                   ],
                 ),
@@ -148,29 +192,50 @@ class IngredientDialogs {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("Item Name *", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF1F2937))),
+                    const Text("Item Name *",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                            color: Color(0xFF1F2937))),
                     const SizedBox(height: 8),
                     TextField(
                       controller: nameController,
                       decoration: InputDecoration(
                         hintText: "Please Enter Item Name",
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFFE5E7EB))),
-                        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFFE5E7EB))),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide:
+                                const BorderSide(color: Color(0xFFE5E7EB))),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide:
+                                const BorderSide(color: Color(0xFFE5E7EB))),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 12),
                       ),
                     ),
                     const SizedBox(height: 24),
-                    const Text("Category *", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF1F2937))),
+                    const Text("Category *",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                            color: Color(0xFF1F2937))),
                     const SizedBox(height: 8),
                     Obx(() => Container(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          decoration: BoxDecoration(border: Border.all(color: const Color(0xFFE5E7EB)), borderRadius: BorderRadius.circular(12)),
+                          decoration: BoxDecoration(
+                              border:
+                                  Border.all(color: const Color(0xFFE5E7EB)),
+                              borderRadius: BorderRadius.circular(12)),
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton<int>(
                               isExpanded: true,
                               value: selectedCatId.value,
                               hint: const Text("Select a category"),
-                              items: controller.categories.map((c) => DropdownMenuItem(value: c.id, child: Text(c.name))).toList(),
+                              items: controller.categories
+                                  .map((c) => DropdownMenuItem(
+                                      value: c.id, child: Text(c.name)))
+                                  .toList(),
                               onChanged: (v) => selectedCatId.value = v,
                             ),
                           ),
@@ -187,25 +252,34 @@ class IngredientDialogs {
                   children: [
                     TextButton(
                       onPressed: () => Get.back(),
-                      child: const Text("Cancel", style: TextStyle(color: Color(0xFF4B5563), fontWeight: FontWeight.bold)),
+                      child: const Text("Cancel",
+                          style: TextStyle(
+                              color: Color(0xFF4B5563),
+                              fontWeight: FontWeight.bold)),
                     ),
                     const SizedBox(width: 12),
                     ElevatedButton(
                       onPressed: () {
-                        if (nameController.text.isNotEmpty && selectedCatId.value != null) {
-                          controller.saveIngredientItem(nameController.text, selectedCatId.value!);
+                        if (nameController.text.isNotEmpty &&
+                            selectedCatId.value != null) {
+                          controller.saveIngredientItem(
+                              nameController.text, selectedCatId.value!);
                         } else {
-                          Get.snackbar("Required", "Please enter item name and select a category");
+                          Get.snackbar("Required",
+                              "Please enter item name and select a category");
                         }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
                         elevation: 0,
                       ),
-                      child: const Text("Save Item", style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: const Text("Save Item",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                   ],
                 ),
@@ -238,10 +312,13 @@ class IngredientDialogs {
                   color: Colors.red.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.delete_outline, color: Colors.red, size: 32),
+                child: const Icon(Icons.delete_outline,
+                    color: Colors.red, size: 32),
               ),
               const SizedBox(height: 20),
-              Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              Text(title,
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold)),
               const SizedBox(height: 12),
               Text(
                 message,
@@ -256,9 +333,13 @@ class IngredientDialogs {
                       onPressed: () => Get.back(),
                       style: TextButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
                       ),
-                      child: const Text("Cancel", style: TextStyle(color: Color(0xFF4B5563), fontWeight: FontWeight.bold)),
+                      child: const Text("Cancel",
+                          style: TextStyle(
+                              color: Color(0xFF4B5563),
+                              fontWeight: FontWeight.bold)),
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -272,10 +353,12 @@ class IngredientDialogs {
                         backgroundColor: Colors.red,
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
                         elevation: 0,
                       ),
-                      child: const Text("Delete", style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: const Text("Delete",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                   ),
                 ],

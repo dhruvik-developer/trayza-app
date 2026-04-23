@@ -73,8 +73,8 @@ class CategoryView extends GetView<CategoryController> {
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFFF4EFFC), Color(0xFFE8E0F3)],
+                      gradient: LinearGradient(
+                        colors: [AppColors.primaryLight, Color(0xFFE8E0F3)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),

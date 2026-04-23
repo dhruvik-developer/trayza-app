@@ -228,7 +228,7 @@ class _DialogHeader extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: const Color(0xFFF4EFFC),
+            color: AppColors.primaryLight,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Icon(icon, color: AppColors.primary, size: 22),

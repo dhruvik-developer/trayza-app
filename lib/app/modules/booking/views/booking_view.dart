@@ -368,7 +368,6 @@ class BookingView extends GetView<BookingController> {
   }
 
   Widget _buildSlotCard(int dayIndex, int slotIndex) {
-    bool isMobile = Get.width < 600;
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.symmetric(vertical: 12),

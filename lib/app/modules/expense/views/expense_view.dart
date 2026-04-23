@@ -77,7 +77,7 @@ class ExpenseView extends GetView<ExpenseController> {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                  color: const Color(0xFFF4EFFC),
+                  color: AppColors.primaryLight,
                   borderRadius: BorderRadius.circular(12)),
               child: Icon(Icons.attach_money_rounded,
                   color: AppColors.primary, size: 24),
@@ -135,7 +135,7 @@ class ExpenseView extends GetView<ExpenseController> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-          color: const Color(0xFFF4EFFC),
+          color: AppColors.primaryLight,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: const Color(0xFFEDE7F6))),
       child: Row(
@@ -214,7 +214,7 @@ class ExpenseView extends GetView<ExpenseController> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         decoration: BoxDecoration(
-            color: active ? AppColors.primary : const Color(0xFFF4EFFC),
+            color: active ? AppColors.primary : AppColors.primaryLight,
             borderRadius: BorderRadius.circular(20)),
         child: Text(label,
             style: TextStyle(
@@ -261,7 +261,7 @@ class ExpenseView extends GetView<ExpenseController> {
             constraints: const BoxConstraints(minWidth: 800),
             child: DataTable(
               headingRowColor:
-                  MaterialStateProperty.all(const Color(0xFFF4EFFC)),
+                  MaterialStateProperty.all(AppColors.primaryLight),
               headingRowHeight: 50,
               dataRowMinHeight: 60,
               dataRowMaxHeight: 60,
@@ -312,7 +312,7 @@ class ExpenseView extends GetView<ExpenseController> {
                     ? Colors.green[50]!
                     : pMode == "ONLINE"
                         ? Colors.blue[50]!
-                        : const Color(0xFFF4EFFC);
+                        : AppColors.primaryLight;
                 Color pModeText = pMode == "CASH"
                     ? Colors.green[600]!
                     : pMode == "ONLINE"
@@ -394,7 +394,7 @@ class ExpenseView extends GetView<ExpenseController> {
             ? Colors.green[50]!
             : pMode == "ONLINE"
                 ? Colors.blue[50]!
-                : const Color(0xFFF4EFFC);
+                : AppColors.primaryLight;
         Color pModeText = pMode == "CASH"
             ? Colors.green[600]!
             : pMode == "ONLINE"
