@@ -11,6 +11,12 @@ import '../modules/layout/controllers/layout_controller.dart';
 import '../modules/order_management/bindings/order_management_binding.dart';
 import '../modules/order_management/views/order_management_view.dart';
 import '../modules/order_management/widgets/order_management_tabs.dart';
+import '../modules/people/bindings/people_binding.dart';
+import '../modules/people/views/people_view.dart';
+import '../modules/settings/bindings/settings_binding.dart';
+import '../modules/settings/views/settings_view.dart';
+import '../modules/users/bindings/users_binding.dart';
+import '../modules/users/views/users_view.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -73,6 +79,30 @@ class AppPages {
       page: () => const BookingView(),
       bindings: [
         BookingBinding(),
+        BindingsBuilder(() => Get.lazyPut(() => LayoutController())),
+      ],
+    ),
+    GetPage(
+      name: Routes.PEOPLE,
+      page: () => const PeopleView(),
+      bindings: [
+        PeopleBinding(),
+        BindingsBuilder(() => Get.lazyPut(() => LayoutController())),
+      ],
+    ),
+    GetPage(
+      name: Routes.USERS,
+      page: () => const UsersView(),
+      bindings: [
+        UsersBinding(),
+        BindingsBuilder(() => Get.lazyPut(() => LayoutController())),
+      ],
+    ),
+    GetPage(
+      name: Routes.SETTINGS,
+      page: () => const SettingsView(),
+      bindings: [
+        SettingsBinding(),
         BindingsBuilder(() => Get.lazyPut(() => LayoutController())),
       ],
     ),

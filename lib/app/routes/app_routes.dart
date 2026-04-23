@@ -14,6 +14,8 @@ abstract class Routes {
   static const EXPENSE = _Paths.expense;
   static const CREATE_INGREDIENT = _Paths.createIngredient;
   static const PEOPLE = _Paths.people;
+  static const USERS = _Paths.users;
+  static const SETTINGS = _Paths.settings;
   static const EVENT_SUMMARY = _Paths.eventSummary;
   static const GROUND_CHECKLIST = _Paths.groundChecklist;
 }
@@ -34,6 +36,8 @@ abstract class _Paths {
   static const expense = '/expense';
   static const createIngredient = '/create-ingredient';
   static const people = '/people';
+  static const users = '/users';
+  static const settings = '/settings';
   static const eventSummary = '/event-summary';
   static const groundChecklist = '/ground-checklist';
 }

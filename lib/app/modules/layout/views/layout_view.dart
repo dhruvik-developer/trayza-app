@@ -28,11 +28,13 @@ import '../../ground_checklist/views/ground_checklist_view.dart';
 class LayoutView extends GetView<LayoutController> {
   final Widget child;
   final int activeIndex; // To highlight the active menu item
+  final String headerTitle;
 
   const LayoutView({
     super.key,
     required this.child,
     this.activeIndex = -1,
+    this.headerTitle = 'Home',
   });
 
   @override
@@ -244,11 +246,11 @@ class LayoutView extends GetView<LayoutController> {
               const SizedBox(width: 12),
 
               // Title (center)
-              const Expanded(
+              Expanded(
                 child: Text(
-                  "Home",
+                  headerTitle,
                   textAlign: TextAlign.left,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),
@@ -262,22 +264,46 @@ class LayoutView extends GetView<LayoutController> {
                   const SizedBox(width: 8),
                   PopupMenuButton<String>(
                     padding: EdgeInsets.zero,
-                    onSelected: (value) {
-                      if (value == 'logout') {
-                        AuthService.to.logout();
-                      }
-                    },
-                    itemBuilder: (context) => const [
-                      PopupMenuItem<String>(
+                    color: Colors.white,
+                    surfaceTintColor: Colors.white,
+                    elevation: 10,
+                    offset: const Offset(0, 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    onSelected: _handleProfileMenuSelection,
+                    itemBuilder: (context) => [
+                      _buildProfileMenuItem(
+                        value: 'users',
+                        label: 'Users',
+                        icon: Icons.people_alt_outlined,
+                      ),
+                      const PopupMenuDivider(height: 1),
+                      _buildProfileMenuItem(
+                        value: 'settings',
+                        label: 'Settings',
+                        icon: Icons.settings_outlined,
+                      ),
+                      const PopupMenuDivider(height: 1),
+                      _buildProfileMenuItem(
                         value: 'logout',
-                        child: Text('Logout'),
+                        label: 'Logout',
+                        icon: Icons.logout_rounded,
+                        color: const Color(0xFFEF4444),
                       ),
                     ],
-                    child: const CircleAvatar(
-                      radius: 16,
-                      backgroundColor: Color(0xFFF3F4F6),
-                      child: Icon(Icons.person_outline,
-                          size: 18, color: Colors.grey),
+                    child: Container(
+                      padding: const EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: const Color(0xFFE5E7EB)),
+                      ),
+                      child: const CircleAvatar(
+                        radius: 16,
+                        backgroundColor: Color(0xFFF3F4F6),
+                        child: Icon(Icons.person_outline,
+                            size: 18, color: Colors.grey),
+                      ),
                     ),
                   ),
                 ],
@@ -306,6 +332,48 @@ class LayoutView extends GetView<LayoutController> {
                   color: Colors.red,
                   fontSize: 11,
                   fontWeight: FontWeight.bold)),
+        ],
+      ),
+    );
+  }
+
+  void _handleProfileMenuSelection(String value) {
+    switch (value) {
+      case 'users':
+        Get.offAllNamed(Routes.USERS);
+        break;
+      case 'settings':
+        Get.offAllNamed(Routes.SETTINGS);
+        break;
+      case 'logout':
+        AuthService.to.logout();
+        break;
+    }
+  }
+
+  PopupMenuItem<String> _buildProfileMenuItem({
+    required String value,
+    required String label,
+    required IconData icon,
+    Color? color,
+  }) {
+    final itemColor = color ?? const Color(0xFF4B5563);
+
+    return PopupMenuItem<String>(
+      value: value,
+      height: 48,
+      child: Row(
+        children: [
+          Icon(icon, size: 20, color: itemColor),
+          const SizedBox(width: 12),
+          Text(
+            label,
+            style: TextStyle(
+              color: itemColor,
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ],
       ),
     );
