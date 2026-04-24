@@ -111,7 +111,7 @@ class PaymentHistoryView extends GetView<PaymentHistoryController> {
 
     return Column(
       children: [
-        _buildHeroCard(history),
+        _buildHeroCard(history, isMobile),
         const SizedBox(height: 16),
         ListView.builder(
           itemCount: (summaryItems.length / itemsPerRow).ceil(),
@@ -156,60 +156,68 @@ class PaymentHistoryView extends GetView<PaymentHistoryController> {
     );
   }
 
-  Widget _buildHeroCard(PaymentHistoryModel history) {
+  Widget _buildHeroCard(PaymentHistoryModel history, bool isMobile) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      constraints: BoxConstraints(minHeight: isMobile ? 140 : 172),
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 20 : 28,
+        vertical: isMobile ? 20 : 24,
+      ),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppColors.primary, Color(0xFF6A3FA0)],
+        gradient: const LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: [Color(0xFF0E8AD4), Color(0xFF0B5E92)],
         ),
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.22),
-            blurRadius: 18,
+            color: const Color(0xFF0B5E92).withValues(alpha: 0.24),
+            blurRadius: 22,
             offset: const Offset(0, 10),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(10),
+                width: isMobile ? 52 : 64,
+                height: isMobile ? 52 : 64,
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.16),
-                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white.withValues(alpha: 0.18),
+                  shape: BoxShape.circle,
                 ),
-                child: const Icon(
-                  Icons.account_balance_wallet_outlined,
+                child: Icon(
+                  Icons.account_balance_wallet_rounded,
                   color: Colors.white,
-                  size: 20,
+                  size: isMobile ? 26 : 30,
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: isMobile ? 12 : 16),
               const Text(
                 "Total Balance",
                 style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w500,
                   color: Colors.white,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
           Padding(
-            padding: const EdgeInsets.only(left: 4),
+            padding: EdgeInsets.only(left: isMobile ? 4 : 2, top: 12),
             child: Text(
               _formatCurrency(history.netAmount),
-              style: const TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w700,
+              style: TextStyle(
+                fontSize: isMobile ? 36 : 52,
+                fontWeight: FontWeight.w800,
                 color: Colors.white,
+                height: 1,
               ),
             ),
           ),
