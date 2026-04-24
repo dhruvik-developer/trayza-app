@@ -192,9 +192,9 @@ class BookingView extends GetView<BookingController> {
             ),
           ],
 
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 32),
-            child: Divider(color: AppColors.border),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 12),
+            child: Divider(color: AppColors.primary),
           ),
 
           // Section: Event Schedule
@@ -295,9 +295,10 @@ class BookingView extends GetView<BookingController> {
         margin: const EdgeInsets.only(bottom: 24),
         padding: EdgeInsets.all(isMobile ? 12 : 20),
         decoration: BoxDecoration(
-          color: const Color(0xFFFAF8FD),
+          // color: const Color(0xFFFAF8FD),
+          color: AppColors.primary.withValues(alpha: 0.10),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFFF3E8FF)),
+          border: Border.all(color: AppColors.primary.withValues(alpha: 0.20)),
         ),
         child: Column(
           children: [
@@ -376,76 +377,137 @@ class BookingView extends GetView<BookingController> {
   }
 
   Widget _buildSlotCard(int dayIndex, int slotIndex) {
+    final isMobile = Get.width < 700;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFFF7FBFF),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.primary.withOpacity(0.2)),
-        boxShadow: const [
-          BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2))
+        border: Border.all(color: const Color(0xFFC9DDF0)),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withValues(alpha: 0.10),
+            blurRadius: 16,
+            offset: const Offset(0, 6),
+          ),
         ],
       ),
-      child: Stack(
-        children: [
-          Container(
-            width: 6,
-            height: 60, // Fixed height for accent bar
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [AppColors.primary, Color(0xFF6A3FAF)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter),
-              borderRadius: BorderRadius.only(
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              width: 5,
+              decoration: BoxDecoration(
+                color: const Color(0xFF0B68A6),
+                borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(12),
-                  bottomLeft: Radius.circular(12)),
+                  bottomLeft: Radius.circular(12),
+                ),
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 16, right: 8),
-            child: Row(
-              children: [
-                Expanded(
+            Expanded(
+              child: Padding(
+                  padding: EdgeInsets.all(isMobile ? 14 : 18),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Icon(Icons.access_time_rounded,
-                              color: AppColors.primary, size: 14),
-                          const SizedBox(width: 4),
-                          Text("SLOT ${slotIndex + 1}",
-                              style: TextStyle(
-                                  color: AppColors.primary,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
+                      _buildSlotBadge(slotIndex),
+                      const SizedBox(height: 14),
                       Row(
                         children: [
                           Expanded(
-                            child: _buildTimingDropdown(dayIndex, slotIndex),
-                          ),
-                          const SizedBox(width: 8),
+                              child: _buildTimingDropdown(dayIndex, slotIndex)),
+                          const SizedBox(width: 10),
                           Expanded(
                             child: _buildPersonsInput(dayIndex, slotIndex),
                           ),
+                          if (controller.schedule[dayIndex].timeSlots.length >
+                              1)
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: _buildRemoveSlotButton(
+                                  dayIndex,
+                                  slotIndex,
+                                ),
+                              ),
+                            ),
                         ],
                       ),
+                      const SizedBox(height: 12),
                     ],
-                  ),
-                ),
-                if (controller.schedule[dayIndex].timeSlots.length > 1)
-                  IconButton(
-                      icon: const Icon(Icons.close, size: 16),
-                      onPressed: () =>
-                          controller.removeTimeSlot(dayIndex, slotIndex)),
-              ],
+                  )),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSlotBadge(int slotIndex) {
+    return Row(
+      children: [
+        Container(
+          width: 32,
+          height: 32,
+          decoration: BoxDecoration(
+            color: const Color(0xFFDCECF9),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: const Icon(
+            Icons.access_time_rounded,
+            color: Color(0xFF0B68A6),
+            size: 20,
+          ),
+        ),
+        const SizedBox(width: 14),
+        Expanded(
+          child: Text(
+            "SLOT ${slotIndex + 1}",
+            style: const TextStyle(
+              color: Color(0xFF0B68A6),
+              fontSize: 14,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.4,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRemoveSlotButton(int dayIndex, int slotIndex) {
+    return Column(
+      children: [
+        const Text("",
+            style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF6B7280),
+                letterSpacing: 0.3)),
+        const SizedBox(height: 4),
+        Container(
+          width: 47,
+          height: 47,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: const Color(0xFFFFD6D6)),
+          ),
+          child: IconButton(
+            tooltip: 'Remove this time slot',
+            icon: const Icon(
+              Icons.delete_outline_rounded,
+              size: 20,
+              color: Color(0xFFFF5A5A),
+            ),
+            onPressed: () => controller.removeTimeSlot(dayIndex, slotIndex),
+          ),
+        ),
+      ],
     );
   }
 
@@ -464,30 +526,44 @@ class BookingView extends GetView<BookingController> {
       children: [
         const Text("TIMING",
             style: TextStyle(
-                fontSize: 9, fontWeight: FontWeight.bold, color: Colors.grey)),
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF6B7280),
+                letterSpacing: 0.3)),
         const SizedBox(height: 4),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          height: 47,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6),
-            border: Border.all(color: AppColors.primary.withOpacity(0.1)),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: const Color(0xFFC4DCF1), width: 2),
           ),
           child: Obx(() => DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
                   value: slot.timeLabel.value.isEmpty
                       ? null
                       : slot.timeLabel.value,
-                  hint: const Text("Select...",
-                      style: TextStyle(fontSize: 11, color: Colors.grey)),
+                  hint: const Text(
+                    "Select Timing...",
+                    style: TextStyle(fontSize: 13, color: Colors.grey),
+                  ),
                   isExpanded: true,
-                  icon: const Icon(Icons.keyboard_arrow_down,
-                      size: 12, color: Colors.grey),
+                  icon: const Icon(
+                    Icons.keyboard_arrow_down,
+                    size: 18,
+                    color: Colors.grey,
+                  ),
                   items: options.map((opt) {
                     return DropdownMenuItem<String>(
                       value: opt["value"],
-                      child: Text(opt["label"]!,
-                          style: const TextStyle(
-                              fontSize: 11, color: AppColors.textPrimary)),
+                      child: Text(
+                        opt["label"]!,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
                     );
                   }).toList(),
                   onChanged: (val) {
@@ -507,24 +583,32 @@ class BookingView extends GetView<BookingController> {
       children: [
         const Text("PERSONS",
             style: TextStyle(
-                fontSize: 9, fontWeight: FontWeight.bold, color: Colors.grey)),
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF6B7280),
+                letterSpacing: 0.3)),
         const SizedBox(height: 4),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+          height: 47,
+          alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6),
-            border: Border.all(color: AppColors.primary.withOpacity(0.1)),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: const Color(0xFFC4DCF1), width: 2),
           ),
           child: TextField(
             onChanged: (val) => slot.estimatedPersons.value = val,
-            style: const TextStyle(fontSize: 11, color: AppColors.textPrimary),
+            style: const TextStyle(fontSize: 13, color: AppColors.textPrimary),
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
               hintText: "e.g. 250",
-              hintStyle: TextStyle(fontSize: 11, color: Colors.grey),
+              hintStyle: TextStyle(fontSize: 13, color: Colors.grey),
               isDense: true,
+              isCollapsed: true,
               border: InputBorder.none,
             ),
+            textAlignVertical: TextAlignVertical.center,
           ),
         ),
       ],
@@ -569,7 +653,7 @@ class BookingView extends GetView<BookingController> {
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.grey.withOpacity(0.2)),
+          border: Border.all(color: Colors.black.withOpacity(0.2)),
         ),
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -578,7 +662,7 @@ class BookingView extends GetView<BookingController> {
             SizedBox(width: 6),
             Text("Add Time Slot",
                 style: TextStyle(
-                    color: Colors.grey,
+                    color: Colors.black45,
                     fontWeight: FontWeight.bold,
                     fontSize: 12)),
           ],
