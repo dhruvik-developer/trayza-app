@@ -36,34 +36,43 @@ class EventSummaryView extends GetView<EventSummaryController> {
         (sum, item) => sum + item.events.length,
       );
 
-      return Column(
-        children: [
-          _SummaryHeader(
-            controller: controller,
-            staffCount: summaries.length,
-            eventCount: totalEvents,
-            totalPending: totalPending,
-          ),
-          const SizedBox(height: 16),
-          Expanded(
-            child: summaries.isEmpty
-                ? const _EventSummaryEmptyState()
-                : RefreshIndicator(
-                    onRefresh: controller.fetchSummary,
-                    child: ListView.builder(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      itemCount: summaries.length,
-                      itemBuilder: (context, index) => Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: _StaffSummaryCard(
-                          summary: summaries[index],
-                          controller: controller,
-                        ),
+      return RefreshIndicator(
+        onRefresh: controller.fetchSummary,
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverToBoxAdapter(
+              child: _SummaryHeader(
+                controller: controller,
+                staffCount: summaries.length,
+                eventCount: totalEvents,
+                totalPending: totalPending,
+              ),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
+            if (summaries.isEmpty)
+              const SliverFillRemaining(
+                hasScrollBody: false,
+                child: _EventSummaryEmptyState(),
+              )
+            else
+              SliverPadding(
+                padding: const EdgeInsets.only(bottom: 16),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) => Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: _StaffSummaryCard(
+                        summary: summaries[index],
+                        controller: controller,
                       ),
                     ),
+                    childCount: summaries.length,
                   ),
-          ),
-        ],
+                ),
+              ),
+          ],
+        ),
       );
     });
 

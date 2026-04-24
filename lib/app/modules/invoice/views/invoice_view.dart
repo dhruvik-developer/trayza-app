@@ -28,33 +28,42 @@ class InvoiceView extends GetView<InvoiceController> {
 
       final invoices = controller.filteredInvoices;
 
-      return Column(
-        children: [
-          _InvoiceFilterBar(
-            controller: controller,
-            filteredCount: invoices.length,
-            totalCount: controller.invoices.length,
-          ),
-          const SizedBox(height: 16),
-          Expanded(
-            child: invoices.isEmpty
-                ? const _InvoiceEmptyState()
-                : RefreshIndicator(
-                    onRefresh: controller.fetchInvoices,
-                    child: ListView.builder(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      itemCount: invoices.length,
-                      itemBuilder: (context, index) => Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: _InvoiceCard(
-                          invoice: invoices[index],
-                          controller: controller,
-                        ),
+      return RefreshIndicator(
+        onRefresh: controller.fetchInvoices,
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverToBoxAdapter(
+              child: _InvoiceFilterBar(
+                controller: controller,
+                filteredCount: invoices.length,
+                totalCount: controller.invoices.length,
+              ),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
+            if (invoices.isEmpty)
+              const SliverFillRemaining(
+                hasScrollBody: false,
+                child: _InvoiceEmptyState(),
+              )
+            else
+              SliverPadding(
+                padding: const EdgeInsets.only(bottom: 16),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) => Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: _InvoiceCard(
+                        invoice: invoices[index],
+                        controller: controller,
                       ),
                     ),
+                    childCount: invoices.length,
                   ),
-          ),
-        ],
+                ),
+              ),
+          ],
+        ),
       );
     });
 

@@ -29,29 +29,38 @@ class QuotationView extends GetView<QuotationController> {
 
       final quotations = controller.filteredQuotations;
 
-      return Column(
-        children: [
-          _QuotationFilterBar(controller: controller),
-          const SizedBox(height: 16),
-          Expanded(
-            child: quotations.isEmpty
-                ? const _QuotationEmptyState()
-                : RefreshIndicator(
-                    onRefresh: controller.fetchQuotations,
-                    child: ListView.builder(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      itemCount: quotations.length,
-                      itemBuilder: (context, index) => Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: _QuotationCard(
-                          quotation: quotations[index],
-                          controller: controller,
-                        ),
+      return RefreshIndicator(
+        onRefresh: controller.fetchQuotations,
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverToBoxAdapter(
+              child: _QuotationFilterBar(controller: controller),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
+            if (quotations.isEmpty)
+              const SliverFillRemaining(
+                hasScrollBody: false,
+                child: _QuotationEmptyState(),
+              )
+            else
+              SliverPadding(
+                padding: const EdgeInsets.only(bottom: 16),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) => Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: _QuotationCard(
+                        quotation: quotations[index],
+                        controller: controller,
                       ),
                     ),
+                    childCount: quotations.length,
                   ),
-          ),
-        ],
+                ),
+              ),
+          ],
+        ),
       );
     });
 

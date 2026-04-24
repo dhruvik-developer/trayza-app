@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 
+import '../../all_order/controllers/all_order_controller.dart';
 import '../../all_order/views/all_order_view.dart';
+import '../../event_summary/controllers/event_summary_controller.dart';
 import '../../event_summary/views/event_summary_view.dart';
+import '../../invoice/controllers/invoice_controller.dart';
 import '../../invoice/views/invoice_view.dart';
+import '../../quotation/controllers/quotation_controller.dart';
 import '../../quotation/views/quotation_view.dart';
 import '../widgets/order_management_page_scaffold.dart';
 import '../widgets/order_management_tabs.dart';
+import 'package:get/get.dart';
 
 class OrderManagementView extends StatefulWidget {
   const OrderManagementView({
@@ -26,8 +31,24 @@ class _OrderManagementViewState extends State<OrderManagementView> {
   @override
   void initState() {
     super.initState();
+    _ensureControllers();
     _currentSection = widget.initialSection;
     _loadedSections = {widget.initialSection};
+  }
+
+  void _ensureControllers() {
+    if (!Get.isRegistered<QuotationController>()) {
+      Get.put(QuotationController());
+    }
+    if (!Get.isRegistered<AllOrderController>()) {
+      Get.put(AllOrderController());
+    }
+    if (!Get.isRegistered<InvoiceController>()) {
+      Get.put(InvoiceController());
+    }
+    if (!Get.isRegistered<EventSummaryController>()) {
+      Get.put(EventSummaryController());
+    }
   }
 
   void _setSection(OrderManagementSection section) {

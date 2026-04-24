@@ -29,33 +29,42 @@ class AllOrderView extends GetView<AllOrderController> {
 
       final orders = controller.filteredOrders;
 
-      return Column(
-        children: [
-          _AllOrderFilterBar(
-            controller: controller,
-            filteredCount: orders.length,
-            totalCount: controller.orders.length,
-          ),
-          const SizedBox(height: 16),
-          Expanded(
-            child: orders.isEmpty
-                ? const _AllOrderEmptyState()
-                : RefreshIndicator(
-                    onRefresh: controller.fetchOrders,
-                    child: ListView.builder(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      itemCount: orders.length,
-                      itemBuilder: (context, index) => Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: _OrderCard(
-                          order: orders[index],
-                          controller: controller,
-                        ),
+      return RefreshIndicator(
+        onRefresh: controller.fetchOrders,
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverToBoxAdapter(
+              child: _AllOrderFilterBar(
+                controller: controller,
+                filteredCount: orders.length,
+                totalCount: controller.orders.length,
+              ),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
+            if (orders.isEmpty)
+              const SliverFillRemaining(
+                hasScrollBody: false,
+                child: _AllOrderEmptyState(),
+              )
+            else
+              SliverPadding(
+                padding: const EdgeInsets.only(bottom: 16),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) => Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: _OrderCard(
+                        order: orders[index],
+                        controller: controller,
                       ),
                     ),
+                    childCount: orders.length,
                   ),
-          ),
-        ],
+                ),
+              ),
+          ],
+        ),
       );
     });
 

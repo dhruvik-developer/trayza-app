@@ -13,8 +13,9 @@ class AppTheme {
           surface: AppColors.surfaceLight,
           background: AppColors.backgroundLight,
         ),
-        scaffoldBackgroundColor: AppColors.backgroundLight,
-        textTheme: GoogleFonts.interTextTheme(ThemeData.light().textTheme).copyWith(
+        scaffoldBackgroundColor: Colors.transparent,
+        textTheme:
+            GoogleFonts.interTextTheme(ThemeData.light().textTheme).copyWith(
           displayLarge: GoogleFonts.outfit(
             fontSize: 32,
             fontWeight: FontWeight.bold,
@@ -52,8 +53,9 @@ class AppTheme {
           surface: AppColors.surfaceDark,
           background: AppColors.backgroundDark,
         ),
-        scaffoldBackgroundColor: AppColors.backgroundDark,
-        textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme).copyWith(
+        scaffoldBackgroundColor: Colors.transparent,
+        textTheme:
+            GoogleFonts.interTextTheme(ThemeData.dark().textTheme).copyWith(
           displayLarge: GoogleFonts.outfit(
             fontSize: 32,
             fontWeight: FontWeight.bold,

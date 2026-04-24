@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:trayza_app/app/modules/bootstrap/views/app_bootstrap_screen.dart';
 
 import 'app/core/theme/app_theme.dart';
+import 'app/core/widgets/app_background.dart';
 import 'app/data/services/auth_service.dart';
 import 'app/data/services/business_profile_service.dart';
 import 'app/routes/app_pages.dart';
@@ -128,6 +129,10 @@ class _TrayzaAppState extends State<TrayzaApp> {
       darkTheme: AppTheme.dark,
       themeMode: ThemeMode.system,
       defaultTransition: Transition.cupertino,
+      builder: (context, child) => AppBackground(
+        primaryColor: _primaryColor,
+        child: child ?? const SizedBox.shrink(),
+      ),
     );
   }
 }

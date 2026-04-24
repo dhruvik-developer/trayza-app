@@ -42,7 +42,7 @@ class LayoutView extends GetView<LayoutController> {
     bool isDesktop = context.width > 900;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Colors.transparent,
       body: Row(
         children: [
           if (isDesktop) _buildSidebar(context),
