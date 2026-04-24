@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
@@ -148,8 +149,13 @@ class BookingView extends GetView<BookingController> {
             _buildInputField("Client Name *", controller.nameController,
                 "Enter client name"),
             const SizedBox(height: 20),
-            _buildInputField("Mobile Number *", controller.mobileController,
-                "Mobile Number"),
+            _buildInputField(
+                "Mobile Number *", controller.mobileController, "Mobile Number",
+                keyboardType: TextInputType.phone,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(10),
+                ]),
             const SizedBox(height: 20),
             _buildInputField(
                 "Order Date",
@@ -170,7 +176,12 @@ class BookingView extends GetView<BookingController> {
                 const SizedBox(width: 24),
                 Expanded(
                     child: _buildInputField("Mobile Number *",
-                        controller.mobileController, "Mobile Number")),
+                        controller.mobileController, "Mobile Number",
+                        keyboardType: TextInputType.phone,
+                        inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(10),
+                    ])),
               ],
             ),
             const SizedBox(height: 20),
@@ -256,7 +267,9 @@ class BookingView extends GetView<BookingController> {
 
   Widget _buildInputField(
       String label, TextEditingController controller, String hint,
-      {bool enabled = true}) {
+      {bool enabled = true,
+      TextInputType? keyboardType,
+      List<TextInputFormatter>? inputFormatters}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -269,6 +282,8 @@ class BookingView extends GetView<BookingController> {
         TextField(
           controller: controller,
           enabled: enabled,
+          keyboardType: keyboardType,
+          inputFormatters: inputFormatters,
           decoration: InputDecoration(
             hintText: hint,
             filled: true,
@@ -524,7 +539,7 @@ class BookingView extends GetView<BookingController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("TIMING",
+        const Text("SLOT TIMING",
             style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
@@ -581,7 +596,7 @@ class BookingView extends GetView<BookingController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("PERSONS",
+        const Text("Number of Persons",
             style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
@@ -601,44 +616,17 @@ class BookingView extends GetView<BookingController> {
             onChanged: (val) => slot.estimatedPersons.value = val,
             style: const TextStyle(fontSize: 13, color: AppColors.textPrimary),
             keyboardType: TextInputType.number,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+            ],
             decoration: const InputDecoration(
-              hintText: "e.g. 250",
+              hintText: "Enter person",
               hintStyle: TextStyle(fontSize: 13, color: Colors.grey),
               isDense: true,
               isCollapsed: true,
               border: InputBorder.none,
             ),
             textAlignVertical: TextAlignVertical.center,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildMiniLabelInput(String label, String hint) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label,
-            style: const TextStyle(
-                fontSize: 9, fontWeight: FontWeight.bold, color: Colors.grey)),
-        const SizedBox(height: 4),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6),
-            border: Border.all(color: AppColors.primary.withOpacity(0.1)),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                  child: Text(hint,
-                      style: const TextStyle(fontSize: 11, color: Colors.grey),
-                      overflow: TextOverflow.ellipsis)),
-              const Icon(Icons.keyboard_arrow_down,
-                  size: 12, color: Colors.grey),
-            ],
           ),
         ),
       ],
@@ -653,7 +641,7 @@ class BookingView extends GetView<BookingController> {
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.black.withOpacity(0.2)),
+          border: Border.all(color: Colors.black.withValues(alpha: 0.2)),
         ),
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -693,7 +681,7 @@ class BookingView extends GetView<BookingController> {
   Widget _buildContinueButton() {
     bool isMobile = Get.width < 600;
     return ElevatedButton(
-      onPressed: controller.nextStep,
+      onPressed: controller.validateAndContinue,
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
@@ -701,7 +689,7 @@ class BookingView extends GetView<BookingController> {
             EdgeInsets.symmetric(horizontal: isMobile ? 16 : 32, vertical: 12),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         elevation: 5,
-        shadowColor: AppColors.primary.withOpacity(0.2),
+        shadowColor: AppColors.primary.withValues(alpha: 0.2),
       ),
       child: Row(
         children: [
